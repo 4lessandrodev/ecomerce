@@ -1,0 +1,33 @@
+/*
+const mysql = require('mysql2');
+
+-------------------------------------------------
+//Ambiente de produção 
+//fonte https://www.npmjs.com/package/mysql2
+const connection = mysql.createConnection({
+  host: 'mysql17........net',
+  user: '*USERNAME*',
+  database: '*DATA-BASE-NAME*',
+  password: '*PASSWORD*',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 1
+});
+
+module.exports = connection;
+-------------------------------------------------
+
+//Ambiente local de desenvolvimento
+//fonte https://www.npmjs.com/package/mysql2
+const connection = mysql.createPool({
+  host: 'localhost',
+  user: '*USERNAME*',
+  database: '*DATA-BASE-NAME*',
+  password: '*PASSWORD*',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 1
+});
+module.exports = connection;
+-------------------------------------------------
+*/
