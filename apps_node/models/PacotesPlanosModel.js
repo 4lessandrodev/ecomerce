@@ -1,5 +1,6 @@
+const conect = require('./../config/CONECT_BD');
 class PacotesPlanosModel {
-  constructor (descricao, titulo, status, id_cesta, preco, quantidade_cestas, plano_excluido) {
+  constructor (descricao, titulo, id_cesta, preco, quantidade_cestas, status = 1, plano_excluido = 0) {
     this._id = null;
     this._descricao = descricao;
     this._titulo = titulo;
@@ -56,6 +57,62 @@ class PacotesPlanosModel {
   } set plano_excluido(value) {
     this._plano_excluido = value;
   }
+
+  salvarPacotePlano(pacotePlano) {
+    return new Promise((resolve, reject) => {
+      conect.query(``, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  listarPacotesPlanos(pacotePlano) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  atualizarPacotePlano(pacotePlano) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  desabilitarPacotePlano(pacotePlano) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
 }
 
 module.exports = PacotesPlanosModel;

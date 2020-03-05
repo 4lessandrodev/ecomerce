@@ -1,3 +1,4 @@
+const conect = require('./../config/CONECT_BD');
 class ProdutoCompraModel {
   constructor (id_produto, id_compra) {
     this._id = null;
@@ -24,6 +25,62 @@ class ProdutoCompraModel {
   set id_compra(value) {
     this._id_compra = value;
   }
+
+  salvarProdutoCompra(produtoCompra) {
+    return new Promise((resolve, reject) => {
+      conect.query(``, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  listarProdutoCompra(produtoCompra) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  atualizarProdutoCompra(produtoCompra) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  desabilitarProdutoCompra(produtoCompra) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
 }
 
 module.exports = ProdutoCompraModel;

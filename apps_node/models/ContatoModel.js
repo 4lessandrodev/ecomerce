@@ -1,6 +1,6 @@
 const conect = require('../config/CONECT_BD');
 class ContatoModel {
-  constructor (nome, email, mensagem, data_envio = new Date(), mensagem_lida = false) {
+  constructor (nome, email, mensagem, data_envio = new Date(), mensagem_lida = 0) {
     this._nome = nome;
     this._email = email;
     this._mensagem = mensagem;

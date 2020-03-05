@@ -1,3 +1,4 @@
+const conect = require('./../config/CONECT_BD');
 class id_fornecedorParaProdutoModel {
   constructor (id_fornecedor, id_produto) {
     this._id_fornecedor = id_fornecedor;
@@ -15,6 +16,61 @@ class id_fornecedorParaProdutoModel {
   set id_produto(value) {
     this._id_produto = value;
   }
+  salvarCategoriaCesta(cesta) {
+    return new Promise((resolve, reject) => {
+      conect.query(``, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  listarFornecedoresParaProduto(fornecedor) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  atualizarFornecedoresParaProduto(fornecedor) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  desabilitarFornecedoresParaProduto(fornecedor) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
 }
 
 module.exports = FornecedorParaProdutoModel;

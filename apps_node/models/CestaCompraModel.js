@@ -1,3 +1,4 @@
+const conect = require('./../config/CONECT_BD');
 class CestaCompraModel {
   constructor (id_cesta, id_compra) {
     this._id = null;
@@ -24,6 +25,63 @@ class CestaCompraModel {
   set id_compra(value) {
     this._id_compra = value;
   }
+
+
+  salvarCestaCompra(cestaCompra) {
+    return new Promise((resolve, reject) => {
+      conect.query(``, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  listarCestaCompra(cestaCompra) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  atualizarCestaCompra(cestaCompra) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  desabilitarCestaCompra(cestaCompra) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
 }
 
 module.exports = CestaCompraModel;

@@ -1,5 +1,6 @@
+const conect = require('./../config/CONECT_BD');
 class CestaModel {
-  constructor (imagem, descricao, id_categoria_cesta, status, preco, informacoes_nutricionais, alteracoes_permitidas, cesta_excluida = false, data_cadastro = new Date()) {
+  constructor (descricao, id_categoria_cesta, preco, informacoes_nutricionais, alteracoes_permitidas, imagem = '/uploads/images/no-image.jpeg', status = 1, cesta_excluida = 0, data_cadastro = new Date()) {
     this._id = null;
     this._imagem = imagem;
     this._descricao = descricao;
@@ -72,6 +73,65 @@ class CestaModel {
   set data_cadastro(value) {
     this._data_cadastro = value;
   }
+
+
+  salvarCesta(cesta) {
+    return new Promise((resolve, reject) => {
+      conect.query(`INSERT INTO tb_cestas(imagem, descricao, id_categoria_cesta, status, preco,
+        alteracoes_permitidas, informacoes_nutricionais, cesta_excluida) VALUES(?,?,?,?,?,?,?)`, [cesta._imagem, cesta._descricao, cesta._id_categoria_cesta, cesta._status, cesta._preco, cesta._alteracoes_permitidas, cesta.__informacoes_nutricionais, cesta._cesta_excluida], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  listarCestas(cesta) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT * FROM tb_cestas WHERE cesta_excluida = ?`, [cesta._cesta_excluida], (err, results) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  }
+
+  atualizarCesta(cesta) {
+    return new Promise((resolve, reject) => {
+      conect.query(`UPDATE tb_cestas SET imagem = ?, descricao = ?, id_categoria_cesta = ?, status = ?, preco = ?,
+        alteracoes_permitidas = ?, informacoes_nutricionais = ?, cesta_excluida = ? WHERE id = ?`, [cesta._imagem, cesta._descricao, cesta._id_categoria_cesta, cesta._status, cesta._preco, cesta._alteracoes_permitidas, cesta.__informacoes_nutricionais, cesta._cesta_excluida, cesta._id], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  desabilitarCesta(cesta) {
+    return new Promise((resolve, reject) => {
+      conect.query(`UPDATE tb_cestas SET cesta_excluida = ? WHERE id = ?`, [cesta._cesta_excluida, cesta._id], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
 }
 
 module.exports = CestaModel;

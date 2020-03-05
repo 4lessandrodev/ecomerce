@@ -1,3 +1,4 @@
+const conect = require('./../config/CONECT_BD');
 class ProdutosParaCestaModel {
   constructor (id, id_produto, id_cesta) {
     this._id = id;
@@ -22,5 +23,63 @@ class ProdutosParaCestaModel {
   set id(value) {
     this._id = value;
   }
+
+
+  salvarProdutoParaCesta(produto) {
+    return new Promise((resolve, reject) => {
+      conect.query(``, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  listarProdutoParaCesta(produto) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  atualizarProdutoParaCesta(produto) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  desabilitarProdutoParaCesta(produto) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+
 }
 module.exports = ProdutosParaCestaModel;

@@ -1,5 +1,6 @@
+const conect = require('./../config/CONECT_BD');
 class FreteModel {
-  constructor (origem, destino, preco, data_cadastro) {
+  constructor (origem, destino, preco, data_cadastro = new Date()) {
     this._id = null;
     this._origem = origem;
     this._destino = destino;
@@ -36,6 +37,62 @@ class FreteModel {
   set data_cadastro(value) {
     this._data_cadastro = value;
   }
+
+  salvarFrete(frete) {
+    return new Promise((resolve, reject) => {
+      conect.query(``, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  listarFretes(frete) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  atualizarFrete(frete) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  desabilitarFrete(frete) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
 }
 
 module.exports = FreteModel;

@@ -27,8 +27,8 @@ const listarMensagens = (req, res, next) => {
     res.send({ mensagens: [], mensagem: err.message });
   });
 };
-
 //------------------------------------------------------------------------------------------------------
+
 
 //Metodos exportados 
 module.exports = { listarInscricoes, listarMensagens };

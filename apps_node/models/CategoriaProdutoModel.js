@@ -1,5 +1,6 @@
+const conect = require('./../config/CONECT_BD');
 class CategoriaProdutoModel {
-  constructor (descricao, status, categoria_excluida = false) {
+  constructor (descricao, status = 1, categoria_excluida = 0) {
     this._id = null;
     this._descricao = descricao;
     this._status = status;
@@ -30,6 +31,50 @@ class CategoriaProdutoModel {
   set categoria_excluida(value) {
     this._categoria_excluida = value;
   }
+
+  salvarCategoria(categoria) {
+    return new Promise((resolve, reject) => {
+      conect.query(`
+    INSERT INTO tb_categoria_produtos(descricao, status, categoria_excluida) VALUES(?,?,?)
+    `, [categoria._descricao, categoria._status, categoria._categoria_excluida], (err, result) => {
+        if (err) {
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  atualizarCategoria(categoria) {
+    return new Promise((resolve, reject) => {
+      conect.query(`
+    UPDATE tb_categoria_produtos SET descricao = ?, status = ?, categoria_excluida = ? WHERE id = ?
+    `, [categoria._descricao, categoria._status, categoria._categoria_excluida, categoria._id], (err, result) => {
+        if (err) {
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  listarCategorias(categoria) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT * FROM tb_categoria_produtos WHERE categoria_excluida = ? AND status = ?`, [categoria._categoria_excluida, categoria._status], (err, result) => {
+        if (err) {
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+
+
 }
 
 module.exports = CategoriaProdutoModel;

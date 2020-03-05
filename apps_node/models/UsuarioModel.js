@@ -1,6 +1,6 @@
 const conect = require('./DB');
 class UsuarioModel {
-  constructor (email, senha, data_cadastro = new Date(), usuario_excluido = false, admin = false) {
+  constructor (email, senha, data_cadastro = new Date(), usuario_excluido = 0, admin = 0) {
     this._id = null;
     this._email = email;
     this._senha = senha;
@@ -62,9 +62,7 @@ class UsuarioModel {
 
   entrar(usuario) {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT email, senha 
-FROM tb_usuarios AS user
-WHERE user.email = ${usuario._email} AND user.senha = ${usuario._senha}`, (err, results) => {
+      conect.query(`SELECT * FROM tb_usuarios AS user WHERE user.email = ? AND user.senha = ?`, [usuario._email, usuario._senha], (err, results) => {
         if (err) {
           reject(err);
         } else {
@@ -76,7 +74,7 @@ WHERE user.email = ${usuario._email} AND user.senha = ${usuario._senha}`, (err, 
 
   alterarSenha(usuario) {
     return new Promise((resolve, reject) => {
-      conect.query(`UPDATE tb_usuario SET senha = ${usuario._senha} WHERE (email = ${usuario._email})`, (err, results) => {
+      conect.query(`UPDATE tb_usuario SET senha = ? WHERE email = ?`, [usuario._senha, usuario._email], (err, results) => {
         if (err) {
           reject(err);
         } else {

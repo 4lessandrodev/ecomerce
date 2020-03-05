@@ -1,5 +1,6 @@
+const conect = require('./../config/CONECT_BD');
 class FormaDePagamentoModel {
-  constructor (desconto, status, descricao_regras, tipo_pagamento_excluido) {
+  constructor (desconto, descricao_regras, tipo_pagamento_excluido = 0, status = 1) {
     this._id = null;
     this._desconto = desconto;
     this._status = status;
@@ -36,6 +37,63 @@ class FormaDePagamentoModel {
   set id(value) {
     this._id = value;
   }
+
+
+  salvarFormaPagamento(formaPagamento) {
+    return new Promise((resolve, reject) => {
+      conect.query(``, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  listarFormasPagamento(formaPagamento) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  atualizarFormaPagamento(formaPagamento) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  desabilitarFormaPagamento(formaPagamento) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
 }
 
 module.exports = FormaDePagamentoModel;

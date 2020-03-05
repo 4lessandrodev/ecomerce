@@ -1,5 +1,6 @@
+const conect = require('./../config/CONECT_BD');
 class ClienteModel {
-  constructor (id_usuario, phone, nome, cep, cidade, estado, endereco, codigo_ibge, regiao, bairro, regiao_atendida = false, cliente_excluido = false) {
+  constructor (id_usuario, phone, nome, cep, cidade, estado, endereco, codigo_ibge, regiao, bairro, regiao_atendida = 1, cliente_excluido = 0) {
     this._id = null;
     this._id_usuario = id_usuario;
     this._phone = phone;
@@ -92,6 +93,61 @@ class ClienteModel {
   }
   set cliente_excluido(value) {
     this._cliente_excluido = value;
+  }
+
+
+  salvarCliente(cliente) {
+    return new Promise((resolve, reject) => {
+      conect.query(``, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  listarClientes(Cliente) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  atualizarCliente(cliente) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  desabilitarCliente(cliente) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
   }
 
 }

@@ -1,5 +1,6 @@
+const conect = require('./../config/CONECT_BD');
 class FornecedorModel {
-  constructor (razao_social, cnpj, cep, cidade, estado, endereco, fornecedor_excluido, phone, email, status, bairro, nome_fantasia) {
+  constructor (razao_social, cnpj, cep, cidade, estado, endereco, phone, email, bairro, nome_fantasia, fornecedor_excluido = 0, status = 1) {
     this._id = null;
     this._razao_social = razao_social;
     this._nome_fantasia = nome_fantasia;
@@ -94,6 +95,62 @@ class FornecedorModel {
   set nome_fantasia(value) {
     this._fatansyName = value;
   }
+
+  salvarFornecedor(fornecedor) {
+    return new Promise((resolve, reject) => {
+      conect.query(``, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  listarFornecedores(fornecedor) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  atualizarFornecedor(fornecedor) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  desabilitarFornecedor(fornecedor) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
 }
 
 module.exports = FornecedorModel;

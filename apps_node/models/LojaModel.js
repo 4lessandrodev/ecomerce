@@ -1,5 +1,6 @@
+const conect = require('./../config/CONECT_BD');
 class LojaModel {
-  constructor (razao_social, nome_fantasia, cnpj_cpf, cep, cidade, estado, endereco, loja_excluida, phone, email, status, regiao) {
+  constructor (razao_social, nome_fantasia, cnpj_cpf, cep, cidade, estado, endereco, phone, email, regiao, status = 1, loja_excluida = 0) {
     this._id = null;
     this._razao_social = razao_social;
     this._nome_fantasia = nome_fantasia;
@@ -93,6 +94,62 @@ class LojaModel {
   set regiao(value) {
     this._regiao = value;
   }
+
+  salvarLoja(loja) {
+    return new Promise((resolve, reject) => {
+      conect.query(``, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  listarLojas(loja) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  atualizarLoja(loja) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  desabilitarLoja(loja) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
 }
 
 module.exports = LojaModel;

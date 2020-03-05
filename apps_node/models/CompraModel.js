@@ -1,5 +1,6 @@
+const conect = require('./../config/CONECT_BD');
 class CompraModel {
-  constructor (id_cliente, data_compra = new Date(), pedido_aberto = true) {
+  constructor (id_cliente, data_compra = new Date(), pedido_aberto = 1) {
     this.id = null;
     this._id_cliente = id_cliente;
     this._data_compra = data_compra;
@@ -30,6 +31,62 @@ class CompraModel {
   set id(value) {
     this._id = value;
   }
+
+  salvarCompra(compra) {
+    return new Promise((resolve, reject) => {
+      conect.query(``, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  listarCompra(compra) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  atualizarCompra(compra) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  desabilitarCompra(compra) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
 }
 
 module.exports = CompraModel;

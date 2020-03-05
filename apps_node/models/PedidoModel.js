@@ -1,5 +1,6 @@
+const conect = require('./../config/CONECT_BD');
 class PedidoModel {
-  constructor (id_compras, ecobag_adicional, id_tipo_pagamento, anotacoes, status, retirar_na_loja = false) {
+  constructor (id_compras, ecobag_adicional, id_tipo_pagamento, anotacoes, status = 1, retirar_na_loja = 0) {
     this._id = null;
     this._id_compras = id_compras;
     this._ecobag_adicional = ecobag_adicional;
@@ -45,5 +46,60 @@ class PedidoModel {
   set status(value) {
     this._status = value;
   }
+
+  salvarPedido(pedido) {
+    return new Promise((resolve, reject) => {
+      conect.query(``, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  listarPedidos(pedido) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  atualizarPedido(pedido) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  desabilitarPedido(pedido) {
+    return new Promise((resolve, reject) => {
+      conect.query(`sql`, [], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
 
 }

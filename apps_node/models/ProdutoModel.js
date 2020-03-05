@@ -1,12 +1,13 @@
+const conect = require('./../config/CONECT_BD');
 class ProdutoModel {
-  constructor (imagem, descricao, id_categoria_produto, preco_venda, unidade_medida, status, info_nutricional, produto_excluido = 0, produto_especial = false, fator_multiplicador = 1, data_cadastro = new Date()) {
+  constructor (descricao, id_categoria_produto, preco_venda, id_unidade_medida, info_nutricional, imagem = '/uploads/images/no-image.jpeg', status = 1, produto_excluido = 0, produto_especial = false, fator_multiplicador = 1, data_cadastro = new Date()) {
     this._id = null;
     this._imagem = imagem;
     this._descricao = descricao;
     this._id_categoria_produto = id_categoria_produto;
     this._preco_venda = preco_venda;
     this._produto_excluido = produto_excluido;
-    this._unidade_medida = unidade_medida;
+    this._id_unidade_medida = id_unidade_medida;
     this._data_cadastro = data_cadastro;
     this._status = status;
     this._info_nutricional = info_nutricional;
@@ -32,8 +33,8 @@ class ProdutoModel {
   get data_cadastro() {
     return this._data_cadastro;
   }
-  get unidade_medida() {
-    return this._unidade_medida;
+  get id_unidade_medida() {
+    return this._id_unidade_medida;
   }
   get status() {
     return this._status;
@@ -65,8 +66,8 @@ class ProdutoModel {
   set data_cadastro(value) {
     this._data_cadastro = value;
   }
-  set unidade_medida(value) {
-    this._unidade_medida = value;
+  set id_unidade_medida(value) {
+    this._id_unidade_medida = value;
   }
   set status(value) {
     this._status = value;
@@ -85,6 +86,68 @@ class ProdutoModel {
   }
   set produto_excluido(value) {
     this._produto_excluido = value;
+  }
+
+
+  salvarProduto(produto) {
+    return new Promise((resolve, reject) => {
+      conect.query(`INSERT INTO tb_produtos(descricao, imagem, info_nutricional, id_categoria_produto, status, produto_especial, fator_multiplicador,
+        preco_venda, produto_excluido, id_unidade_medida) VALUES(?,?,?,?,?,?,?,?,?,?)`, [produto._descricao, produto._imagem, produto._info_nutricional, this.id_categoria_produto,
+      produto._status, produto._produto_especial, produto._fator_multiplicador, produto._preco_venda, produto._produto_excluido, produto._id_unidade_medida
+      ], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  listarProduto(produto) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT * FROM tb_produtos WHERE produto_excluido = ? AND status = ?`, [produto._produto_excluido, produto._status], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  atualizarProduto(produto) {
+    return new Promise((resolve, reject) => {
+      conect.query(`UPDATE tb_produtos SET descricao = ?, imagem = ?, info_nutricional = ?, id_categoria_produto = ?, status = ?, produto_especial = ?, fator_multiplicador = ?,
+        preco_venda = ?, produto_excluido = ?, id_unidade_medida = ? WHERE id = ?`, [produto._descricao, produto._imagem, produto._info_nutricional, this.id_categoria_produto,
+      produto._status, produto._produto_especial, produto._fator_multiplicador, produto._preco_venda, produto._produto_excluido, produto._id_unidade_medida,
+      produto._id
+      ], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  desabilitarProduto(produto) {
+    return new Promise((resolve, reject) => {
+      conect.query(`UPDATE tb_produtos SET produto_excluido = ? WHERE id = ?`, [produto._produto_excluido, produto._id], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
   }
 
 }
