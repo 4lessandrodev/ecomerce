@@ -2,6 +2,11 @@ var express = require('express');
 var router = express.Router();
 const indexController = require('../controllers/IndexController');
 
+
+router.get('/index', (req, res, next) => {
+  res.render('index', { cestas: [], produtos: [] });
+});
+
 //------------------------------------------------------------------------------------------------------
 //Metodo de postagem do email 
 router.post('/inscrever', (req, res, next) => {
