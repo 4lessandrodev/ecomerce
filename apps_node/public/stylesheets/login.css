@@ -1,0 +1,107 @@
+:root {
+  --cor-um: #4f5e38;
+  --cor-dois: #8aa958;
+  --cor-tres: #a2af89;
+  --cor-quatro: #d3eaac;
+  --cor-cinco: #a6ce74;
+  --cor-seis: #edfeed;
+}
+
+.background-dark {
+  background: #456;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.login {
+  width: 40%;
+  margin: 1% auto;
+  font-size: 16px;
+  min-width: 340px;
+}
+
+/* Reset top and bottom margins from certain elements */
+.login-header,
+.login p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* The triangle form is achieved by a CSS hack */
+.login-triangle {
+  width: 0;
+  margin-right: auto;
+  margin-left: auto;
+  border: 12px solid transparent;
+  border-bottom-color: var(--cor-um);
+}
+
+.login-header {
+  background: var(--cor-um);
+  padding: 20px;
+  font-size: 1.4em;
+  font-weight: normal;
+  text-align: center;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.login-container {
+  background: #ebebeb;
+  padding: 12px;
+}
+
+/* Every row inside .login-container is defined with p tags */
+.login p {
+  padding: 12px;
+}
+
+.login input {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  border-width: 1px;
+  border-style: solid;
+  padding: 16px;
+  outline: 0;
+  font-family: inherit;
+  font-size: 0.95em;
+}
+
+.login input[type="email"],
+.login input[type="password"],
+.login input[type="tel"],
+.login input[type="number"],
+.login input[type="text"] {
+  background: var(--cor-seis);
+  border-color: var(--cor-quatro);
+  color: #555;
+}
+
+/* Text fields' focus effect */
+.login input[type="email"]:focus,
+.login input[type="password"]:focus {
+  border-color: var(--cor-um);
+}
+
+.login input[type="submit"],
+.login input[type="button"] {
+  background: var(--cor-um);
+  border-color: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+.login input[type="submit"]:hover,
+.login input[type="button"]:hover {
+  background: var(--cor-dois);
+}
+
+/* Buttons' focus effect */
+.login input[type="submit"]:focus,
+.login input[type="button"]:focus {
+  border-color: var(--cor-um);
+}
+
+.hidden {
+  display: none;
+}

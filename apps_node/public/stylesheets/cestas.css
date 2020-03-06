@@ -1,0 +1,112 @@
+.formulario {
+  margin: 2em auto;
+  padding: 2em;
+  background-color: white;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 1px 6px 2px rgba(0, 0, 0, 0.09);
+  box-shadow: 0px 1px 6px 2px rgba(0, 0, 0, 0.09);
+}
+
+
+.list-itens-container {
+  background-color: white;
+  margin-top: 1em;
+  padding-bottom: 4em;
+}
+
+td .btn-editar,
+td .btn-excluir {
+  display: inline-block;
+  margin: 0 0.2em;
+  padding: 0 1em;
+
+}
+
+td .btn-excluir {
+  font-size: .98em;
+  padding: 0 1.2em;
+  color: rgb(148, 1, 1);
+}
+
+.col-small {
+  width: 2em;
+}
+
+
+.display-none {
+  display: none;
+}
+
+.botoes-a-direita {
+  text-align: right;
+  margin: 0 2em 0 0;
+}
+
+.btn-cancelar,
+.botao-salvar {
+  min-width: 8em;
+}
+
+
+/* div que irá mostrar a imagem, dentro dela terá a imagem e o conteúdo oculto*/
+.caixaImg {
+  position: relative;
+  width: 8em;
+  display: inline-block;
+  border-radius: 180px;
+}
+
+/* deixar a imagem do tamanho da div*/
+.imagem {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 180px;
+}
+
+/*conteudo oculto*/
+.sobreposicao {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transition: .5s ease;
+  background-color: rgb(9, 154, 202);
+  border-radius: 180px;
+}
+
+/* exibir o conteudo oculto*/
+.caixaImg:hover .sobreposicao {
+  opacity: 1;
+}
+
+/* estilização do texto oculto*/
+.texto {
+  color: white;
+  font-size: 18px;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.caixaImg:hover {
+  cursor: pointer;
+}
+
+.icone {
+  color: white;
+  font-size: 20px;
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+}

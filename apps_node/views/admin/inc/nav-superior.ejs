@@ -1,0 +1,12 @@
+      <div class="navbar navbar-dark bg-dark">
+        <div class="sidebar-dropdown navbar-home">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="button" id="btn-new"
+            onclick="location.href='/admin';"><i class="fas fa-home"></i></button>
+        </div>
+        <a class="navbar-brand" href="/admin">
+          <img src="./../images/images/favicon.png" width=" 30" height="30" class="d-inline-block align-top" alt="">
+          <%=pagina%>
+        </a>
+        <button class="btn btn-outline-success my-2 my-sm-0" type="button" id="btn-new" style="margin: 1em"
+          onclick="Utils.exibirFormulario('#form-new', 'display-none', true)"><%=btnLabel%></button>
+      </div>

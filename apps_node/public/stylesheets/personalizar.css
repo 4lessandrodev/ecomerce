@@ -1,0 +1,13 @@
+.list-group-item {
+  margin: 0.4em 0;
+  padding: 0.5em;
+}
+
+li span .icon {
+  padding: 0 1em;
+}
+
+.excluir {
+  float: right;
+  color: red;
+}

@@ -1,3 +1,12 @@
+:root {
+  --cor-um: #4f5e38;
+  --cor-dois: #8aa958;
+  --cor-tres: #a2af89;
+  --cor-quatro: #d3eaac;
+  --cor-cinco: #a6ce74;
+  --cor-seis: #edfeed;
+}
+
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;

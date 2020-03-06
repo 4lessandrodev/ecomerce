@@ -1,0 +1,87 @@
+<div class="gtco-section">
+  <div class="gtco-container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-6 animate-box">
+          <h3>Cesta Selecionada</h3>
+          <%- include('./alerts') -%>
+          <form action="/salvar-item-cesta" method="POST" id="form-salvar-cesta">
+            <div class="row">
+              <div class="col-lg-10 col-md-10 col-sm-10" data-row="<%= JSON.stringify(cesta)%>">
+                <a href="../<%=cesta.imageCesta%>" class="fh5co-card-item image-popup">
+                  <figure>
+                    <div class="overlay">
+                      <i style="font-size: 1.5em;">
+                        Comprar
+                      </i>
+                    </div>
+                    <img src="../<%=cesta.imageCesta%>" alt="Image" class="img-responsive" style="margin: auto;">
+                  </figure>
+                  <div class="fh5co-text">
+                    <h2><%=cesta.descriptionCesta%></h2>
+                    <input type="hidden" value="../<%=cesta.imageCesta%>" name="mainImage" class="item">
+                    <input type="hidden" value="<%=cesta.idCesta%>" name="mainCode" class="item">
+                    <input type="hidden" value="<%=cesta.descriptionCesta%>" name="mainDescription" class="item">
+                    <input type="hidden" value="<%=cesta.salesPriceCesta%>" name="priceTotal" class="item">
+                    <input type="hidden" value="" name="itens" class="item">
+                    <p><i><%=cesta.descriptionCesta%> - <%=cesta.qtdItensCesta%> itens </i></p>
+                    <p><%=cesta.nutrInfoCesta%></p>
+                    <p>
+                      <span class="price cursive-font">R$ <%=cesta.salesPriceCesta%></span>
+                    </p>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+
+          </form>
+        </div>
+        <div class="col-md-5 col-md-push-1 animate-box">
+
+          <div class="gtco-contact-info">
+            <h3>Produtos</h3>
+            <div class="card" style="width: 1em 0;">
+              <ul class="list-group list-group-flush">
+                <% produtos.forEach(function(produto){ %>
+                <li class="list-group-item" style="margin:0.4em 0; padding: 0.5em;">
+                  <input type="hidden" value="<%=produto.idProd%>" class="item" name="arrayItensCode">
+                  <input type="hidden" value="<%=produto.nameProd%>" class="item" name="itensDecription">
+                  <span style="padding: 0 1em;" class="icon"><i class="far fa-bookmark"
+                      style="font-size: larger;"></i></span>
+                  <%=produto.nameProd%>
+                  <span style="float: right; color: red;" class="excluir">
+                    <i class="far fa-trash-alt"></i>
+                  </span>
+                </li>
+                <% }); %>
+
+
+                <li class="list-group-item" style="margin:1em 0; padding: 0.5em;">
+                  <span style="padding: 0 1em;"></span>
+                  <strong>Adicionar novo item</strong>
+                  <span style="float: right; color: darkgreen;">
+                    <i class="far fa-plus-square"></i>
+                  </span>
+                </li>
+              </ul>
+            </div>
+            <button type="submit" class="btn btn-default btn-block">
+              <span style="float: left; font-size: 1.2em;">
+              </span>
+              Colocar no Carrinho
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="./../javascripts/Controller/AddItemNoCarrinhoController.js"></script>
+<script src="./../javascripts/util/Utils.js"></script>
+<!-- FIM DO SCRIPT PARA ENVIAR O FORMULÁRIO -->
+<script>
+  Utils.atualizarQtdItensNoCarrinho();
+</script>
+</div>

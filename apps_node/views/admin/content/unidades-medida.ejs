@@ -1,0 +1,136 @@
+    <main>
+      <section class="container formulario display-none" id="form-new">
+        <div style="margin-bottom: 1em;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close-category"
+            onclick="Utils.ocultarFormulario('#form-new', 'display-none', true)">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+
+        <!-- FORMULÁRIO DE CADASTRO DE UNIDADE DE MEDIDA-->
+        <form method="POST" action="/admin/unidades-medida">
+          <input type="hidden" id="id" name="id">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="descricao"><strong>Unidade de Medida</strong></label>
+              <input type="text" class="form-control" id="descricao" name="description" placeholder="Descrição">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="inputState"><strong>Status</strong></label>
+              <select id="inputState" class="form-control" name="status">
+                <option selected>Selecione...</option>
+                <option value="1">Ativo</option>
+                <option value="0">Bloqueado</option>
+              </select>
+            </div>
+            <div class="form-group col-md-2">
+              <button type="submit" class="btn btn-primary form-control botao-salvar">Salvar</button>
+            </div>
+          </div>
+        </form>
+      </section>
+      <!-- FIM FORMULÁRIO DE CADASTRO DE UNIDADE DE MEDIDA-->
+
+
+      <!-- SCRIPT PARA ENVIAR O FORMULÁRIO -->
+      <script src="./../javascripts/js/script-formsave.js"></script>
+      <script>
+        let form = document.querySelector('main form');
+
+        form.save().then(json => {
+
+          window.location.reload();
+
+        }).catch(err => {
+
+          console.log(err);
+
+        });
+      </script>
+      <!-- FIM DO SCRIPT PARA ENVIAR O FORMULÁRIO -->
+
+
+      <!-- LISTA DE CATEGORIA DE PRODUTO-->
+      <section class="container list-itens-container table-responsive-md">
+        <div class="navbar navbar-light">
+          <h6 class="navbar-brand">
+            Lista de Unidades de Medida
+          </h6>
+        </div>
+
+        <table class="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Codigo</th>
+              <th scope="col">Descrição</th>
+              <th scope="col">Status</th>
+              <th scope="col" class="col-small">Excluir</th>
+              <th scope="col" class="col-small">Editar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% unidMedida.forEach(function(row){ %>
+            <tr data-row="<%= JSON.stringify(row)%>">
+              <th scope="row"><%=row.id%></th>
+              <td><%=row.description%></td>
+              <td><% if(row.status){ %>Ativo<% }else{ %>Bloqueado<% }; %></td>
+              <td>
+                <button class="btn btn-excluir"><i class="fas fa-trash-alt"></i></button>
+              </td>
+              <td>
+                <button class="btn btn-editar" onclick="Utils.exibirFormulario('#form-new', 'display-none')"><i
+                    class="fa fa-pencil-alt"></i></button>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </section>
+    </main>
+
+    <script>
+      let buttonsEdit = document.querySelectorAll('.btn-editar');
+      let buttonsDelete = document.querySelectorAll('.btn-excluir');
+
+      let mainForm = document.querySelector('main form');
+      for (let btn of buttonsEdit) {
+        btn.addEventListener('click', function (e) {
+          let tr = e.path.find(elemento => {
+            return (elemento.tagName.toUpperCase() == 'TR');
+          });
+
+          window.scrollTo(0, 0);
+
+          let data = JSON.parse(tr.dataset.row);
+
+          for (let name in data) {
+            switch (name) {
+              case 'image':
+                mainForm.querySelector('img').src = '/' + data[name];
+                break;
+              default:
+                let input = mainForm.querySelector(`[name=${name}`);
+                if (input) input.value = data[name];
+            }
+          }
+        });
+      }
+
+      for (let btn of buttonsDelete) {
+        btn.addEventListener('click', function (e) {
+          let tr = e.path.find(elemento => {
+            return (elemento.tagName.toUpperCase() == 'TR');
+          });
+
+          let data = JSON.parse(tr.dataset.row);
+
+          fetch(`/admin/unidades-medida/${data.id}`, {
+              method: 'POST'
+            }).then(response => response.json())
+            .then(json => {
+              window.location.reload();
+            })
+        });
+      }
+    </script>

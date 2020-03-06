@@ -1,0 +1,37 @@
+<div class="gtco-section">
+  <div class="gtco-container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
+        <h2 class="cursive-font primary-color">Mercearia</h2>
+        <p>Mussum Ipsum, cacilds vidis litro abertis. Diuretics paradis num copo é motivis de denguis. Quem num
+          gosta di mé, boa
+          gentis num é.</p>
+      </div>
+    </div>
+    <div class="row">
+
+      <% produtos.forEach(function(produto){ %>
+      <div class="col-lg-4 col-md-4 col-sm-6" data-row="<%= JSON.stringify(produto)%>">
+        <a href="<%=produto.imageProd%>" class="fh5co-card-item image-popup" onclick="Utils.getProdutoById(this)">
+          <input type="hidden" value="<%=produto.idProd%>" class="item-id">
+          <figure>
+            <div class="overlay">
+              <i style="font-size: 1.5em;">
+                Comprar
+              </i>
+            </div>
+            <img src="<%=produto.imageProd%>" alt="Image" class="img-responsive" style="margin: auto;">
+          </figure>
+          <div class="fh5co-text">
+            <h2><%=produto.nameProd%></h2>
+            <p><%=produto.nutrictionInformationProd%></p>
+            <p>
+              <span class="price cursive-font">R$ <%=produto.salePriceProd%></span>
+            </p>
+          </div>
+        </a>
+      </div>
+      <% }); %>
+    </div>
+  </div>
+</div>
