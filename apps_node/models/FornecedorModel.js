@@ -1,10 +1,10 @@
 const conect = require('./../config/CONECT_BD');
 class FornecedorModel {
-  constructor (razao_social, cnpj, cep, cidade, estado, endereco, phone, email, bairro, nome_fantasia, fornecedor_excluido = 0, status = 1) {
+  constructor (razao_social, cnpj_cpf, cep, cidade, estado, endereco, phone, email, bairro, nome_fantasia, fornecedor_excluido = 0, status = 1) {
     this._id = null;
     this._razao_social = razao_social;
     this._nome_fantasia = nome_fantasia;
-    this._cnpj = cnpj;
+    this._cnpj_cpf = cnpj_cpf;
     this._cep = cep;
     this._cidade = cidade;
     this._estado = estado;
@@ -19,10 +19,10 @@ class FornecedorModel {
     return this._razao_social;
   }
   get nome_fantasia() {
-    return this._fatansyName;
+    return this._nome_fantasia;
   }
-  get cnpj() {
-    return this._cnpj;
+  get cnpj_cpf() {
+    return this._cnpj_cpf;
   }
   get cep() {
     return this._cep;
@@ -56,8 +56,8 @@ class FornecedorModel {
   set razao_social(value) {
     this._razao_social = value;
   }
-  set cnpj(value) {
-    this._cnpj = value;
+  set cnpj_cpf(value) {
+    this._cnpj_cpf = value;
   }
   set cep(value) {
     this._cep = value;
@@ -93,12 +93,16 @@ class FornecedorModel {
     this._bairro = value;
   }
   set nome_fantasia(value) {
-    this._fatansyName = value;
+    this._nome_fantasia = value;
   }
 
   salvarFornecedor(fornecedor) {
     return new Promise((resolve, reject) => {
-      conect.query(``, [], (err, result) => {
+      conect.query(`INSERT INTO tb_fornecedores(razao_social, nome_fantasia, cnpj_cpf, cep, cidade, estado, endereco,
+        phone, email, status, bairro) VALUES(?,?,?,?,?,?,?,?,?,?,?)`, [
+        fornecedor._razao_social, fornecedor._nome_fantasia, fornecedor._cnpj_cpf, fornecedor._cep, fornecedor._cidade,
+        fornecedor._estado, fornecedor._endereco, fornecedor._phone, fornecedor._email, fornecedor._status, fornecedor._bairro
+      ], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -112,7 +116,9 @@ class FornecedorModel {
 
   listarFornecedores(fornecedor) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, (err, result) => {
+      conect.query(`SELECT * FROM tb_fornecedores WHERE fornecedor_excluido = ?`, [
+        fornecedor._fornecedor_excluido
+      ], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -125,7 +131,11 @@ class FornecedorModel {
 
   atualizarFornecedor(fornecedor) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, [], (err, result) => {
+      conect.query(`UPDATE tb_fornecedores SET razao_social = ?, nome_fantasia = ?, cnpj_cpf = ?, cep = ?, cidade = ?, estado = ?, endereco = ?,
+        phone = ?, email = ?, status = ?, bairro = ? WHERE id = ?`, [
+        fornecedor._razao_social, fornecedor._nome_fantasia, fornecedor._cnpj_cpf, fornecedor._cep, fornecedor._cidade,
+        fornecedor._estado, fornecedor._endereco, fornecedor._phone, fornecedor._email, fornecedor._status, fornecedor._bairro, fornecedor._id
+      ], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -139,14 +149,15 @@ class FornecedorModel {
 
   desabilitarFornecedor(fornecedor) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, [], (err, result) => {
-        if (err) {
-          console.log(err.message);
-          reject(err.message);
-        } else {
-          resolve(result);
-        }
-      });
+      conect.query(`UPDATE tb_fornecedores SET fornecedor_excluido = ? WHERE id = ?`, [
+        fornecedor._fornecedor_excluido, fornecedor._id], (err, result) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
     });
   }
 

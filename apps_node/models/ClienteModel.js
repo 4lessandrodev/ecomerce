@@ -1,6 +1,6 @@
 const conect = require('./../config/CONECT_BD');
 class ClienteModel {
-  constructor (id_usuario, phone, nome, cep, cidade, estado, endereco, codigo_ibge, regiao, bairro, regiao_atendida = 1, cliente_excluido = 0) {
+  constructor (id_usuario, phone, nome, cep, cidade, estado, endereco, codigo_ibge, id_regiao, bairro, regiao_atendida = 1, cliente_excluido = 0) {
     this._id = null;
     this._id_usuario = id_usuario;
     this._phone = phone;
@@ -11,7 +11,7 @@ class ClienteModel {
     this._endereco = endereco;
     this._bairroer = bairro;
     this._codigo_ibge = codigo_ibge;
-    this._regiao = regiao;
+    this._id_regiao = id_regiao;
     this._regiao_atendida = regiao_atendida;
     this._cliente_excluido = cliente_excluido;
   }
@@ -73,11 +73,11 @@ class ClienteModel {
   set codigo_ibge(value) {
     this._codigo_ibge = value;
   }
-  get regiao() {
-    return this._regiao;
+  get id_regiao() {
+    return this._id_regiao;
   }
-  set regiao(value) {
-    this._regiao = value;
+  set id_regiao(value) {
+    this._id_regiao = value;
   }
   get regiao_atendida() {
     return this._regiao_atendida;
@@ -98,7 +98,11 @@ class ClienteModel {
 
   salvarCliente(cliente) {
     return new Promise((resolve, reject) => {
-      conect.query(``, [], (err, result) => {
+      conect.query(`INSERT INTO tb_clientes(id_usuario, phone, nome, cep, cidade, endereco, codigo_ibge,
+        estado, id_regiao, regiao_atendida, cliente_excluido, bairro) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)`, [
+        cliente._id_usuario, cliente._phone, cliente._nome, cliente._cep, cliente._cidade, cliente._endereco, cliente._codigo_ibge,
+        cliente._estado, cliente._id_regiao, cliente._regiao_atendida, cliente._cliente_excluido, cliente._bairro
+      ], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -110,9 +114,11 @@ class ClienteModel {
   }
 
 
-  listarClientes(Cliente) {
+  listarClientes(cliente) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, (err, result) => {
+      conect.query(`SELECT c.nome, c.phone, u.email, c.endereco, c.cidade, c.estado, r.descricao as regiao, c.regiao_atendida, c.data_cadastro
+FROM tb_clientes AS c, tb_usuarios AS u, tb_regioes AS r 
+WHERE u.id = c.id_usuario AND r.id = c.id_regiao AND c.cliente_excluido = ?;`, [cliente._cliente_excluido], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -125,7 +131,11 @@ class ClienteModel {
 
   atualizarCliente(cliente) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, [], (err, result) => {
+      conect.query(`UPDATE tb_clientes SET phone =?, nome =?, cep =?, cidade =?, endereco =?, codigo_ibge =?,
+        estado =?, id_regiao =?, regiao_atendida =?, cliente_excluido =?, bairro =?) WHERE id = ?`, [
+        cliente._phone, cliente._nome, cliente._cep, cliente._cidade, cliente._endereco, cliente._codigo_ibge,
+        cliente._estado, cliente._id_regiao, cliente._regiao_atendida, cliente._cliente_excluido, cliente._bairro, cliente._id
+      ], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -139,7 +149,9 @@ class ClienteModel {
 
   desabilitarCliente(cliente) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, [], (err, result) => {
+      conect.query(`UPDATE tb_clientes SET cliente_excluido = ? WHERE id = ?`, [
+        cliente._cliente_excluido, cliente._id
+      ], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);

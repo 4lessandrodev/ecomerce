@@ -1,6 +1,6 @@
 const conect = require('./../config/CONECT_BD');
 class LojaModel {
-  constructor (razao_social, nome_fantasia, cnpj_cpf, cep, cidade, estado, endereco, phone, email, regiao, status = 1, loja_excluida = 0) {
+  constructor (razao_social, nome_fantasia, cnpj_cpf, cep, cidade, estado, endereco, phone, email, id_regiao, bairro, status = 1, loja_excluida = 0) {
     this._id = null;
     this._razao_social = razao_social;
     this._nome_fantasia = nome_fantasia;
@@ -13,7 +13,8 @@ class LojaModel {
     this._phone = phone;
     this._email = email;
     this._status = status;
-    this._regiao = regiao;
+    this._id_regiao = id_regiao;
+    this._bairro = bairro;
   }
   get razao_social() {
     return this._razao_social;
@@ -88,16 +89,20 @@ class LojaModel {
   set nome_fantasia(value) {
     this._nome_fantasia = value;
   }
-  get regiao() {
-    return this._regiao;
+  get id_regiao() {
+    return this._id_regiao;
   }
-  set regiao(value) {
-    this._regiao = value;
+  set id_regiao(value) {
+    this._id_regiao = value;
   }
 
   salvarLoja(loja) {
     return new Promise((resolve, reject) => {
-      conect.query(``, [], (err, result) => {
+      conect.query(`INSERT INTO tb_lojas(razao_social, nome_fantasia, cnpj_cpf, cep, cidade, estado, endereco,
+        phone, email, status, bairro, id_regiao) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)`, [
+        loja._razao_social, loja._nome_fantasia, loja._cnpj_cpf, loja._cep, loja._cidade, loja._cidade, loja._estado,
+        loja._endereco, loja._phone, loja._email, loja._status, loja._bairro, loja._id_regiao
+      ], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -111,7 +116,7 @@ class LojaModel {
 
   listarLojas(loja) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, (err, result) => {
+      conect.query(`SELECT * FROM tb_lojas WHERE loja_excluida = ?`, [loja._loja_excluida], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -124,7 +129,11 @@ class LojaModel {
 
   atualizarLoja(loja) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, [], (err, result) => {
+      conect.query(`UPDATE tb_lojas SET razao_social = ?, nome_fantasia = ?, cnpj_cpf = ?, cep = ?, cidade = ?, estado = ?, endereco = ?,
+        phone = ?, email = ?, status = ?, bairro = ? WHERE id_regiao = ? WHERE id = ?`, [
+        loja._razao_social, loja._nome_fantasia, loja._cnpj_cpf, loja._cep, loja._cidade, loja._estado,
+        loja._endereco, loja._phone, loja._email, loja._status, loja._bairro, loja._id_regiao, loja._id
+      ], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -138,7 +147,9 @@ class LojaModel {
 
   desabilitarLoja(loja) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, [], (err, result) => {
+      conect.query(`UPDATE tb_lojas SET loja_excluida = ? WHERE id = ?`, [
+        loja._loja_excluida, loja._id
+      ], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);

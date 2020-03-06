@@ -1,6 +1,7 @@
 const conect = require('./../config/CONECT_BD');
 class id_fornecedorParaProdutoModel {
-  constructor (id_fornecedor, id_produto) {
+  constructor (id, id_fornecedor, id_produto) {
+    this._id = id;
     this._id_fornecedor = id_fornecedor;
     this._id_produto = id_produto;
   }
@@ -16,9 +17,20 @@ class id_fornecedorParaProdutoModel {
   set id_produto(value) {
     this._id_produto = value;
   }
-  salvarCategoriaCesta(cesta) {
+
+  get id() {
+    return this._id;
+  }
+  set id(value) {
+    this._id = value;
+  }
+
+
+  salvarCategoriaCesta(forn_prod) {
     return new Promise((resolve, reject) => {
-      conect.query(``, [], (err, result) => {
+      conect.query(`
+      INSERT INTO tb_fornecedor_produtos(id_fornecedor, id_produto) VALUES(?,?)
+      `, [forn_prod._id_fornecedor, forn_prod._id_produto], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -30,9 +42,11 @@ class id_fornecedorParaProdutoModel {
   }
 
 
-  listarFornecedoresParaProduto(fornecedor) {
+  listarFornecedoresParaProduto(forn_prod) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, (err, result) => {
+      conect.query(`
+      SELECT * FROM tb_fornecedor_produtos
+      `, (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -43,9 +57,11 @@ class id_fornecedorParaProdutoModel {
     });
   }
 
-  atualizarFornecedoresParaProduto(fornecedor) {
+  atualizarFornecedoresParaProduto(forn_prod) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, [], (err, result) => {
+      conect.query(`
+      UPDATE tb_fornecedor_produtos SET id_fornecedor = ?, id_produto = ? WHERE id = ?
+      `, [forn_prod._id_fornecedor, forn_prod._id_produto, forn_prod._id], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -56,10 +72,11 @@ class id_fornecedorParaProdutoModel {
     });
   }
 
-
-  desabilitarFornecedoresParaProduto(fornecedor) {
+  excluirFornecedoresParaProduto(forn_prod) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, [], (err, result) => {
+      conect.query(`
+       DELETE FROM tb_fornecedor_produtos WHERE id = ?
+      `, [forn_prod._id], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);

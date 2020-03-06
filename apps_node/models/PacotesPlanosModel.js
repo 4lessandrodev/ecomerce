@@ -60,7 +60,9 @@ class PacotesPlanosModel {
 
   salvarPacotePlano(pacotePlano) {
     return new Promise((resolve, reject) => {
-      conect.query(``, [], (err, result) => {
+      conect.query(`INSERT INTO tb_pacotes_planos(quantidade_cestas, id_cesta, preco, descricao, titulo, status) VALUES(?,?,?,?,?,?)`, [
+        pacotePlano.quantidade_cestas, pacotePlano._id_cesta, pacotePlano._preco, pacotePlano._descricao, pacotePlano._titulo, pacotePlano._status
+      ], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -74,7 +76,7 @@ class PacotesPlanosModel {
 
   listarPacotesPlanos(pacotePlano) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, (err, result) => {
+      conect.query(`SELECT * FROM tb_pacotes_planos WHERE id = ?`, [pacotePlano._plano_excluido], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -87,7 +89,9 @@ class PacotesPlanosModel {
 
   atualizarPacotePlano(pacotePlano) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, [], (err, result) => {
+      conect.query(`UPDATE tb_pacotes_planos SET quantidade_cestas = ?, id_cesta = ?, preco = ?, descricao = ?, titulo = ?, status = ? WHERE id = ?`, [
+        pacotePlano.quantidade_cestas, pacotePlano._id_cesta, pacotePlano._preco, pacotePlano._descricao, pacotePlano._titulo, pacotePlano._status, pacotePlano._id
+      ], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -101,7 +105,9 @@ class PacotesPlanosModel {
 
   desabilitarPacotePlano(pacotePlano) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, [], (err, result) => {
+      conect.query(`UPDATE tb_pacotes_planos SET plano_excluido = ? WHERE id = ?`, [
+        pacotePlano.plano_excluido, pacotePlano._id
+      ], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);

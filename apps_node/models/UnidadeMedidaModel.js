@@ -34,55 +34,59 @@ class UnidadeMedidaModel {
 
   salvarUnidadeMedida(unidadeMedida) {
     return new Promise((resolve, reject) => {
-      conect.query(`INSERT INTO tb_und_medidas(descricao, status, categoria_excluida) VALUES(?,?,?)`, [unidadeMedida._descricao, unidadeMedida._status, unidadeMedida.categoria_excluida], (err, result) => {
-        if (err) {
-          console.log(err.message);
-          reject(err.message);
-        } else {
-          resolve(result);
-        }
-      });
+      conect.query(`INSERT INTO tb_und_medidas(descricao, status, categoria_excluida) VALUES(?,?,?)`, [
+        unidadeMedida._descricao, unidadeMedida._status, unidadeMedida.categoria_excluida], (err, result) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
     });
   }
 
 
   listarUnidadesMedida(unidadeMedida) {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT * FROM tb_und_medidas WHERE categoria_excluida = ? AND status = ?`, [unidadeMedida._categoria_excluida, unidadeMedida._status], (err, result) => {
-        if (err) {
-          console.log(err.message);
-          reject(err.message);
-        } else {
-          resolve(result);
-        }
-      });
+      conect.query(`SELECT * FROM tb_und_medidas WHERE categoria_excluida = ? AND status = ?`, [
+        unidadeMedida._categoria_excluida, unidadeMedida._status], (err, result) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
     });
   }
 
   atualizarUnidadeMedida(unidadeMedida) {
     return new Promise((resolve, reject) => {
-      conect.query(`UPDATE tb_und_medidas SET descricao = ?, status = ?, categoria_excluida = ? WHERE id = ?`, [unidadeMedida._descricao, unidadeMedida._status, unidadeMedida._categoria_excluida, unidadeMedida._id], (err, result) => {
-        if (err) {
-          console.log(err.message);
-          reject(err.message);
-        } else {
-          resolve(result);
-        }
-      });
+      conect.query(`UPDATE tb_und_medidas SET descricao = ?, status = ?, categoria_excluida = ? WHERE id = ?`, [
+        unidadeMedida._descricao, unidadeMedida._status, unidadeMedida._categoria_excluida, unidadeMedida._id], (err, result) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
     });
   }
 
 
   desabilitarUnidadeMedida(unidadeMedida) {
     return new Promise((resolve, reject) => {
-      conect.query(`UPDATE tb_und_medidas SET categoria_excluida = ? WHERE id = ?`, [unidadeMedida._categoria_excluida, unidadeMedida._id], (err, result) => {
-        if (err) {
-          console.log(err.message);
-          reject(err.message);
-        } else {
-          resolve(result);
-        }
-      });
+      conect.query(`UPDATE tb_und_medidas SET categoria_excluida = ? WHERE id = ?`, [
+        unidadeMedida._categoria_excluida, unidadeMedida._id], (err, result) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
     });
   }
 

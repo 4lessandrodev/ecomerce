@@ -1,10 +1,11 @@
 const conect = require('./../config/CONECT_BD');
 class FormaDePagamentoModel {
-  constructor (desconto, descricao_regras, tipo_pagamento_excluido = 0, status = 1) {
+  constructor (desconto, descricao_regras, descricao, tipo_pagamento_excluido = 0, status = 1) {
     this._id = null;
     this._desconto = desconto;
     this._status = status;
     this._descricao_regras = descricao_regras;
+    this._descricao = descricao;
     this._tipo_pagamento_excluido = tipo_pagamento_excluido;
   }
   get desconto() {
@@ -37,11 +38,19 @@ class FormaDePagamentoModel {
   set id(value) {
     this._id = value;
   }
+  get descricao() {
+    return this._descricao;
+  }
+  set descricao(value) {
+    this._descricao = value;
+  }
 
 
   salvarFormaPagamento(formaPagamento) {
     return new Promise((resolve, reject) => {
-      conect.query(``, [], (err, result) => {
+      conect.query(`INSERT INTO tb_tipos_pagamento(desconto, descricao_regras, status, descricao) VALUES(?,?,?,?)`, [
+        formaPagamento._desconto, formaPagamento._descricao_regras, formaPagamento._status, formaPagamento._descricao
+      ], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -55,7 +64,7 @@ class FormaDePagamentoModel {
 
   listarFormasPagamento(formaPagamento) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, (err, result) => {
+      conect.query(`SELECT * FROM tb_tipos_pagamento WHERE tipo_pagamento_excluido = ?`, [formaPagamento._tipo_pagamento_excluido], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -68,7 +77,9 @@ class FormaDePagamentoModel {
 
   atualizarFormaPagamento(formaPagamento) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, [], (err, result) => {
+      conect.query(`UPDATE tb_tipos_pagamento SET desconto = ?, descricao_regras = ?, status = ?, descricao = ? WHERE id = ?`, [
+        formaPagamento._desconto, formaPagamento._descricao_regras, formaPagamento._status, formaPagamento._descricao, formaPagamento._id
+      ], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -82,7 +93,9 @@ class FormaDePagamentoModel {
 
   desabilitarFormaPagamento(formaPagamento) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, [], (err, result) => {
+      conect.query(`UPDATE tb_tipos_pagamento SET tipo_pagamento_excluido = ?, WHERE id = ?`, [
+        formaPagamento.tipo_pagamento_excluido, formaPagamento._id
+      ], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);

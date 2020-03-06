@@ -18,4 +18,5 @@ const listarCategorias = (req, res, next) => {
   });
 };
 
+
 module.exports = { salvarCategoria, listarCategorias };

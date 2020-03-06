@@ -27,7 +27,7 @@ class ProdutosParaCestaModel {
 
   salvarProdutoParaCesta(produto) {
     return new Promise((resolve, reject) => {
-      conect.query(``, [], (err, result) => {
+      conect.query(`INSERT INTO tb_produtos_para_cesta(id_produto, id_cesta) VALUES(?,?)`, [produto._id_produto, produto._id_cesta], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -41,7 +41,7 @@ class ProdutosParaCestaModel {
 
   listarProdutoParaCesta(produto) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, (err, result) => {
+      conect.query(`SELECT * FROM tb_produtos_para_cesta`, (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -54,7 +54,7 @@ class ProdutosParaCestaModel {
 
   atualizarProdutoParaCesta(produto) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, [], (err, result) => {
+      conect.query(`UPDATE tb_produtos_para_cesta SET id_produto = ?, id_cesta = ? WHERE id = ?`, [produto._id_produto, produto._id_cesta, produto._id], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -68,7 +68,7 @@ class ProdutosParaCestaModel {
 
   desabilitarProdutoParaCesta(produto) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, [], (err, result) => {
+      conect.query(`DELETE FROM tb_produtos_para_cesta WHERE id = ?`, [produto._id], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);

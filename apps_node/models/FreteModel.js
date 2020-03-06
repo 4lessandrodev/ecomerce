@@ -1,11 +1,12 @@
 const conect = require('./../config/CONECT_BD');
 class FreteModel {
-  constructor (origem, destino, preco, data_cadastro = new Date()) {
+  constructor (id_origem, id_destino, preco, data_cadastro = new Date(), tabela_excluida = 0) {
     this._id = null;
-    this._origem = origem;
-    this._destino = destino;
+    this._id_origem = id_origem;
+    this._id_destino = id_destino;
     this._preco = preco;
     this._data_cadastro = data_cadastro;
+    this.__tabela_excluida = tabela_excluida;
   }
   get id() {
     return this._id;
@@ -13,17 +14,17 @@ class FreteModel {
   set id(value) {
     this._id = value;
   }
-  get origem() {
-    return this._origem;
+  get id_origem() {
+    return this._id_origem;
   }
-  set origem(value) {
-    this._origem = value;
+  set id_origem(value) {
+    this._id_origem = value;
   }
-  get destino() {
-    return this._destino;
+  get id_destino() {
+    return this._id_destino;
   }
-  set destino(value) {
-    this._destino = value;
+  set id_destino(value) {
+    this._id_destino = value;
   }
   get preco() {
     return this._preco;
@@ -38,9 +39,18 @@ class FreteModel {
     this._data_cadastro = value;
   }
 
+  get tabela_excluida() {
+    return this._tabela_excluida;
+  }
+  set tabela_excluida(value) {
+    this._tabela_excluida = value;
+  }
+
   salvarFrete(frete) {
     return new Promise((resolve, reject) => {
-      conect.query(``, [], (err, result) => {
+      conect.query(`INSERT INTO tb_fretes(id_origem, id_destino, preco) VALUES(?,?,?)`, [
+        frete._id_origem, frete._id_destino, frete._preco
+      ], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -54,7 +64,7 @@ class FreteModel {
 
   listarFretes(frete) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, (err, result) => {
+      conect.query(`SELECT * FROM tb_fretes WHERE tabela_excluida = ?`, [frete._tabela_excluida], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -67,28 +77,30 @@ class FreteModel {
 
   atualizarFrete(frete) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, [], (err, result) => {
-        if (err) {
-          console.log(err.message);
-          reject(err.message);
-        } else {
-          resolve(result);
-        }
-      });
+      conect.query(`UPDATE tb_fretes SET id_origem = ?, id_destino = ?, preco = ? WHERE id`, [
+        frete._id_origem, frete._id_destino, frete._preco, frete._id], (err, result) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
     });
   }
 
 
   desabilitarFrete(frete) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, [], (err, result) => {
-        if (err) {
-          console.log(err.message);
-          reject(err.message);
-        } else {
-          resolve(result);
-        }
-      });
+      conect.query(`UPDATE tb_fretes SET tabela_excluida = ? WHERE id`, [
+        frete._tabela_excluida, frete._id], (err, result) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
     });
   }
 

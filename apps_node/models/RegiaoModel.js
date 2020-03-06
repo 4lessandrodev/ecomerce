@@ -33,7 +33,7 @@ class RegiaoModel {
 
   salvarRegiao(regiao) {
     return new Promise((resolve, reject) => {
-      conect.query(`INSERT INTO tb_regioes(descricao, status, regiao_excluida)`, [regiao._descricao, regiao._status, regiao._regiao_excluida], (err, result) => {
+      conect.query(`INSERT INTO tb_regioes(descricao, status, regiao_excluida) VALUES(?,?,?)`, [regiao._descricao, regiao._status, regiao._regiao_excluida], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);

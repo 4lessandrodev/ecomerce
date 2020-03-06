@@ -34,7 +34,9 @@ class CompraModel {
 
   salvarCompra(compra) {
     return new Promise((resolve, reject) => {
-      conect.query(``, [], (err, result) => {
+      conect.query(`INSERT INTO tb_compras(id_cliente, pedido_aberto) VALUES(?,?)`, [
+        compra._id_cliente, compra._pedido_aberto
+      ], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -48,7 +50,7 @@ class CompraModel {
 
   listarCompra(compra) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, (err, result) => {
+      conect.query(`SELECT * FROM tb_compras`, (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -61,7 +63,9 @@ class CompraModel {
 
   atualizarCompra(compra) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, [], (err, result) => {
+      conect.query(`UPDATE tb_compras SET id_cliente = ?, pedido_aberto = ? WHERE id = ?`, [
+        compra._id_cliente, compra._pedido_aberto, compra._id
+      ], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -73,9 +77,9 @@ class CompraModel {
   }
 
 
-  desabilitarCompra(compra) {
+  excluirCompra(compra) {
     return new Promise((resolve, reject) => {
-      conect.query(`sql`, [], (err, result) => {
+      conect.query(`DELETE FROM tb_compras WHERE id = ?`, [compra._id], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);

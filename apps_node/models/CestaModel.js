@@ -77,8 +77,8 @@ class CestaModel {
 
   salvarCesta(cesta) {
     return new Promise((resolve, reject) => {
-      conect.query(`INSERT INTO tb_cestas(imagem, descricao, id_categoria_cesta, status, preco,
-        alteracoes_permitidas, informacoes_nutricionais, cesta_excluida) VALUES(?,?,?,?,?,?,?)`, [cesta._imagem, cesta._descricao, cesta._id_categoria_cesta, cesta._status, cesta._preco, cesta._alteracoes_permitidas, cesta.__informacoes_nutricionais, cesta._cesta_excluida], (err, result) => {
+      conect.query(`INSERT INTO tb_cestas(imagem, descricao, id_categoria_c_cesta, status, preco,
+        alteracoes_permitidas, informacoes_nutricionais, cesta_excluida) VALUES(?,?,?,?,?,?,?)`, [cesta._imagem, cesta._descricao, cesta._id_categoria_c_cesta, cesta._status, cesta._preco, cesta._alteracoes_permitidas, cesta.__informacoes_nutricionais, cesta._cesta_excluida], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -92,16 +92,20 @@ class CestaModel {
 
   listarCestas(cesta) {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT * FROM tb_cestas WHERE cesta_excluida = ?`, [cesta._cesta_excluida], (err, results) => {
-        if (err) {
-          console.log(err.message);
-          reject(err.message);
-        } else {
-          resolve(results);
-        }
-      });
+      conect.query(`SELECT c.id, c.imagem, c.descricao AS 'cesta', cc.descricao AS 'categoria', p.descricao, p.status, p.fator_multiplicador, c.preco, c.alteracoes_permitidas, c.informacoes_nutricionais
+FROM tb_cestas AS c, tb_produtos_para_cesta AS pc, tb_produtos AS p, tb_categoria_cestas AS cc 
+WHERE cesta_excluida = ? AND c.id = pc.id_cesta AND p.id = pc.id_produto AND cc.id = c.id_categoria_cesta GROUP BY c.id`, [
+        cesta._cesta_excluida], (err, results) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(results);
+          }
+        });
     });
   }
+
 
   atualizarCesta(cesta) {
     return new Promise((resolve, reject) => {
