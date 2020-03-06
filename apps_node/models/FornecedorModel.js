@@ -1,6 +1,6 @@
 const conect = require('./../config/CONECT_BD');
 class FornecedorModel {
-  constructor (razao_social, cnpj_cpf, cep, cidade, estado, endereco, phone, email, bairro, nome_fantasia, fornecedor_excluido = 0, status = 1) {
+  constructor (razao_social, cnpj_cpf, cep, cidade, estado, endereco, phone, email, bairro, nome_fantasia, status = 1, fornecedor_excluido = 0) {
     this._id = null;
     this._razao_social = razao_social;
     this._nome_fantasia = nome_fantasia;

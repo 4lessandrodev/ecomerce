@@ -1,50 +1,42 @@
-const xxx = require('model');
+const FornecedorParaProduto = require('./../models/FornecedorParaProdutoModel');
 
-
-const salvar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.salvar().then(xx => {
-
+//-------------------------------------------------------------------------------
+const salvarFornecedorParaProduto = (req, res, next) => {
+  let fpp = new FornecedorParaProduto(req.body.id_fornecedor, req.body.id_produto);
+  fpp.salvarFornecedorParaProduto(fpp).then(forn => {
+    res.send(forn);
   }).catch(err => {
-
+    res.send(err.message);
+  });
+};
+//-------------------------------------------------------------------------------
+const editarFornecedorParaProduto = (req, res, next) => {
+  let fpp = new FornecedorParaProduto(req.body.id_fornecedor, req.body.id_produto);
+  fpp.id = req.body.id;
+  fpp.atualizarFornecedoresParaProduto(fpp).then(forn => {
+    res.send(forn);
+  }).catch(err => {
+    res.send(err.message);
+  });
+};
+//-------------------------------------------------------------------------------
+const excluirFornecedorParaProduto = (req, res, next) => {
+  let fpp = new FornecedorParaProduto(req.body.id_fornecedor, req.body.id_produto);
+  fpp.id = req.body.id;
+  fpp.excluirFornecedoresParaProduto(fpp).then(forn => {
+    res.send(forn);
+  }).catch(err => {
+    res.send(err.message);
+  });
+};
+//-------------------------------------------------------------------------------
+const listarFornecedoresParaProduto = (req, res, next) => {
+  let fpp = new FornecedorParaProduto(req.body.id_fornecedor, req.body.id_produto);
+  fpp.listarFornecedoresParaProduto(fpp).then(fornecedores => {
+    res.send(fornecedores);
+  }).catch(err => {
+    res.send(err.message);
   });
 };
 
-
-const editar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.editar().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-const excluir = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.excluir().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-const listar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.listar().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-const desativar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.desativar().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-module.exports = { salvar, editar, excluir, listar, desativar };
+module.exports = { salvarFornecedorParaProduto, editarFornecedorParaProduto, excluirFornecedorParaProduto, listarFornecedoresParaProduto };

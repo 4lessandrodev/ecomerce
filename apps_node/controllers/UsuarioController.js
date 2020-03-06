@@ -1,50 +1,32 @@
-const xxx = require('model');
+const Usuario = require('./../models/UsuarioModel');
 
-
-const salvar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.salvar().then(xx => {
-
+//-----------------------------------------------------------------
+const salvarUsuario = (req, res, next) => {
+  let usuario = new Usuario(req.body.email, req.body.senha);
+  usuario.cadastrarNovoUsuario(usuario).then(usuario => {
+    res.send(usuario);
   }).catch(err => {
-
+    res.send(err.message);
+  });
+};
+//-----------------------------------------------------------------
+const editarUsuario = (req, res, next) => {
+  let usuario = new Usuario(req.body.email, req.body.senha);
+  usuario.alterarSenha(usuario).then(usuario => {
+    res.send(usuario);
+  }).catch(err => {
+    res.send(err.message);
+  });
+};
+//-----------------------------------------------------------------
+const entrar = (req, res, next) => {
+  let usuario = new Usuario(req.body.email, req.body.senha);
+  usuario.entrar(usuario).then(usuario => {
+    res.send(usuario);
+  }).catch(err => {
+    res.send(err.message);
   });
 };
 
 
-const editar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.editar().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-const excluir = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.excluir().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-const listar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.listar().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-const desativar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.desativar().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-module.exports = { salvar, editar, excluir, listar, desativar };
+module.exports = { salvarUsuario, editarUsuario, entrar };

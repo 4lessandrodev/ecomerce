@@ -1,50 +1,43 @@
-const xxx = require('model');
+const Cesta = require('./../models/CestaModel');
 
-
-const salvar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.salvar().then(xx => {
-
+//---------------------------------------------------------------------------------------------
+const salvarCesta = (req, res, next) => {
+  let cesta = new Cesta(req.body.descricao, req.body.id_categoria_cesta, req.body.preco, req.body.informacoes_nutricionais, req.body.alteracoes_permitidas, req.body.imagem, req.body.status);
+  cesta.salvarCesta(cesta).then(cesta => {
+    res.send(cesta);
   }).catch(err => {
-
+    res.send(err.message);
   });
 };
-
-
-const editar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.editar().then(xx => {
-
+//---------------------------------------------------------------------------------------------
+const editarCesta = (req, res, next) => {
+  let cesta = new Cesta(req.body.descricao, req.body.id_categoria_cesta, req.body.preco, req.body.informacoes_nutricionais, req.body.alteracoes_permitidas, req.body.imagem, req.body.status);
+  cesta.atualizarCesta(cesta).then(cesta => {
+    res.send(cesta);
   }).catch(err => {
-
+    res.send(err.message);
   });
 };
-
-const excluir = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.excluir().then(xx => {
-
+//---------------------------------------------------------------------------------------------
+const desabilitarCesta = (req, res, next) => {
+  let cesta = new Cesta();
+  cesta.id = req.body.id;
+  cesta.cesta_excluida = 1;
+  cesta.desabilitarCesta(cesta).then(cesta => {
+    res.send(cesta);
   }).catch(err => {
-
+    res.send(err.message);
   });
 };
-
-const listar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.listar().then(xx => {
-
+//---------------------------------------------------------------------------------------------
+const listarCestas = (req, res, next) => {
+  let cesta = new Cesta();
+  x.listar(cesta).then(cestas => {
+    res.send(cestas);
   }).catch(err => {
-
+    res.send(err.message);
   });
 };
+//---------------------------------------------------------------------------------------------
 
-const desativar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.desativar().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-module.exports = { salvar, editar, excluir, listar, desativar };
+module.exports = { salvarCesta, editarCesta, desabilitarCesta, listarCestas };

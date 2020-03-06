@@ -74,6 +74,19 @@ class CategoriaProdutoModel {
   }
 
 
+  desabilitarCategoria(categoria) {
+    return new Promise((resolve, reject) => {
+      conect.query(`
+    UPDATE tb_categoria_produtos SET categoria_p_excluida = ? WHERE id = ?
+    `, [categoria._categoria_p_excluida, categoria._id], (err, result) => {
+        if (err) {
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
 
 
 }

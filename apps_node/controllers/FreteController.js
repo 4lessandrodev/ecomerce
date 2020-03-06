@@ -1,50 +1,42 @@
-const xxx = require('model');
+const Frete = require('./../models/FreteModel');
 
-
-const salvar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.salvar().then(xx => {
-
+//------------------------------------------------------------------------
+const salvarFrete = (req, res, next) => {
+  let frete = new Frete(req.body.id_origem, req.body.id_destino, req.body.preco);
+  frete.salvarFrete(frete).then(frete => {
+    res.send(frete);
   }).catch(err => {
-
+    res.send(err.message);
+  });
+};
+//------------------------------------------------------------------------
+const editarFrete = (req, res, next) => {
+  let frete = new Frete(req.body.id_origem, req.body.id_destino, req.body.preco);
+  frete.id = req.body.id;
+  frete.atualizarFrete(frete).then(frete => {
+    res.send(frete);
+  }).catch(err => {
+    res.send(err.message);
+  });
+};
+//------------------------------------------------------------------------
+const desabilitarFrete = (req, res, next) => {
+  let frete = new Frete();
+  frete.id = req.body.id;
+  frete.desabilitarFrete(frete).then(frete => {
+    res.send(frete);
+  }).catch(err => {
+    res.send(err.message);
+  });
+};
+//------------------------------------------------------------------------
+const listarFretes = (req, res, next) => {
+  let frete = new Frete();
+  frete.listarFretes(frete).then(fretes => {
+    res.send(fretes);
+  }).catch(err => {
+    res.send(err.message);
   });
 };
 
-
-const editar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.editar().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-const excluir = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.excluir().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-const listar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.listar().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-const desativar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.desativar().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-module.exports = { salvar, editar, excluir, listar, desativar };
+module.exports = { salvarFrete, editarFrete, desabilitarFrete, listarFretes };

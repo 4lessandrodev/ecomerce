@@ -1,50 +1,41 @@
-const xxx = require('model');
+const CestaCompra = require('./../models/CestaCompraModel');
 
-
-const salvar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.salvar().then(xx => {
-
+//---------------------------------------------------------------------------
+const salvarCestaCompra = (req, res, next) => {
+  let cestaCompra = new CestaCompra(req.body.id_cesta, req.body.id_compra);
+  cestaCompra.salvarCestaCompra(cestaCompra).then(cestaCompra => {
+    res.send(cestaCompra);
   }).catch(err => {
-
+    res.send(err.message);
   });
 };
-
-
-const editar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.editar().then(xx => {
-
+//---------------------------------------------------------------------------
+const editarCestaCompra = (req, res, next) => {
+  let cestaCompra = new CestaCompra(req.body.id_cesta, req.body.id_compra);
+  cestaCompra.atualizarCestaCompra(cestaCompra).then(cestaCompra => {
+    res.send(cestaCompra);
   }).catch(err => {
-
+    res.send(err.message);
   });
 };
-
-const excluir = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.excluir().then(xx => {
-
+//---------------------------------------------------------------------------
+const excluirCestaCompra = (req, res, next) => {
+  let cestaCompra = new CestaCompra();
+  cestaCompra.id = req.body.id;
+  cestaCompra.atualizarCestaCompra(cestaCompra).then(cestaCompra => {
+    res.send(cestaCompra);
   }).catch(err => {
-
+    res.send(err.message);
   });
 };
-
-const listar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.listar().then(xx => {
-
+//---------------------------------------------------------------------------
+const listarCestaCompra = (req, res, next) => {
+  let cestaCompra = new CestaCompra();
+  cestaCompra.atualizarCestaCompra(cestaCompra).then(cestasCompra => {
+    res.send(cestasCompra);
   }).catch(err => {
-
+    res.send(err.message);
   });
 };
-
-const desativar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.desativar().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-module.exports = { salvar, editar, excluir, listar, desativar };
+//---------------------------------------------------------------------------
+module.exports = { salvarCestaCompra, editarCestaCompra, excluirCestaCompra, listarCestaCompra };

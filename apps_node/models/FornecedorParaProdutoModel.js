@@ -1,7 +1,7 @@
 const conect = require('./../config/CONECT_BD');
-class id_fornecedorParaProdutoModel {
-  constructor (id, id_fornecedor, id_produto) {
-    this._id = id;
+class FornecedorParaProdutoModel {
+  constructor (id_fornecedor, id_produto) {
+    this._id = null;
     this._id_fornecedor = id_fornecedor;
     this._id_produto = id_produto;
   }
@@ -26,7 +26,7 @@ class id_fornecedorParaProdutoModel {
   }
 
 
-  salvarCategoriaCesta(forn_prod) {
+  salvarFornecedorParaProduto(forn_prod) {
     return new Promise((resolve, reject) => {
       conect.query(`
       INSERT INTO tb_fornecedor_produtos(id_fornecedor, id_produto) VALUES(?,?)

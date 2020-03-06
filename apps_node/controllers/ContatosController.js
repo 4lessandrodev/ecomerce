@@ -1,50 +1,44 @@
-const xxx = require('model');
+const Mensagem = require('./../models/ContatoModel');
 
-
-const salvar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.salvar().then(xx => {
-
+//--------------------------------------------------------------------------------
+const salvarMensagem = (req, res, next) => {
+  let mensagem = new Mensagem(req.body.nome, req.body.email, req.body.mensagem);
+  mensagem.enviarMensagem(mensagem).then(mensagem => {
+    res.send(mensagem);
   }).catch(err => {
-
+    res.send(err.message);
+  });
+};
+//--------------------------------------------------------------------------------
+const marcarComoLida = (req, res, next) => {
+  let mensagem = new Mensagem();
+  mensagem.id = req.body.id;
+  mensagem.marcarComoLida(mensagem).then(mensagem => {
+    res.send(mensagem);
+  }).catch(err => {
+    res.send(err.mensagem);
+  });
+};
+//--------------------------------------------------------------------------------
+const excluirMensagem = (req, res, next) => {
+  let mensagem = new Mensagem();
+  mensagem.id = req.body.id;
+  mensagem.excluirMensagem(mensagem).then(mensagem => {
+    res.send(mensagem);
+  }).catch(err => {
+    res.send(err.message);
+  });
+};
+//--------------------------------------------------------------------------------
+const listarMensagens = (req, res, next) => {
+  let mensagem = new Mensagem();
+  mensagem.listarMensagens(mensagem).then(mensagens => {
+    res.send(mensagens);
+  }).catch(err => {
+    res.send(err.message);
   });
 };
 
 
-const editar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.editar().then(xx => {
 
-  }).catch(err => {
-
-  });
-};
-
-const excluir = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.excluir().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-const listar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.listar().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-const desativar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.desativar().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-module.exports = { salvar, editar, excluir, listar, desativar };
+module.exports = { salvarMensagem, marcarComoLida, excluirMensagem, listarMensagens };

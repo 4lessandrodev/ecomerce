@@ -1,50 +1,44 @@
-const xxx = require('model');
+const Loja = require('./../models/LojaModel');
 
-
-const salvar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.salvar().then(xx => {
-
+//-------------------------------------------------------------------------------------------
+const salvarLoja = (req, res, next) => {
+  let loja = new Loja(req.body.razao_social, req.body.nome_fantasia, req.body.cnpj_cpf, req.body.cep, req.body.cidade, req.body.estado, req.body.endereco, req.body.phone, req.body.email, req.body.id_regiao, req.body.bairro, req.body.status);
+  loja.salvarLoja(loja).then(loja => {
+    res.send(loja);
   }).catch(err => {
-
+    res.send(err.message);
+  });
+};
+//-------------------------------------------------------------------------------------------
+const editarLoja = (req, res, next) => {
+  let loja = new Loja(req.body.razao_social, req.body.nome_fantasia, req.body.cnpj_cpf, req.body.cep, req.body.cidade, req.body.estado, req.body.endereco, req.body.phone, req.body.email, req.body.id_regiao, req.body.bairro, req.body.status);
+  loja.id = req.body.id;
+  loja.atualizarLoja(loja).then(loja => {
+    res.send(loja);
+  }).catch(err => {
+    res.send(err.message);
+  });
+};
+//-------------------------------------------------------------------------------------------
+const desabilitarLoja = (req, res, next) => {
+  let loja = new Loja();
+  loja.loja_excluida = 1;
+  loja.id = req.body.id;
+  loja.desabilitarLoja(loja).then(loja => {
+    res.send(loja);
+  }).catch(err => {
+    res.send(err.message);
+  });
+};
+//-------------------------------------------------------------------------------------------
+const listarLojas = (req, res, next) => {
+  let loja = new Loja();
+  loja.desabilitarLoja(loja).then(lojas => {
+    res.send(lojas);
+  }).catch(err => {
+    res.send(err.message);
   });
 };
 
 
-const editar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.editar().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-const excluir = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.excluir().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-const listar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.listar().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-const desativar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.desativar().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-module.exports = { salvar, editar, excluir, listar, desativar };
+module.exports = { salvarLoja, editarLoja, desabilitarLoja, listarLojas };
