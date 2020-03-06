@@ -1,18 +1,18 @@
-const xxx = require('model');
+const ProdutoCompra = require('./../models/ProdutoCompraModel');
 
 
-const salvar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.salvar().then(xx => {
-
+const salvarProdutoCompra = (req, res, next) => {
+  let produtoCompra = new ProdutoCompra(req.body.id_produto, req.body.id_compra);
+  produtoCompra.salvarProdutoCompra(produtoCompra).then(produtoCompra => {
+    res.send(produtoCompra);
   }).catch(err => {
 
   });
 };
 
 
-const editar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
+const editarProdutoCompra = (req, res, next) => {
+  let produtoCompra = new ProdutoCompra(req.body.id_produto, req.body.id_compra);
   x.editar().then(xx => {
 
   }).catch(err => {
@@ -20,7 +20,7 @@ const editar = (req, res, next) => {
   });
 };
 
-const excluir = (req, res, next) => {
+const excluirProdutoCompra = (req, res, next) => {
   let x = new xxx(req, req, req, req);
   x.excluir().then(xx => {
 
@@ -29,7 +29,7 @@ const excluir = (req, res, next) => {
   });
 };
 
-const listar = (req, res, next) => {
+const listarProdutoCompra = (req, res, next) => {
   let x = new xxx(req, req, req, req);
   x.listar().then(xx => {
 
@@ -38,7 +38,7 @@ const listar = (req, res, next) => {
   });
 };
 
-const desativar = (req, res, next) => {
+const desativarProdutoCompra = (req, res, next) => {
   let x = new xxx(req, req, req, req);
   x.desativar().then(xx => {
 
@@ -47,4 +47,4 @@ const desativar = (req, res, next) => {
   });
 };
 
-module.exports = { salvar, editar, excluir, listar, desativar };
+module.exports = { salvarProdutoCompra, editarProdutoCompra, excluirProdutoCompra, listarProdutoCompra, desativarProdutoCompra };

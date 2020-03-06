@@ -94,3 +94,4 @@ AND pedido.id_tipo_de_pagamento = pg.id GROUP BY cc.id_plano;
 
 
 }
+module.exports = PlanoCompraModel;

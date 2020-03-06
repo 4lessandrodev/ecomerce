@@ -1,50 +1,42 @@
-const xxx = require('model');
+const PlanoCompra = require('./../models/PlanoCompraModel');
 
-
-const salvar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.salvar().then(xx => {
-
+//-------------------------------------------------------------------
+const salvarPlanoCompra = (req, res, next) => {
+  let plano = new PlanoCompra(req.body.id_plano, req.body.id_compra);
+  plano.salvarPlanoCompra(plano).then(plano => {
+    res.send(plano);
   }).catch(err => {
-
+    res.send(err.message);
+  });
+};
+//-------------------------------------------------------------------
+const editarPlanoCompra = (req, res, next) => {
+  let plano = new PlanoCompra(req.body.id_plano, req.body.id_compra);
+  plano.id = req.body.id;
+  plano.atualizarPlanoCompra(plano).then(plano => {
+    res.send(plano);
+  }).catch(err => {
+    res.send(err.message);
+  });
+};
+//-------------------------------------------------------------------
+const listarPlanoCompra = (req, res, next) => {
+  let plano = new PlanoCompra();
+  plano.listarPlanoCompra(plano).then(plano => {
+    res.send(plano);
+  }).catch(err => {
+    res.send(err.message);
+  });
+};
+//-------------------------------------------------------------------
+const excluirPlanoCompra = (req, res, next) => {
+  let plano = new PlanoCompra();
+  plano.id = req.body.id;
+  plano.excluirPlanoCompra(plano).then(plano => {
+    res.send(plano);
+  }).catch(err => {
+    res.send(err.message);
   });
 };
 
-
-const editar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.editar().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-const excluir = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.excluir().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-const listar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.listar().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-const desativar = (req, res, next) => {
-  let x = new xxx(req, req, req, req);
-  x.desativar().then(xx => {
-
-  }).catch(err => {
-
-  });
-};
-
-module.exports = { salvar, editar, excluir, listar, desativar };
+module.exports = { salvarPlanoCompra, editarPlanoCompra, listarPlanoCompra, excluirPlanoCompra };
