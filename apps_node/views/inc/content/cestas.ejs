@@ -1,0 +1,37 @@
+<div class="gtco-section">
+  <div class="gtco-container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
+        <h2 class="cursive-font primary-color">Cestas da Semana</h2>
+        <p>Nossas cestas semanais são montadas de acordo com a colheita prevista de cada produtor, para que você receba
+          sempre alimentos fresquinhos.</p>
+      </div>
+    </div>
+    <div class="row item">
+
+      <% cestas.forEach(function(cesta){ %>
+      <div class="col-lg-4 col-md-4 col-sm-6" data-row="<%= JSON.stringify(cesta)%>">
+        <a href="<%=cesta.imageCesta%>" class="fh5co-card-item image-popup" onclick="Utils.getItemById(this)">
+          <input type="hidden" value="<%=cesta.idCesta%>" class="item-id">
+          <figure>
+            <div class="overlay">
+              <i style="font-size: 1.5em;">
+                Comprar
+              </i>
+            </div>
+            <img src="<%=cesta.imageCesta%>" alt="Image" class="img-responsive" style="margin: auto;">
+          </figure>
+          <div class="fh5co-text">
+            <h2><%=cesta.descriptionCesta%></h2>
+            <p><i><%=cesta.description%> - <%=cesta.qtdItensCesta%> itens </i></p>
+            <p><%=cesta.nutrInfoCesta%></p>
+            <p>
+              <span class="price cursive-font">R$ <%=cesta.salesPriceCesta%></span>
+            </p>
+          </div>
+        </a>
+      </div>
+      <% }); %>
+    </div>
+  </div>
+</div>

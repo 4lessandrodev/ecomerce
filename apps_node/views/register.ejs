@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+  <head class="background-dark">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cadastro</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="author" content="Alessandro L. Menezes" />
+    <link rel="stylesheet" href="./../stylesheets/login.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- Google Font -->
+    <link rel="icon" href="./../images/images/favicon.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="images/images/favicon.png" type="image/x-icon" />
+  </head>
+
+  <body class="background-dark">
+    <!-- /.login-logo -->
+
+    <div class="login">
+      <div class="login-triangle"></div>
+
+      <h2 class="login-header">Cadastrar</h2>
+      <%- include('./inc/content/alerts') -%>
+      <form class="login-container" method="POST" action="/register">
+
+        <p><input type="email" placeholder="Email" name="email" maxlength="40"></p>
+        <p><input type="password" placeholder="Password" name="password"></p>
+
+        <p><input type="text" placeholder="Nome" name="name" maxlength="30"></p>
+        <p><input type="tel" placeholder="Celular" name="phone" max="99999999999" maxlength="11"></p>
+        <p><input type="number" placeholder="Cep" name="zipCode" maxlength="8" max="99999999"
+            onkeyup="Utils.retornarEndereco()"></p>
+
+
+        <p><input type="button" value="Avançar" class="btn-next" onclick="avancar()"></p>
+
+        <div class="hidden" id="address">
+          <p><input type="text" placeholder="Cidade" name="city" maxlength="45"></p>
+          <p><input type="text" placeholder="Logradouro" name="street" maxlength="45"></p>
+          <p><input type="text" placeholder="Bairro" name="zone" maxlength="50"></p>
+          <p><input type="text" placeholder="Numero" name="numb" max="99999999" maxlength="15"></p>
+          <p><input type="text" placeholder="Uf" name="province" maxlength="2"></p>
+          <p><input type="hidden" placeholder="ibge" name="ibgeCode"></p>
+          <p><select id="destin" class="form-control" name="region">
+              <option selected>Selecione sua região</option>
+              <% regioes.forEach(function(regiao){ %>
+              <option value="<%=regiao.id%>"><%=regiao.description%></option>
+              <% }); %>
+            </select>
+          </p>
+
+          <div class="custom-control custom-checkbox my-1 mr-sm-2">
+            <p><input type="checkbox" class="custom-control-input" id="deliveredRegion">
+              <label class="custom-control-label" for="deliveredRegion">Nenhuma anterior</label></p>
+          </div>
+          <p><input type="submit" value="Cadastrar"></p>
+        </div>
+      </form>
+    </div>
+    <script src="./../javascripts/util/Utils.js"></script>
+    <script src="./../javascripts/js/script-formsave.js"></script>
+    <script>
+      let btnNext = document.querySelector('.btn-next');
+      let address = document.getElementById('address');
+
+      function avancar() {
+        address.classList.remove('hidden');
+        btnNext.style.display = 'none';
+      }
+
+
+      let form = document.querySelector('form');
+
+      form.save().then(json => {
+
+        window.location.href = '/login';
+
+      }).catch(err => {
+
+        console.log(err);
+
+      });
+    </script>
+  </body>
+
+</html>

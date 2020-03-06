@@ -1,0 +1,263 @@
+    <main>
+      <section class="container formulario display-none" id="form-new">
+        <div style="margin-bottom: 1em;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close"
+            onclick="Utils.ocultarFormulario('#form-new', 'display-none', true)">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+
+        <form method="POST" action="/admin/produtos">
+          <input type="hidden" id="idProd" name="idProd">
+          <input type="hidden" id="array" name="array">
+          <input type="hidden" id="fornecedor_key" name="fornecedor_key">
+          <div class="form-row">
+            <div onclick="Utils.uploadImg()" class="form-group col-md-2" id="div-imagem">
+              <label for="image" class="caixaImg">
+                <input type="file" hidden name="imageProd" id="imageProd" accept="image/png">
+                <img src="./../images/images/SemImagem-300x300px.png" alt="Imagem" class="imagem rounded-circle"
+                  id="imagem-produto">
+                <div class="sobreposicao">
+                  <h5 class="texto">Adicionar Imagem</h5>
+                  <span class="icone"><i class="fas fa-chevron-circle-up"></i></span>
+                </div>
+              </label>
+            </div>
+
+
+            <div class="form-group col-md-4">
+              <label for="nameProd"><strong>Descrição</strong></label>
+              <input type="text" class="form-control" id="nameProd" name="nameProd" required>
+            </div>
+
+            <div class="form-group col-md-4">
+              <label for="categoryProd"><strong>Categoria</strong></label>
+              <select class="form-control" id="categoryProd" name="categoryProd">
+                <option selected>Selecione...</option>
+                <% categoriasProd.forEach(function(categ){ %>
+                <option value="<%= categ.id%>"><%=categ.description%></option>
+                <% }); %>
+              </select>
+            </div>
+
+            <div class="form-group col-md-2">
+              <label for="salePriceProd"><strong>Preço</strong></label>
+              <input type="number" class="form-control" id="salePriceProd" name="salePriceProd" required>
+            </div>
+
+            <div class="form-group col-md-3">
+              <label for="unitMeansureProd"><strong>Und. Medida</strong></label>
+              <select id="unitMeansureProd" class="form-control" name="unitMeansureProd">
+                <option selected>Selecione...</option>
+                <% unidMedida.forEach(function(und){ %>
+                <option value="<%= und.id%>"><%=und.description%></option>
+                <% }); %>
+              </select>
+            </div>
+
+
+            <div class="form-group col-md-3">
+              <label for="productTypeProd"><strong>Tipo de Produto</strong></label>
+              <select id="productTypeProd" class="form-control" name="productTypeProd">
+                <option selected>Selecione...</option>
+                <option value="1">Produtos Especiais</option v>
+                <option value="0">Produto Normal</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-3">
+              <label for="multiplyFactorProd"><strong>Fator Multiplicador</strong></label>
+              <input type="number" class="form-control" id="multiplyFactorProd" name="multiplyFactorProd">
+            </div>
+
+            <div class="form-group col-md-3">
+              <label for="statusProd"><strong>Status</strong></label>
+              <select id="statusProd" class="form-control" name="statusProd">
+                <option selected>Selecione...</option>
+                <option value="1">Ativo</option>
+                <option value="0">Bloqueado</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="productSuppliersProd"><strong>Fornecedor</strong></label>
+              <select class="mdb-select md-form form-control" id="productSuppliersProd" multiple size="5"
+                name="productSuppliersProd" data-item="<%= JSON.stringify(chaves)%>">
+                <% fornec.forEach(function(fornec){ %>
+                <option value="<%= fornec.id%>"><%=fornec.socialName%></option>
+                <% }); %>
+              </select>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="nutrictionInformationProd"><strong>Informações Nutricionais</strong></label>
+              <textarea class="form-control" id="nutrictionInformationProd" rows="5"
+                name="nutrictionInformationProd"></textarea>
+            </div>
+
+          </div>
+          <div class="botoes-a-direita">
+            <button type="reset" class="btn btn-success btn-cancelar">Cancelar</button>
+            <button type="submit" class="btn btn-primary botao-salvar">Salvar</button>
+          </div>
+          </div>
+        </form>
+      </section>
+
+
+      <script src="./../javascripts/js/script-filereader.js"></script>
+      <script src="./../javascripts/js/script-formsave.js"></script>
+      <script>
+        new Scriptfilereader('#div-imagem [type=file]', '#div-imagem img');
+
+        let form = document.querySelector('main form');
+
+
+        form.save().then(json => {
+
+          window.location.reload();
+
+        }).catch(err => {
+
+          console.log(err);
+
+        });
+      </script>
+
+
+      <section class="container list-itens-container table-responsive-md">
+        <div class="navbar navbar-light">
+          <h6 class="navbar-brand">
+            Lista de Produtos
+          </h6>
+        </div>
+
+        <table class="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Imagem</th>
+              <th scope="col">Descrição</th>
+              <th scope="col">Preço</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Status</th>
+              <th scope="col" class="col-small">Excluir</th>
+              <th scope="col" class="col-small">Editar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% produtos.forEach(function(produto){ %>
+            <tr data-row="<%= JSON.stringify(produto)%>">
+              <th scope="row"><img src="/<%=produto.imageProd%>" style="width: 2em; height: 2em;"></th>
+              <td><%=produto.nameProd %></td>
+              <td><%=produto.salePriceProd %></td>
+              <td><% if(produto.productTypeProd){ %>Especial<% }else{ %>Normal<% }; %></td>
+              <td><% if(produto.statusProd){ %>Ativo<% }else{ %>Bloqueado<% }; %></td>
+              <td>
+                <button class="btn btn-excluir"><i class="fas fa-trash-alt"></i></button>
+              </td>
+              <td>
+                <button class="btn btn-editar" onclick="Utils.exibirFormulario('#form-new', 'display-none')"><i
+                    class="fa fa-pencil-alt"></i></button>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </section>
+    </main>
+
+    <script>
+      let buttonsEdit = document.querySelectorAll('.btn-editar');
+      let buttonsDelete = document.querySelectorAll('.btn-excluir');
+
+
+      let chaveFornecedoresSelecionados =
+        JSON.parse(document.querySelector('select[name=productSuppliersProd]').getAttribute('data-item'));
+
+      let mainForm = document.querySelector('main form');
+      for (let btn of buttonsEdit) {
+        btn.addEventListener('click', function (e) {
+          let tr = e.path.find(elemento => {
+            return (elemento.tagName.toUpperCase() == 'TR');
+          });
+
+          window.scrollTo(0, 0);
+
+          let data = JSON.parse(tr.dataset.row);
+
+
+
+          for (let inputName in data) {
+            switch (inputName) {
+              case 'imageProd':
+                mainForm.querySelector('img').src = '/' + data[inputName];
+                mainForm.querySelector('input[type=file]').file = data[inputName];
+                break;
+              default:
+                let input = mainForm.querySelector(`[name=${inputName}`);
+                if (input) input.value = data[inputName];
+            }
+          }
+
+          let selectionValues = chaveFornecedoresSelecionados.filter(item => {
+            return item.fornecedor_key == data.productSuppliersProd;
+          });
+
+
+
+          let cods = [];
+          for (let cod of selectionValues) {
+            cods.push(cod.fornecedor);
+            inputHidden.value = JSON.stringify(cods);
+          }
+          if (!isNaN(selectionValues[0].fornecedor_key)) {
+            fornecedor_key.value = parseInt(selectionValues[0].fornecedor_key);
+            console.log(document.getElementById('fornecedor_key').value);
+          }
+
+          let check = false;
+          for (let option of collection) {
+            check = cods.some((item) => {
+              return (option.value == item);
+            });
+            if (check) {
+              option.selected = true;
+            }
+          };
+
+          console.log(cods);
+
+        });
+      }
+
+      for (let btn of buttonsDelete) {
+        btn.addEventListener('click', function (e) {
+          let tr = e.path.find(elemento => {
+            return (elemento.tagName.toUpperCase() == 'TR');
+          });
+
+          let data = JSON.parse(tr.dataset.row);
+
+          fetch(`/admin/produtos/${data.id}`, {
+              method: 'POST'
+            }).then(response => response.json())
+            .then(json => {
+              window.location.reload();
+            })
+        });
+      }
+
+      let inputHidden = document.getElementById('array');
+      let fornecedor_key = document.getElementById('fornecedor_key');
+      let collection = document.getElementById('productSuppliersProd');
+      collection.addEventListener('click', e => {
+
+        let arr = [];
+
+        for (let item of collection.selectedOptions) {
+          arr.push(item.value);
+          inputHidden.value = JSON.stringify(arr);
+        }
+      });
+    </script>

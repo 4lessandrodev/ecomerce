@@ -1,0 +1,163 @@
+<script>
+  let itens = localStorage.getItem('itensDoCarrinho');
+  if (itens) {
+    itens = JSON.parse(itens);
+  }
+</script>
+
+<div class="gtco-section">
+  <div class="gtco-container">
+    <div class="row">
+      <div class="col-md-12">
+        <form action="/pedido-provisorio" method="POST" id="form-contact">
+          <div class="col-md-6 animate-box">
+            <h3>Cesta no carrinho</h3>
+            <%- include('./alerts') -%>
+            <ul id="cestas">
+
+              <!-- AUTO IMPLEMENTADO O LAYOUT COM AS CESTAS AQUI-->
+
+            </ul>
+          </div>
+          <div class="col-md-5 col-md-push-1 animate-box">
+            <div class="gtco-contact-info">
+              <h3>Produtos no carrinho</h3>
+              <div class="card" style="width: 1em 0;">
+                <ul class="list-group list-group-flush" id="Produtos-cesta">
+
+                  <!-- AUTO IMPLEMENTADO O LAYOUT COM OS PRODUTOS AQUI-->
+
+                </ul>
+              </div>
+
+              <div style="padding: 0.5em 0;">
+                <h3>Endereço de entrega</h3>
+                <input type="hidden"
+                  value="<%=clientLoged.name%>, <%=clientLoged.street%>, <%=clientLoged.numb%>, <%=clientLoged.zone%>, <%=clientLoged.city%>,<%=clientLoged.province%>"
+                  name="cliente">
+                <p style="width: 100%;"><strong><%=clientLoged.name%></strong> <br>
+                  <%=clientLoged.street%>
+                  <%=clientLoged.numb%>,
+                  <%=clientLoged.zone%>,
+                  <%=clientLoged.city%>
+                  -<%=clientLoged.province%>
+                </p>
+                <textarea style="width: 100%;" placeholder="Observações" rows="5" maxlength="250"
+                  name="observacoes"></textarea>
+                <p>
+                  <span class="price cursive-font" id="priceTotal">R$ 00,00</span>
+                </p>
+              </div>
+              <button type="submit" class="btn btn-default btn-block">
+                <span style="float: left; font-size: 1.2em;">
+                </span>
+                Finalizar Compra
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="./../javascripts/util/Utils.js"></script>
+<!-- FIM DO SCRIPT PARA ENVIAR O FORMULÁRIO -->
+<script src="./../javascripts/js/script-formsave.js"></script>
+<script>
+  let form = document.querySelector('form');
+  let inputs = form.querySelectorAll('input[type=hidden]');
+
+
+  let btn = form.querySelector('button[type=submit]');
+
+
+  form.save().then(json => {
+
+  }).catch(err => {
+    console.log(err);
+  });
+
+
+  function recarregarPagina() {
+    for (let input of inputs) {
+      if (input.value == '') {
+        return false;
+      }
+    }
+    alert('Pedido enviado com sucesso!');
+    localStorage.clear()
+    window.location.href = '/';
+  };
+
+  btn.addEventListener('click', function () {
+    setTimeout(recarregarPagina, 900);
+  });
+
+
+  Utils.atualizarQtdItensNoCarrinho();
+</script>
+<!-- FIM DO SCRIPT PARA ENVIAR O FORMULÁRIO -->
+
+
+</div>
+
+<script>
+  if (itens) {
+    let ulCestas = document.querySelector('#cestas');
+    let ulProdutosCesta = document.querySelector('#Produtos-cesta');
+    let total = document.getElementById('priceTotal');
+    let count = 0;
+
+    for (let item of itens) {
+      let liCesta = document.createElement('LI');
+      liCesta.style.listStyleType = 'none';
+      liCesta.style.margin = '0';
+      liCesta.style.padding = '0';
+      liCesta.innerHTML = `
+           <div class="row">
+             <div class="col-lg-10 col-md-10 col-sm-10">
+               <a href="${item._mainImage}"
+                 class="fh5co-card-item image-popup">
+                 <figure>
+                   <div class="overlay">
+                     <i style="font-size: 1.5em;">
+                       Comprar
+                     </i>
+                   </div>
+                   <img src="${item._mainImage}" alt="Image"
+                     class="img-responsive" style="margin: auto;">
+                 </figure>
+                 <div class="fh5co-text">
+                   <h2>${item._mainDescription}</h2>
+                   <input type="hidden" value="${item._mainCode}" name="mainCode" class="item">
+                   <input type="hidden" value="${item._mainDescription}" name="mainDescription" class="item">
+                   <input type="hidden" value="${item._priceTotal}" name="total" class="item">
+                   <p>
+                     <span class="price cursive-font">R$ ${item._priceTotal}</span>
+                   </p>
+                 </div>
+               </a>
+             </div>
+           </div>    
+    `;
+      ulCestas.appendChild(liCesta);
+      count = count + parseFloat(item._priceTotal);
+      // console.log(item._mainDescription);
+      for (let prods of item._itensDescription) {
+        let liProdutos = document.createElement('LI');
+        liProdutos.classList.add('list-group-item');
+        liProdutos.style.margin = '0.4em 0';
+        liProdutos.style.padding = '0.5em';
+
+
+        liProdutos.innerHTML =
+          `<span style="padding: 0 1em;" class="icon"><i class="far fa-bookmark" style="font-size: larger;"></i> ${prods}</span>`
+        ulProdutosCesta.appendChild(liProdutos);
+      }
+      total.textContent = `R$ ${count}`;
+    }
+
+  }
+</script>
