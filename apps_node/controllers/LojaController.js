@@ -31,9 +31,18 @@ const desabilitarLoja = (req, res, next) => {
   });
 };
 //-------------------------------------------------------------------------------------------
-const listarLojas = (req, res, next) => {
+const listarLojasAtivas = (req, res, next) => {
   let loja = new Loja();
-  loja.desabilitarLoja(loja).then(lojas => {
+  loja.listarLojasAtivas(loja).then(lojas => {
+    res.send(lojas);
+  }).catch(err => {
+    res.send(err.message);
+  });
+};
+//-------------------------------------------------------------------------------------------
+const listarTodasLojas = (req, res, next) => {
+  let loja = new Loja();
+  loja.listarTodasLojas(loja).then(lojas => {
     res.send(lojas);
   }).catch(err => {
     res.send(err.message);
@@ -41,4 +50,4 @@ const listarLojas = (req, res, next) => {
 };
 
 
-module.exports = { salvarLoja, editarLoja, desabilitarLoja, listarLojas };
+module.exports = { salvarLoja, editarLoja, desabilitarLoja, listarLojasAtivas, listarTodasLojas };

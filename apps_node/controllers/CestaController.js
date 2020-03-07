@@ -31,9 +31,18 @@ const desabilitarCesta = (req, res, next) => {
   });
 };
 //---------------------------------------------------------------------------------------------
-const listarCestas = (req, res, next) => {
+const listarCestasAtivas = (req, res, next) => {
   let cesta = new Cesta();
-  cesta.listarCestas(cesta).then(cestas => {
+  cesta.listarCestasAtivas(cesta).then(cestas => {
+    res.send(cestas);
+  }).catch(err => {
+    res.send(err.message);
+  });
+};
+//---------------------------------------------------------------------------------------------
+const listarTodasCestas = (req, res, next) => {
+  let cesta = new Cesta();
+  cesta.listarTodasCestas(cesta).then(cestas => {
     res.send(cestas);
   }).catch(err => {
     res.send(err.message);
@@ -41,4 +50,4 @@ const listarCestas = (req, res, next) => {
 };
 //---------------------------------------------------------------------------------------------
 
-module.exports = { salvarCesta, editarCesta, desabilitarCesta, listarCestas };
+module.exports = { salvarCesta, editarCesta, desabilitarCesta, listarCestasAtivas, listarTodasCestas };

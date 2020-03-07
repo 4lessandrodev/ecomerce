@@ -35,9 +35,10 @@ class CategoriaProdutoModel {
   salvarCategoria(categoria) {
     return new Promise((resolve, reject) => {
       conect.query(`
-    INSERT INTO tb_categoria_produtos(descricao, status, categoria_excluida) VALUES(?,?,?)
+    INSERT INTO tb_categoria_produtos(descricao, status, categoria_p_excluida) VALUES(?,?,?)
     `, [categoria._descricao, categoria._status, categoria._categoria_p_excluida], (err, result) => {
         if (err) {
+          console.log(err.message);
           reject(err.message);
         } else {
           resolve(result);
@@ -52,6 +53,7 @@ class CategoriaProdutoModel {
     UPDATE tb_categoria_produtos SET descricao = ?, status = ?, categoria_p_excluida = ? WHERE id = ?
     `, [categoria._descricao, categoria._status, categoria._categoria_p_excluida, categoria._id], (err, result) => {
         if (err) {
+          console.log(err.message);
           reject(err.message);
         } else {
           resolve(result);
@@ -60,11 +62,27 @@ class CategoriaProdutoModel {
     });
   }
 
-  listarCategorias(categoria) {
+  listarCategoriasAtivas(categoria) {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT * FROM tb_categoria_produtos WHERE categoria_p_excluida = ? AND status = ?`, [
         categoria._categoria_p_excluida, categoria._status], (err, result) => {
           if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
+    });
+  }
+
+
+  listarTodasCategorias(categoria) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT * FROM tb_categoria_produtos WHERE categoria_p_excluida = ?`, [
+        categoria._categoria_p_excluida], (err, result) => {
+          if (err) {
+            console.log(err.message);
             reject(err.message);
           } else {
             resolve(result);
@@ -80,6 +98,7 @@ class CategoriaProdutoModel {
     UPDATE tb_categoria_produtos SET categoria_p_excluida = ? WHERE id = ?
     `, [categoria._categoria_p_excluida, categoria._id], (err, result) => {
         if (err) {
+          console.log(err.message);
           reject(err.message);
         } else {
           resolve(result);

@@ -47,7 +47,22 @@ class UnidadeMedidaModel {
   }
 
 
-  listarUnidadesMedida(unidadeMedida) {
+  listarTodasUnidadesMedida(unidadeMedida) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT * FROM tb_und_medidas WHERE categoria_excluida = ?`, [
+        unidadeMedida._categoria_excluida], (err, result) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
+    });
+  }
+
+
+  listarUnidadesMedidaAtivas(unidadeMedida) {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT * FROM tb_und_medidas WHERE categoria_excluida = ? AND status = ?`, [
         unidadeMedida._categoria_excluida, unidadeMedida._status], (err, result) => {

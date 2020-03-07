@@ -1,29 +1,52 @@
 const CategoriaProdutoModel = require('./../models/CategoriaProdutoModel');
 
+const renderizarPaginaCategoria = (req, res, next, categorias) => {
+  res.render('admin/categoria-produtos', {
+    categorias,
+    data: '',
+    navbar: true,
+    pagina: 'Categoria produtos',
+    btnLabel: 'categoria produto'
+  });
+};
+
 //--------------------------------------------------------------------------------
 const salvarCategoria = (req, res, next) => {
   let categoria = new CategoriaProdutoModel(req.body.descricao, req.body.status);
   categoria.salvarCategoria(categoria).then(categoria => {
-    res.send(categoria);
+    res.redirect('categoria-produtos');
   }).catch(err => {
     res.send(err);
   });
 };
 //--------------------------------------------------------------------------------
-const listarCategorias = (req, res, next) => {
+const listarTodasCategorias = (req, res, next) => {
   let categoria = new CategoriaProdutoModel();
-  categoria.listarCategorias(categoria).then(categorias => {
-    res.send(categorias);
+  categoria.listarTodasCategorias(categoria).then(categorias => {
+    renderizarPaginaCategoria(req, res, next, categorias);
   }).catch(err => {
-    res.send(err.message);
+    return err;
+  });
+};
+//--------------------------------------------------------------------------------
+const listarCategoriasAtivas = (req, res, next) => {
+  let categoria = new CategoriaProdutoModel();
+  categoria.listarCategoriasAtivas(categoria).then(categorias => {
+    renderizarPaginaCategoria(req, res, next, categorias);
+  }).catch(err => {
+    return err;
   });
 };
 //--------------------------------------------------------------------------------
 const editarCategoria = (req, res, next) => {
   let categoria = new CategoriaProdutoModel(req.body.descricao, req.body.status);
   categoria.id = req.body.id;
-  categoria.atualizarCategoria(categoria).then(categorias => {
-    res.send(categorias);
+  categoria.atualizarCategoria(categoria).then(result => {
+    categoria.listarCategoriasAtivas(categoria).then(categorias => {
+      renderizarPaginaCategoria(req, res, next, categorias);
+    }).catch(err => {
+      return err;
+    });
   }).catch(err => {
     res.send(err.message);
   });
@@ -31,14 +54,14 @@ const editarCategoria = (req, res, next) => {
 //--------------------------------------------------------------------------------
 const desabilitarCategoria = (req, res, next) => {
   let categoria = new CategoriaProdutoModel();
-  categoria.id = req.body.id;
+  categoria.id = req.params.id;
   categoria.categoria_p_excluida = 1;
-  categoria.desabilitarCategoria(categoria).then(categoria => {
-    res.send(categoria);
+  categoria.desabilitarCategoria(categoria).then(result => {
+    res.send(result);
   }).catch(err => {
     res.send(err.message);
   });
 };
 //--------------------------------------------------------------------------------
 
-module.exports = { salvarCategoria, listarCategorias, editarCategoria, desabilitarCategoria };
+module.exports = { salvarCategoria, listarTodasCategorias, editarCategoria, desabilitarCategoria, listarCategoriasAtivas };

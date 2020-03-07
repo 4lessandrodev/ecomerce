@@ -20,9 +20,18 @@ const editarTipoPg = (req, res, next) => {
   });
 };
 //------------------------------------------------------------------------------------------------
-const listarTipoPg = (req, res, next) => {
+const listarTodosTipoPg = (req, res, next) => {
   let tipoPg = new TipoPg();
-  tipoPg.listarFormasPagamento(tipoPg).then(tipoPg => {
+  tipoPg.listarTodasFormasPagamento(tipoPg).then(tipoPg => {
+    res.send(tipoPg);
+  }).catch(err => {
+    res.send(err.message);
+  });
+};
+//------------------------------------------------------------------------------------------------
+const listarTipoPgAtivo = (req, res, next) => {
+  let tipoPg = new TipoPg();
+  tipoPg.listarFormasPagamentoAtivas(tipoPg).then(tipoPg => {
     res.send(tipoPg);
   }).catch(err => {
     res.send(err.message);
@@ -40,4 +49,4 @@ const desativarTipoPg = (req, res, next) => {
   });
 };
 
-module.exports = { salvarTipoPg, editarTipoPg, listarTipoPg, desativarTipoPg };
+module.exports = { salvarTipoPg, editarTipoPg, listarTipoPgAtivo, desativarTipoPg, listarTodosTipoPg };

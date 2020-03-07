@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const indexController = require('../controllers/IndexController');
+const contactController = require('../controllers/ContatosController');
 
 //------------------------------------------------------------------------------------------------------
 //Rota para renderizar a pagina principal  
@@ -29,8 +30,8 @@ router.post('/inscrever', (req, res, next) => {
 });
 //------------------------------------------------------------------------------------------------------
 //Metodo de enviar mensagem de contato 
-router.post('/mensagem', (req, res, next) => {
-  indexController.enviarMensagem(req, res, next);
+router.post('/contact', (req, res, next) => {
+  contactController.salvarMensagem(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
 //Rota para renderizar a pagina de login

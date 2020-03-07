@@ -1,4 +1,4 @@
-const conect = require('../config/CONECT_BD'); 
+const conect = require('../config/CONECT_BD');
 class ContatoModel {
   constructor (nome, email, mensagem, data_envio = new Date(), mensagem_lida = 0) {
     this._id = null;
@@ -49,6 +49,7 @@ class ContatoModel {
         mensagem._nome, mensagem._email, mensagem._mensagem, mensagem._mensagem_lida
       ], (err, result) => {
         if (err) {
+          console.log(err.message);
           reject(err.message);
         } else {
           resolve(result);
@@ -62,6 +63,7 @@ class ContatoModel {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT * FROM tb_contatos`, (err, result) => {
         if (err) {
+          console.log(err.message);
           reject(err.message);
         } else {
           resolve(result);
@@ -74,6 +76,7 @@ class ContatoModel {
     return new Promise((resolve, reject) => {
       conect.query(`UPDATE tb_contatos SET mensagem_lida = ?`, [mensagem._mensagem_lida, mensagem._id], (err, result) => {
         if (err) {
+          console.log(err.message);
           reject(err.message);
         } else {
           resolve(result);
@@ -86,6 +89,7 @@ class ContatoModel {
     return new Promise((resolve, reject) => {
       conect.query(`DELETE FROM tb_contatos WHERE id = ?`, [mensagem._id], (err, result) => {
         if (err) {
+          console.log(err.message);
           reject(err.message);
         } else {
           resolve(result);

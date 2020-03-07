@@ -114,7 +114,23 @@ class FornecedorModel {
   }
 
 
-  listarFornecedores(fornecedor) {
+  listarFornecedoresAtivos(fornecedor) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT * FROM tb_fornecedores WHERE fornecedor_excluido = ? AND status`, [
+        fornecedor._fornecedor_excluido, fornecedor._status
+      ], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+  listarTodosFornecedores(fornecedor) {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT * FROM tb_fornecedores WHERE fornecedor_excluido = ?`, [
         fornecedor._fornecedor_excluido

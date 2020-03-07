@@ -52,7 +52,8 @@ class UsuarioModel {
         usuario._email, usuario._senha, usuario._usuario_excluido
       ], (err, results) => {
         if (err) {
-          reject(err);
+          console.log(err.message);
+          reject(err.message);
         } else {
           resolve(results);
         }
@@ -64,7 +65,8 @@ class UsuarioModel {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT * FROM tb_usuarios AS user WHERE user.email = ? AND user.senha = ?`, [usuario._email, usuario._senha], (err, results) => {
         if (err) {
-          reject(err);
+          console.log(err.message);
+          reject(err.message);
         } else {
           resolve(results);
         }
@@ -76,7 +78,8 @@ class UsuarioModel {
     return new Promise((resolve, reject) => {
       conect.query(`UPDATE tb_usuario SET senha = ? WHERE email = ?`, [usuario._senha, usuario._email], (err, results) => {
         if (err) {
-          reject(err);
+          console.log(err.message);
+          reject(err.message);
         } else {
           resolve(results);
         }

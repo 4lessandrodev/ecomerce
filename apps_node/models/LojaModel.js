@@ -1,4 +1,4 @@
-const conect = require('./../config/CONECT_BD'); 
+const conect = require('./../config/CONECT_BD');
 class LojaModel {
   constructor (razao_social, nome_fantasia, cnpj_cpf, cep, cidade, estado, endereco, phone, email, id_regiao, bairro, status = 1, loja_excluida = 0) {
     this._id = null;
@@ -114,9 +114,22 @@ class LojaModel {
   }
 
 
-  listarLojas(loja) {
+  listarTodasLojas(loja) {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT * FROM tb_lojas WHERE loja_excluida = ?`, [loja._loja_excluida], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  listarLojasAtivas(loja) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT * FROM tb_lojas WHERE loja_excluida = ? AND status`, [loja._loja_excluida, loja._status], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);

@@ -26,9 +26,18 @@ const editarProduto = (req, res, next) => {
   });
 };
 //-----------------------------------------------------------------------------------
-const listarProduto = (req, res, next) => {
+const listarProdutoEspeciaisAtivos = (req, res, next) => {
   let produto = new Produto();
-  produto.atualizarProduto(produto).then(produto => {
+  produto.listarProdutosEspeciaisAtivos(produto).then(produto => {
+    res.send(produto);
+  }).catch(err => {
+    res.send(err.message);
+  });
+};
+//-----------------------------------------------------------------------------------
+const listarTodosProdutos = (req, res, next) => {
+  let produto = new Produto();
+  produto.listarTodosProdutos(produto).then(produto => {
     res.send(produto);
   }).catch(err => {
     res.send(err.message);
@@ -39,11 +48,11 @@ const desativarProduto = (req, res, next) => {
   let produto = new Produto();
   produto.id = req.body.id;
   produto.produto_excluido = 1;
-  produto.atualizarProduto(produto).then(produto => {
+  produto.desabilitarProduto(produto).then(produto => {
     res.send(produto);
   }).catch(err => {
     res.send(err.message);
   });
 };
 
-module.exports = { salvarProduto, editarProduto, listarProduto, desativarProduto };
+module.exports = { salvarProduto, editarProduto, listarProdutoEspeciaisAtivos, desativarProduto, listarTodosProdutos };

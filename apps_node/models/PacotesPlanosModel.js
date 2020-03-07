@@ -74,9 +74,22 @@ class PacotesPlanosModel {
   }
 
 
-  listarPacotesPlanos(pacotePlano) {
+  listarPacotesPlanosAtivos(pacotePlano) {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT * FROM tb_pacotes_planos WHERE id = ?`, [pacotePlano._plano_excluido], (err, result) => {
+      conect.query(`SELECT * FROM tb_pacotes_planos WHERE plano_excluido = ? AND status = ?`, [pacotePlano._plano_excluido, pacotePlano._status], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  listarTodosPacotesPlanos(pacotePlano) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT * FROM tb_pacotes_planos WHERE plano_excluido = ?`, [pacotePlano._plano_excluido], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);

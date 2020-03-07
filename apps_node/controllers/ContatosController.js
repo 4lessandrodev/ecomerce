@@ -4,9 +4,9 @@ const Mensagem = require('./../models/ContatoModel');
 const salvarMensagem = (req, res, next) => {
   let mensagem = new Mensagem(req.body.nome, req.body.email, req.body.mensagem);
   mensagem.enviarMensagem(mensagem).then(mensagem => {
-    res.send(mensagem);
+    res.render('contact', { success: 'Mensagem enviada com sucesso!', body: '' });
   }).catch(err => {
-    res.send(err.message);
+    res.send('contact', { error: `ERRO: ${err.message}`, body: req.body });
   });
 };
 //--------------------------------------------------------------------------------

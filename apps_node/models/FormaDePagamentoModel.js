@@ -62,9 +62,22 @@ class FormaDePagamentoModel {
   }
 
 
-  listarFormasPagamento(formaPagamento) {
+  listarTodasFormasPagamento(formaPagamento) {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT * FROM tb_tipos_pagamento WHERE tipo_pagamento_excluido = ?`, [formaPagamento._tipo_pagamento_excluido], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  listarFormasPagamentoAtivas(formaPagamento) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT * FROM tb_tipos_pagamento WHERE tipo_pagamento_excluido = ? AND status = ?`, [formaPagamento._tipo_pagamento_excluido, formaPagamento._status], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);

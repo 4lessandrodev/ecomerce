@@ -19,6 +19,7 @@ class InscricaoModel {
         inscricao._email
       ], (err, results) => {
         if (err) {
+          console.log(err.message);
           reject(err.message);
         } else {
           resolve(results);
@@ -32,6 +33,7 @@ class InscricaoModel {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT * FROM tb_inscricoes`, (err, result) => {
         if (err) {
+          console.log(err.message);
           reject(err.message);
         } else {
           resolve(result);

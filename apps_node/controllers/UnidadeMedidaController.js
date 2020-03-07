@@ -20,9 +20,18 @@ const editarUndMed = (req, res, next) => {
   });
 };
 //------------------------------------------------------------------
-const listarUndMed = (req, res, next) => {
+const listarTodasUndMed = (req, res, next) => {
   let und = new UndMed();
-  und.listarUnidadesMedida(und).then(und => {
+  und.listarTodasUnidadesMedida(und).then(und => {
+    res.send(und);
+  }).catch(err => {
+    res.send(und);
+  });
+};
+//------------------------------------------------------------------
+const listarUndMedAtivas = (req, res, next) => {
+  let und = new UndMed();
+  und.listarUnidadesMedidaAtivas(und).then(und => {
     res.send(und);
   }).catch(err => {
     res.send(und);
@@ -40,4 +49,4 @@ const desativarUndMed = (req, res, next) => {
   });
 };
 
-module.exports = { salvarUndMed, editarUndMed, listarUndMed, desativarUndMed };
+module.exports = { salvarUndMed, editarUndMed, listarTodasUndMed, desativarUndMed, listarUndMedAtivas };

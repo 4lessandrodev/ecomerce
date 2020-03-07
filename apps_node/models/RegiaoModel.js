@@ -45,7 +45,20 @@ class RegiaoModel {
   }
 
 
-  listarRegiao(regiao) {
+  listarRegioesAtivas(regiao) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT * FROM tb_regioes WHERE regiao_excluida = ? AND status = ?`, [regiao._regiao_excluida, regiao._status], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  listarTodasRegioes(regiao) {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT * FROM tb_regioes WHERE regiao_excluida = ?`, [regiao._regiao_excluida], (err, result) => {
         if (err) {
@@ -57,6 +70,7 @@ class RegiaoModel {
       });
     });
   }
+
 
   atualizarRegiao(regiao) {
     return new Promise((resolve, reject) => {

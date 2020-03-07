@@ -20,9 +20,18 @@ const editarRegiao = (req, res, next) => {
   });
 };
 //----------------------------------------------------------------
-const listarRegioes = (req, res, next) => {
+const listarTodasRegioes = (req, res, next) => {
   let regiao = new Regiao();
-  regiao.listarRegiao(regiao).then(regioes => {
+  regiao.listarTodasRegioes(regiao).then(regioes => {
+    res.send(regioes);
+  }).catch(err => {
+    res.send(err.message);
+  });
+};
+//----------------------------------------------------------------
+const listarRegioesAtivas = (req, res, next) => {
+  let regiao = new Regiao();
+  regiao.listarRegioesAtivas(regiao).then(regioes => {
     res.send(regioes);
   }).catch(err => {
     res.send(err.message);
@@ -41,4 +50,4 @@ const desativarRegiao = (req, res, next) => {
 };
 //----------------------------------------------------------------
 
-module.exports = { salvarRegiao, editarRegiao, listarRegioes, desativarRegiao };
+module.exports = { salvarRegiao, editarRegiao, listarTodasRegioes, desativarRegiao, listarRegioesAtivas };

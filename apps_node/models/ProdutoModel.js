@@ -1,4 +1,4 @@
-const conect = require('./../config/CONECT_BD'); 
+const conect = require('./../config/CONECT_BD');
 class ProdutoModel {
   constructor (descricao, id_categoria_produto, preco_venda, id_unidade_medida, info_nutricional, imagem = '/uploads/images/no-image.jpeg', status = 1, produto_especial = 0, fator_multiplicador = 1, data_cadastro = new Date(), produto_excluido = 0) {
     this._id = null;
@@ -107,7 +107,24 @@ class ProdutoModel {
   }
 
 
-  listarProdutos(produto) {
+  listarTodosProdutos(produto) {
+    return new Promise((resolve, reject) => {
+      conect.query(`
+      SELECT p.imagem, p.descricao, p.info_nutricional, c.descricao AS categoria, p.status, p.produto_especial, p.fator_multiplicador, p.preco_venda, p.data_cadastro 
+      FROM tb_produtos AS p, tb_categoria_produtos AS c, tb_und_medidas AS u
+      WHERE p.produto_excluido = ? AND c.id = p.id_categoria_produto AND u.id = p.id_unidade_medida`, [
+        produto._produto_excluido], (err, result) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
+    });
+  }
+
+  listarProdutosEspeciaisAtivos(produto) {
     return new Promise((resolve, reject) => {
       conect.query(`
       SELECT p.imagem, p.descricao, p.info_nutricional, c.descricao AS categoria, p.status, p.produto_especial, p.fator_multiplicador, p.preco_venda, p.data_cadastro 
@@ -123,6 +140,7 @@ class ProdutoModel {
         });
     });
   }
+
 
   atualizarProduto(produto) {
     return new Promise((resolve, reject) => {

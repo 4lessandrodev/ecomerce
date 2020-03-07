@@ -1,6 +1,6 @@
 
 class Utils {
-  static exibirFormulario(element, classe, reset = false) {
+  static exibirFormulario(element, classe, reset = false, editar = false) {
     let item = document.querySelector(element);
     item.classList.remove(classe);
     if (reset) {
