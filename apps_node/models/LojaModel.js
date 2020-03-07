@@ -1,4 +1,4 @@
-const conect = require('./../config/CONECT_BD');
+const conect = require('./../config/CONECT_BD'); 
 class LojaModel {
   constructor (razao_social, nome_fantasia, cnpj_cpf, cep, cidade, estado, endereco, phone, email, id_regiao, bairro, status = 1, loja_excluida = 0) {
     this._id = null;

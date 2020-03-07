@@ -1,4 +1,4 @@
-const conect = require('../config/CONECT_BD');
+const conect = require('../config/CONECT_BD'); 
 class ContatoModel {
   constructor (nome, email, mensagem, data_envio = new Date(), mensagem_lida = 0) {
     this._id = null;

@@ -9,7 +9,6 @@ class ClienteModel {
     this._cidade = cidade;
     this._estado = estado;
     this._endereco = endereco;
-    
     this._bairroer = bairro;
     this._codigo_ibge = codigo_ibge;
     this._id_regiao = id_regiao;
