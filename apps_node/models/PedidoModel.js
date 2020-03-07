@@ -1,6 +1,6 @@
 const conect = require('./../config/CONECT_BD');
 class PedidoModel {
-  constructor (id_compras, ecobag_adicional, id_tipo_pagamento, anotacoes, status = 1, retirar_na_loja = 0) {
+  constructor (id_compras, ecobag_adicional, id_tipo_pagamento, anotacoes, retirar_na_loja = 0, status = 1) {
     this._id = null;
     this._id_compras = id_compras;
     this._ecobag_adicional = ecobag_adicional;
@@ -113,6 +113,6 @@ WHERE pedido.id_compras = compra.id AND produto.id = prd.id_produto AND cesta.id
       });
     });
   }
-
-
 }
+
+module.exports = PedidoModel;

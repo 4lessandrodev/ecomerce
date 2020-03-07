@@ -94,19 +94,19 @@ class Utils {
           let inputs = document.querySelectorAll('input');
           for (let input of inputs) {
             switch (input.name) {
-              case 'ibgeCode':
+              case 'codigo_ibge':
                 input.value = res.ibge;
                 break;
-              case 'street':
+              case 'endereco':
                 input.value = res.logradouro;
                 break;
               case 'province':
                 input.value = res.uf;
                 break;
-              case 'zone':
+              case 'bairro':
                 input.value = res.bairro;
                 break;
-              case 'city':
+              case 'cidade':
                 input.value = res.localidade;
                 break;
               default:

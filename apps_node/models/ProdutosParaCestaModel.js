@@ -1,6 +1,6 @@
 const conect = require('./../config/CONECT_BD');
 class ProdutosParaCestaModel {
-  constructor (id, id_produto, id_cesta) {
+  constructor (id_produto, id_cesta) {
     this._id = id;
     this._id_produto = id_produto;
     this._id_cesta = id_cesta;
