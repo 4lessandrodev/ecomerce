@@ -12,6 +12,7 @@ const salvarCestaCompra = (req, res, next) => {
 //---------------------------------------------------------------------------
 const editarCestaCompra = (req, res, next) => {
   let cestaCompra = new CestaCompra(req.body.id_cesta, req.body.id_compra);
+  cestaCompra.id = req.body.id;
   cestaCompra.atualizarCestaCompra(cestaCompra).then(cestaCompra => {
     res.send(cestaCompra);
   }).catch(err => {
@@ -22,7 +23,7 @@ const editarCestaCompra = (req, res, next) => {
 const excluirCestaCompra = (req, res, next) => {
   let cestaCompra = new CestaCompra();
   cestaCompra.id = req.body.id;
-  cestaCompra.atualizarCestaCompra(cestaCompra).then(cestaCompra => {
+  cestaCompra.excluirCestaCompra(cestaCompra).then(cestaCompra => {
     res.send(cestaCompra);
   }).catch(err => {
     res.send(err.message);
@@ -31,7 +32,7 @@ const excluirCestaCompra = (req, res, next) => {
 //---------------------------------------------------------------------------
 const listarCestaCompra = (req, res, next) => {
   let cestaCompra = new CestaCompra();
-  cestaCompra.atualizarCestaCompra(cestaCompra).then(cestasCompra => {
+  cestaCompra.listarCestaCompra(cestaCompra).then(cestasCompra => {
     res.send(cestasCompra);
   }).catch(err => {
     res.send(err.message);

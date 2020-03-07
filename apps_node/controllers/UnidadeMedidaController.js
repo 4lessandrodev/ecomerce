@@ -32,6 +32,7 @@ const listarUndMed = (req, res, next) => {
 const desativarUndMed = (req, res, next) => {
   let und = new UndMed();
   und.id = req.body.id;
+  und.categoria_excluida = 1;
   und.desabilitarUnidadeMedida(und).then(und => {
     res.send(und);
   }).catch(err => {

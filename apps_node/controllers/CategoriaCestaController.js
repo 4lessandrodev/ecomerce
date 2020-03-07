@@ -12,6 +12,7 @@ const salvarCategoria = (req, res, next) => {
 //--------------------------------------------------------------------------------
 const editarCategoria = (req, res, next) => {
   let categoria = new CategoriaCestaModel(req.body.descricao, req.body.status);
+  categoria.id = req.body.id;
   categoria.atualizarCategoriaCesta(categoria).then(categoria => {
     res.send(categoria);
   }).catch(err => {

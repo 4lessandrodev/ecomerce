@@ -12,6 +12,7 @@ const salvarFornecedor = (req, res, next) => {
 //----------------------------------------------------------------------------------------------
 const editarFornecedor = (req, res, next) => {
   let fornecedor = new Fornecedor(req.body.razao_social, req.body.cnpj_cpf, req.body.cep, req.body.cidade, req.body.estado, req.body.endereco, req.body.phone, req.body.email, req.body.bairro, req.body.nome_fantasia, req.body.status);
+  fornecedor.id = req.body.id;
   fornecedor.atualizarFornecedor(fornecedor).then(fornecedor => {
     res.send(fornecedor);
   }).catch(err => {
@@ -31,6 +32,7 @@ const listarFornecedores = (req, res, next) => {
 const desabilitarFornecedor = (req, res, next) => {
   let fornecedor = new Fornecedor();
   fornecedor.id = req.body.id;
+  fornecedor.fornecedor_excluido = 1;
   fornecedor.desabilitarFornecedor(fornecedor).then(fornecedor => {
     res.send(fornecedor);
   }).catch(err => {

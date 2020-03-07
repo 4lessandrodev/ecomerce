@@ -32,6 +32,7 @@ const listarRegioes = (req, res, next) => {
 const desativarRegiao = (req, res, next) => {
   let regiao = new Regiao(req.body.escricao, req.body.status);
   regiao.id = req.body.id;
+  regiao.regiao_excluida = 1;
   regiao.desabilitarRegiao(regiao).then(regiao => {
     res.send(regiao);
   }).catch(err => {

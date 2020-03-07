@@ -66,7 +66,7 @@ class ProdutosParaCestaModel {
   }
 
 
-  desabilitarProdutoParaCesta(produto) {
+  excluirProdutoParaCesta(produto) {
     return new Promise((resolve, reject) => {
       conect.query(`DELETE FROM tb_produtos_para_cesta WHERE id = ?`, [produto._id], (err, result) => {
         if (err) {

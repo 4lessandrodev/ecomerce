@@ -12,6 +12,7 @@ const salvarCesta = (req, res, next) => {
 //---------------------------------------------------------------------------------------------
 const editarCesta = (req, res, next) => {
   let cesta = new Cesta(req.body.descricao, req.body.id_categoria_cesta, req.body.preco, req.body.informacoes_nutricionais, req.body.alteracoes_permitidas, req.body.imagem, req.body.status);
+  cesta.id = req.body.id;
   cesta.atualizarCesta(cesta).then(cesta => {
     res.send(cesta);
   }).catch(err => {
@@ -32,7 +33,7 @@ const desabilitarCesta = (req, res, next) => {
 //---------------------------------------------------------------------------------------------
 const listarCestas = (req, res, next) => {
   let cesta = new Cesta();
-  x.listar(cesta).then(cestas => {
+  cesta.listarCestas(cesta).then(cestas => {
     res.send(cestas);
   }).catch(err => {
     res.send(err.message);

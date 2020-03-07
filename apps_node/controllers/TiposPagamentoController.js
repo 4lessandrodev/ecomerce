@@ -32,6 +32,7 @@ const listarTipoPg = (req, res, next) => {
 const desativarTipoPg = (req, res, next) => {
   let tipoPg = new TipoPg();
   tipoPg.id = req.body.id;
+  tipoPg.tipo_pagamento_excluido = 1;
   tipoPg.desabilitarFormaPagamento(tipoPg).then(tipoPg => {
     res.send(tipoPg);
   }).catch(err => {

@@ -22,7 +22,6 @@ const editarProdParaCesta = (req, res, next) => {
 //-------------------------------------------------------------------
 const listarProdParaCesta = (req, res, next) => {
   let prodPcesta = new ProdutoParaCesta();
-  prodPcesta.id = req.body.id;
   prodPcesta.listarProdutoParaCesta(prodPcesta).then(prodPcesta => {
     res.send(prodPcesta);
   }).catch(err => {
@@ -30,14 +29,14 @@ const listarProdParaCesta = (req, res, next) => {
   });
 };
 //-------------------------------------------------------------------
-const desativarProdParaCesta = (req, res, next) => {
+const excluirProdParaCesta = (req, res, next) => {
   let prodPcesta = new ProdutoParaCesta();
   prodPcesta.id = req.body.id;
-  prodPcesta.desabilitarProdutoParaCesta(prodPcesta).then(prodPcesta => {
+  prodPcesta.excluirProdutoParaCesta(prodPcesta).then(prodPcesta => {
     res.send(prodPcesta);
   }).catch(err => {
     res.send(err.message);
   });
 };
 
-module.exports = { salvarProdParaCesta, editarProdParaCesta, listarProdParaCesta, desativarProdParaCesta };
+module.exports = { salvarProdParaCesta, editarProdParaCesta, listarProdParaCesta, excluirProdParaCesta };

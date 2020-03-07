@@ -23,6 +23,7 @@ const editarFrete = (req, res, next) => {
 const desabilitarFrete = (req, res, next) => {
   let frete = new Frete();
   frete.id = req.body.id;
+  frete.tabela_excluida = 1;
   frete.desabilitarFrete(frete).then(frete => {
     res.send(frete);
   }).catch(err => {

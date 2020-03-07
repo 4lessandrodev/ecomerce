@@ -38,6 +38,7 @@ const listarProduto = (req, res, next) => {
 const desativarProduto = (req, res, next) => {
   let produto = new Produto();
   produto.id = req.body.id;
+  produto.produto_excluido = 1;
   produto.atualizarProduto(produto).then(produto => {
     res.send(produto);
   }).catch(err => {
