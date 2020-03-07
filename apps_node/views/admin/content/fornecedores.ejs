@@ -13,32 +13,32 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="cnpj"><strong>CNPJ/CPF</strong></label>
-              <input type="text" class="form-control" id="cnpj" name="cnpjRegister" maxlength="14">
+              <input type="text" class="form-control" id="cnpj_cpf" name="cnpj_cpf" maxlength="14">
             </div>
 
             <div class="form-group col-md-6">
               <label for="razao-social"><strong>Razão Social/Nome</strong></label>
-              <input type="text" class="form-control" id="razao-social" name="socialName" maxlength="50">
+              <input type="text" class="form-control" id="razao_social" name="razao_social" maxlength="50">
             </div>
 
             <div class="form-group col-md-6">
               <label for="nome-fantasia"><strong>Nome Fantasia</strong></label>
-              <input type="text" class="form-control" id="nome-fantasia" name="fantasyName" maxlength="50">
+              <input type="text" class="form-control" id="nome_fantasia" name="nome_fantasia" maxlength="50">
             </div>
 
             <div class="form-group col-md-2">
               <label for="cep"><strong>CEP</strong></label>
-              <input type="text" class="form-control" id="cep" name="zipCode" maxlength="8">
+              <input type="text" class="form-control" id="cep" name="cep" maxlength="8">
             </div>
 
             <div class="form-group col-md-4">
               <label for="cidade"><strong>Cidade</strong></label>
-              <input type="text" class="form-control" id="cidade" name="city" maxlength="50">
+              <input type="text" class="form-control" id="cidade" name="cidade" maxlength="50">
             </div>
 
             <div class="form-group col-md-2">
               <label for="estado"><strong>Estado</strong></label>
-              <select id="estado" class="form-control" name="province">
+              <select id="estado" class="form-control" name="estado">
                 <option selected value="null">Selecione...</option>
                 <option value="AC">AC</option>
                 <option value="AL">AL</option>
@@ -72,12 +72,12 @@
 
             <div class="form-group col-md-4">
               <label for="bairro"><strong>Bairro</strong></label>
-              <input type="text" class="form-control" id="bairro" name="district" maxlength="30">
+              <input type="text" class="form-control" id="bairro" name="bairro" maxlength="30">
             </div>
 
             <div class="form-group col-md-4">
               <label for="rua"><strong>Rua</strong></label>
-              <input type="text" class="form-control" id="rua" name="street" maxlength="30">
+              <input type="text" class="form-control" id="endereco" name="endereco" maxlength="30">
             </div>
 
             <div class="form-group col-md-2">
@@ -87,7 +87,7 @@
 
             <div class="form-group col-md-4">
               <label for="telefone"><strong>Telefone</strong></label>
-              <input type="number" class="form-control" id="telefone" name="phone" maxlength="15">
+              <input type="number" class="form-control" id="phone" name="phone" maxlength="15">
             </div>
 
             <div class="form-group col-md-6">
@@ -97,7 +97,7 @@
 
             <div class="form-group col-md-2">
               <label for="inputState"><strong>Status</strong></label>
-              <select id="inputState" class="form-control" name="status">
+              <select id="inputState" class="form-control" id="status" name="status">
                 <option selected>Selecione...</option>
                 <option value="1">Ativo</option>
                 <option value="0">Bloqueado</option>
@@ -114,7 +114,7 @@
 
 
       <!-- SCRIPT PARA ENVIAR O FORMULÁRIO -->
-      <script src="./../javascripts/js/script-formsave.js"></script>
+      <script src="../../../javascripts/js/script-formsave.js"></script>
       <script>
         let form = document.querySelector('main form');
 

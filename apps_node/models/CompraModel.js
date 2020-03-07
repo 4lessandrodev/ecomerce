@@ -1,4 +1,4 @@
-const conect = require('./../config/CONECT_BD'); 
+const conect = require('./../config/CONECT_BD');
 class CompraModel {
   constructor (id_cliente, data_compra = new Date(), pedido_aberto = 1) {
     this.id = null;
