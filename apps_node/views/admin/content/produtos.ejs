@@ -17,7 +17,7 @@
               <label for="image" class="caixaImg">
                 <input type="file" hidden name="imageProd" id="imageProd" accept="image/png">
                 <img src="./../images/images/SemImagem-300x300px.png" alt="Imagem" class="imagem rounded-circle"
-                  id="imagem-produto">
+                  id="imagem">
                 <div class="sobreposicao">
                   <h5 class="texto">Adicionar Imagem</h5>
                   <span class="icone"><i class="fas fa-chevron-circle-up"></i></span>
@@ -28,12 +28,12 @@
 
             <div class="form-group col-md-4">
               <label for="nameProd"><strong>Descrição</strong></label>
-              <input type="text" class="form-control" id="nameProd" name="nameProd" required>
+              <input type="text" class="form-control" id="descricao" name="descricao" required>
             </div>
 
             <div class="form-group col-md-4">
               <label for="categoryProd"><strong>Categoria</strong></label>
-              <select class="form-control" id="categoryProd" name="categoryProd">
+              <select class="form-control" id="id_categoria_produto" name="id_categoria_produto">
                 <option selected>Selecione...</option>
                 <% categoriasProd.forEach(function(categ){ %>
                 <option value="<%= categ.id%>"><%=categ.description%></option>
@@ -43,12 +43,12 @@
 
             <div class="form-group col-md-2">
               <label for="salePriceProd"><strong>Preço</strong></label>
-              <input type="number" class="form-control" id="salePriceProd" name="salePriceProd" required>
+              <input type="number" class="form-control" id="preco_venda" name="preco_venda" required>
             </div>
 
             <div class="form-group col-md-3">
               <label for="unitMeansureProd"><strong>Und. Medida</strong></label>
-              <select id="unitMeansureProd" class="form-control" name="unitMeansureProd">
+              <select id="unitMeansureProd" class="form-control" id="id_unidade_medida" name="id_unidade_medida">
                 <option selected>Selecione...</option>
                 <% unidMedida.forEach(function(und){ %>
                 <option value="<%= und.id%>"><%=und.description%></option>
@@ -59,7 +59,7 @@
 
             <div class="form-group col-md-3">
               <label for="productTypeProd"><strong>Tipo de Produto</strong></label>
-              <select id="productTypeProd" class="form-control" name="productTypeProd">
+              <select id="produto_especial" class="form-control" name="produto_especial">
                 <option selected>Selecione...</option>
                 <option value="1">Produtos Especiais</option v>
                 <option value="0">Produto Normal</option>
@@ -68,12 +68,12 @@
 
             <div class="form-group col-md-3">
               <label for="multiplyFactorProd"><strong>Fator Multiplicador</strong></label>
-              <input type="number" class="form-control" id="multiplyFactorProd" name="multiplyFactorProd">
+              <input type="number" class="form-control" id="fator_multiplicador" name="fator_multiplicador">
             </div>
 
             <div class="form-group col-md-3">
               <label for="statusProd"><strong>Status</strong></label>
-              <select id="statusProd" class="form-control" name="statusProd">
+              <select id="status" class="form-control" name="status">
                 <option selected>Selecione...</option>
                 <option value="1">Ativo</option>
                 <option value="0">Bloqueado</option>
@@ -92,8 +92,8 @@
 
             <div class="form-group col-md-6">
               <label for="nutrictionInformationProd"><strong>Informações Nutricionais</strong></label>
-              <textarea class="form-control" id="nutrictionInformationProd" rows="5"
-                name="nutrictionInformationProd"></textarea>
+              <textarea class="form-control" id="info_nutricional" rows="5"
+                name="info_nutricional"></textarea>
             </div>
 
           </div>
@@ -106,8 +106,8 @@
       </section>
 
 
-      <script src="./../javascripts/js/script-filereader.js"></script>
-      <script src="./../javascripts/js/script-formsave.js"></script>
+      <script src="../../../javascripts/js/script-filereader.js"></script>
+      <script src="../../../javascripts/js/script-formsave.js"></script>
       <script>
         new Scriptfilereader('#div-imagem [type=file]', '#div-imagem img');
 

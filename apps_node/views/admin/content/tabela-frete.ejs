@@ -11,7 +11,7 @@
           <div class="form-row">
             <div class="form-group col-md-4">
               <label for="origin"><strong>Origem</strong></label>
-              <select id="origin" class="form-control" name="origin">
+              <select id="id_origem" class="form-control" name="id_origem">
                 <option selected>Selecione...</option>
                 <% lojas.forEach(function(loja){ %>
                 <option value="<%= loja.id%>"><%=loja.socialName%></option>
@@ -20,7 +20,7 @@
             </div>
             <div class="form-group col-md-4">
               <label for="destin"><strong>Destino</strong></label>
-              <select id="destin" class="form-control" name="destin">
+              <select id="id_destino" class="form-control" name="id_destino">
                 <option selected>Selecione...</option>
                 <% regioes.forEach(function(regiao){ %>
                 <option value="<%= regiao.id%>"><%=regiao.description%></option>
@@ -29,7 +29,7 @@
             </div>
             <div class="form-group col-md-2">
               <label for="price"><strong>Frete</strong></label>
-              <input type="number" class="form-control" id="price" name="price" placeholder="Preço">
+              <input type="number" class="form-control" id="preco" name="preco" placeholder="Preço">
             </div>
             <div class="form-group col-md-2">
               <button type="submit" class="btn btn-primary form-control botao-salvar">Salvar</button>
@@ -41,7 +41,7 @@
 
 
 
-      <script src="./../javascripts/js/script-formsave.js"></script>
+      <script src="../../../javascripts/js/script-formsave.js"></script>
       <script>
         let form = document.querySelector('main form');
 

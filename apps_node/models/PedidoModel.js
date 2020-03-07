@@ -1,4 +1,4 @@
-const conect = require('./../config/CONECT_BD');
+const conect = require('./../config/CONECT_BD'); 
 class PedidoModel {
   constructor (id_compras, ecobag_adicional, id_tipo_pagamento, anotacoes, retirar_na_loja = 0, status = 1) {
     this._id = null;

@@ -1,4 +1,4 @@
-const conect = require('./../config/CONECT_BD');
+const conect = require('./../config/CONECT_BD'); 
 class FreteModel {
   constructor (id_origem, id_destino, preco, data_cadastro = new Date(), tabela_excluida = 0) {
     this._id = null;

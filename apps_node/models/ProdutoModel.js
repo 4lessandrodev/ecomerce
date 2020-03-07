@@ -1,4 +1,4 @@
-const conect = require('./../config/CONECT_BD');
+const conect = require('./../config/CONECT_BD'); 
 class ProdutoModel {
   constructor (descricao, id_categoria_produto, preco_venda, id_unidade_medida, info_nutricional, imagem = '/uploads/images/no-image.jpeg', status = 1, produto_especial = 0, fator_multiplicador = 1, data_cadastro = new Date(), produto_excluido = 0) {
     this._id = null;
