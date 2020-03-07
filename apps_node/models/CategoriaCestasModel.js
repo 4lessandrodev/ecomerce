@@ -1,4 +1,4 @@
-const conect = require('./../config/CONECT_BD');
+const conect = require('./../config/CONECT_BD'); 
 
 class CategoriaCestasModel {
   constructor (descricao, status = 1, categoria_c_excluida = 0) {

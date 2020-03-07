@@ -9,15 +9,15 @@
 
 
         <form method="POST" action="/admin/cestas">
-          <input type="hidden" id="idCesta" name="idCesta">
+          <input type="hidden" id="id_cesta" name="id_cesta">
           <input type="hidden" id="array" name="array">
           <input type="hidden" id="item_key" name="item_key">
           <div class="form-row">
             <div class="form-group col-md-2" id="div-imagem">
               <label for="imageCesta" class="caixaImg">
                 <input type="file" hidden name="imageCesta" id="imageCesta" accept="image/png">
-                <img src="./../images/images/SemImagem-300x300px.png" alt="Imagem" class="imagem rounded-circle"
-                  id="imagem-cesta">
+                <img src="../../../images/images/SemImagem-300x300px.png" alt="Imagem" class="imagem rounded-circle"
+                  id="imagem">
                 <div class="sobreposicao">
                   <h5 class="texto">Adicionar Imagem</h5>
                   <span class="icone"><i class="fas fa-chevron-circle-up"></i></span>
@@ -28,12 +28,12 @@
 
             <div class="form-group col-md-4">
               <label for="descriptionCesta"><strong>Descrição</strong></label>
-              <input type="text" class="form-control" id="descriptionCesta" name="descriptionCesta">
+              <input type="text" class="form-control" id="descricao" name="descricao">
             </div>
 
             <div class="form-group col-md-4">
               <label for="categoryCesta"><strong>Categoria</strong></label>
-              <select class="form-control" id="categoryCesta" name="categoryCesta">
+              <select class="form-control" id="id_categoria_cesta" name="id_categoria_cesta">
                 <option selected>Selecione...</option>
                 <% categoriasCestas.forEach(function(categ){ %>
                 <option value="<%= categ.id%>"><%=categ.description%></option>
@@ -43,7 +43,7 @@
 
             <div class="form-group col-md-2">
               <label for="salesPriceCesta"><strong>Preço de Venda</strong></label>
-              <input type="number" class="form-control" id="salesPriceCesta" name="salesPriceCesta">
+              <input type="number" class="form-control" id="preco" name="preco">
             </div>
 
             <div class="form-group col-md-6">
@@ -59,7 +59,7 @@
 
             <div class="form-group col-md-6">
               <label for="nutrInfoCesta"><strong>Informações Nutricionais</strong></label>
-              <textarea class="form-control" id="nutrInfoCesta" rows="5" name="nutrInfoCesta"></textarea>
+              <textarea class="form-control" id="informacoes_nutricionais" rows="5" name="informacoes_nutricionais"></textarea>
             </div>
 
             <div class="form-group col-md-4">
@@ -69,12 +69,12 @@
 
             <div class="form-group col-md-4">
               <label for="changesCesta"><strong>Quantidade de Alterações Permitidas</strong></label>
-              <input type="number" class="form-control" id="changesCesta" name="changesCesta">
+              <input type="number" class="form-control" id="alteracoes_permitidas" name="alteracoes_permitidas">
             </div>
 
             <div class="form-group col-md-4">
               <label for="statusCesta"><strong>Status</strong></label>
-              <select id="statusCesta" class="form-control" name="statusCesta">
+              <select id="status" class="form-control" name="status">
                 <option selected>Selecione...</option>
                 <option value="1">Ativo</option>
                 <option value="0">Bloqueado</option>
@@ -92,8 +92,8 @@
 
 
 
-      <script src="./../javascripts/js/script-filereader.js"></script>
-      <script src="./../javascripts/js/script-formsave.js"></script>
+      <script src="../../../javascripts/js/script-filereader.js"></script>
+      <script src="../../../javascripts/js/script-formsave.js"></script>
       <script>
         new Scriptfilereader('#div-imagem [type=file]', '#div-imagem img');
 
