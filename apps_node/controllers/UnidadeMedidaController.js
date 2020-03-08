@@ -9,7 +9,7 @@ const renderizar = (req, res, next, unidades) => {
     data: '',
     navbar: true,
     pagina: 'Unidades Medidas',
-    btnLabel: 'unidade medida'
+    btnLabel: 'Nova und. medida'
   });
 };
 //------------------------------------------------------------------

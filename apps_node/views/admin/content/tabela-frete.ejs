@@ -1,4 +1,6 @@
     <main>
+      <!--------------------------------------------------------------------------------------------->
+      <!--CADASTRAR NOVO FRETE-->
       <section class="container formulario display-none" id="form-new">
         <div style="margin-bottom: 1em;">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close-category"
@@ -6,11 +8,11 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form method="POST" action="/admin/tabela-frete">
+        <form method="POST" action="/admin/frete">
           <input type="hidden" id="id" name="id">
           <div class="form-row">
             <div class="form-group col-md-4">
-              <label for="origin"><strong>Origem</strong></label>
+              <label for="id_origem"><strong>Origem</strong></label>
               <select id="id_origem" class="form-control" name="id_origem">
                 <option selected>Selecione...</option>
                 <% lojas.forEach(function(loja){ %>
@@ -37,26 +39,58 @@
           </div>
         </form>
       </section>
+      <!--------------------------------------------------------------------------------------------->
 
+
+
+      <!--------------------------------------------------------------------------------------------->
+      <!--CADASTRAR NOVO FRETE-->
+      <section class="container formulario display-none" id="form-edit">
+        <div style="margin-bottom: 1em;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close"
+            onclick="Utils.ocultarFormulario('#form-edit', 'display-none', true)">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form method="POST" action="/admin/editar-frete">
+          <input type="hidden" id="id" name="id">
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="id_origem"><strong>Origem</strong></label>
+              <select id="id_origem" class="form-control" name="id_origem">
+                <option selected>Selecione...</option>
+                <% lojas.forEach(function(loja){ %>
+                <option value="<%= loja.id%>"><%=loja.socialName%></option>
+                <% }); %>
+              </select>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="id_destino"><strong>Destino</strong></label>
+              <select id="id_destino" class="form-control" name="id_destino">
+                <option selected>Selecione...</option>
+                <% regioes.forEach(function(regiao){ %>
+                <option value="<%= regiao.id%>"><%=regiao.descricao%></option>
+                <% }); %>
+              </select>
+            </div>
+            <div class="form-group col-md-2">
+              <label for="preco"><strong>Frete</strong></label>
+              <input type="number" class="form-control" id="preco" name="preco" placeholder="Preço">
+            </div>
+            <div class="form-group col-md-2">
+              <button type="submit" class="btn btn-primary form-control botao-salvar">Salvar</button>
+            </div>
+          </div>
+        </form>
+      </section>
+      <!--------------------------------------------------------------------------------------------->
 
 
 
       <script src="../../../javascripts/js/script-formsave.js"></script>
-      <script>
-        let form = document.querySelector('main form');
 
-        form.save().then(json => {
-
-          window.location.reload();
-
-        }).catch(err => {
-
-          console.log(err);
-
-        });
-      </script>
-
-
+      <!--LISTAR FRETES CADASTRADOS -->
+      <!--------------------------------------------------------------------------------------------->
       <section class="container list-itens-container table-responsive-md">
         <div class="navbar navbar-light">
           <h6 class="navbar-brand">
@@ -77,14 +111,14 @@
           <tbody>
             <% fretes.forEach(function(row){ %>
             <tr data-row="<%= JSON.stringify(row)%>">
-              <td scope="row"><%=row.socialName%></td>
-              <td><%=row.description%></td>
-              <td><%=row.price%></td>
+              <td scope="row"><%=row.razao_social%></td>
+              <td><%=row.descricao%></td>
+              <td><%=row.preco%></td>
               <td>
                 <button class="btn btn-excluir"><i class="fas fa-trash-alt"></i></button>
               </td>
               <td>
-                <button class="btn btn-editar" onclick="Utils.exibirFormulario('#form-new', 'display-none')"><i
+                <button class="btn btn-editar" onclick="Utils.exibirFormulario('#form-edit', 'display-none')"><i
                     class="fa fa-pencil-alt"></i></button>
               </td>
             </tr>
@@ -92,13 +126,14 @@
           </tbody>
         </table>
       </section>
+      <!--------------------------------------------------------------------------------------------->
     </main>
 
     <script>
       let buttonsEdit = document.querySelectorAll('.btn-editar');
       let buttonsDelete = document.querySelectorAll('.btn-excluir');
 
-      let mainForm = document.querySelector('main form');
+      let mainForm = document.querySelector('main #form-edit');
       for (let btn of buttonsEdit) {
         btn.addEventListener('click', function (e) {
           let tr = e.path.find(elemento => {
@@ -111,7 +146,7 @@
 
           for (let name in data) {
             switch (name) {
-              case 'image':
+              case 'imagem':
                 mainForm.querySelector('img').src = '/' + data[name];
                 break;
               default:
@@ -130,8 +165,8 @@
 
           let data = JSON.parse(tr.dataset.row);
 
-          fetch(`/admin/tabela-frete/${data.id}`, {
-              method: 'POST'
+          fetch(`/admin/frete/${data.id}`, {
+              method: 'DELETE'
             }).then(response => response.json())
             .then(json => {
               window.location.reload();

@@ -1,4 +1,5 @@
     <main>
+      <!------------------------------------------------------------------------------------------>
       <section class="container formulario display-none" id="form-new">
         <div style="margin-bottom: 1em;">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close"
@@ -6,9 +7,9 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-
-        <!--FORMULÁRIO DE CADASTRO DE FORNECEDOR-->
-        <form method="POST" action="/admin/pedidos-provisorio">
+        <!------------------------------------------------------------------------------------------>
+        <!--FORMULÁRIO DE EDIÇÃO DE PEDIDOS-->
+        <form method="POST" action="/admin/editar-pedido">
           <input type="hidden" id="id" name="id">
           <div class="form-row">
             <div class="form-group col-md-8">
@@ -35,10 +36,12 @@
               <label for="status"><strong>Status</strong></label>
               <select id="status" class="form-control" name="status">
                 <option selected value="null">Selecione...</option>
-                <option value="Em aberto">Em aberto</option>
-                <option value="Concluido">Concluído</option>
-                <option value="Cancelado">Cancelado</option>
-                <option value="Em transito">Em transito</option>
+                <option value="1">Em aberto</option>
+                <option value="2">Aguardando Pagamento</option>
+                <option value="3">Em separação</option>
+                <option value="4">Em transito</option>
+                <option value="5">Concluído</option>
+                <option value="0">Cancelado</option>
               </select>
             </div>
             <div class="botoes-a-direita">
@@ -48,27 +51,15 @@
         </form>
       </section>
       <!--FIM DP FORMULÁRIO DE CADASTRO DE FORNECEDOR-->
+      <!------------------------------------------------------------------------------------------>
 
 
       <!-- SCRIPT PARA ENVIAR O FORMULÁRIO -->
       <script src="./../javascripts/js/script-formsave.js"></script>
-      <script>
-        let form = document.querySelector('main form');
-
-        form.save().then(json => {
-
-          window.location.reload();
-
-        }).catch(err => {
-
-          console.log(err);
-
-        });
-      </script>
       <!-- FIM DO SCRIPT PARA ENVIAR O FORMULÁRIO -->
 
 
-
+      <!------------------------------------------------------------------------------------------>
       <!--LISTA DE FORNECEDORES CADASTRADOS-->
       <section class="container list-itens-container table-responsive-md">
         <div class="navbar navbar-light">
@@ -111,6 +102,7 @@
           </tbody>
         </table>
       </section>
+      <!------------------------------------------------------------------------------------------>
     </main>
 
     <script>
@@ -154,7 +146,7 @@
 
           let data = JSON.parse(tr.dataset.row);
 
-          fetch(`/admin/pedidos-provisorio/${data.id}`, {
+          fetch(`/admin/pedido/${data.id}`, {
               method: 'DELETE'
             }).then(response => response.json())
             .then(json => {

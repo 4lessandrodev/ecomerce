@@ -7,7 +7,7 @@ const renderizarPaginaCategoria = (req, res, next, categorias) => {
     data: '',
     navbar: true,
     pagina: 'Categoria cestas',
-    btnLabel: 'categoria cestas'
+    btnLabel: 'Nova categoria'
   });
 };
 //--------------------------------------------------------------------------------
