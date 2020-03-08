@@ -1,4 +1,4 @@
-const conect = require('./../config/CONECT_BD'); 
+const conect = require('./../config/CONECT_BD');
 class FreteModel {
   constructor (id_origem, id_destino, preco, data_cadastro = new Date(), tabela_excluida = 0) {
     this._id = null;
@@ -6,7 +6,7 @@ class FreteModel {
     this._id_destino = id_destino;
     this._preco = preco;
     this._data_cadastro = data_cadastro;
-    this.__tabela_excluida = tabela_excluida;
+    this._tabela_excluida = tabela_excluida;
   }
   get id() {
     return this._id;
@@ -64,7 +64,9 @@ class FreteModel {
 
   listarFretes(frete) {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT * FROM tb_fretes WHERE tabela_excluida = ?`, [frete._tabela_excluida], (err, result) => {
+      conect.query(`SELECT frete.id, loja.id AS 'id_origem', CONCAT(loja.razao_social,' | ', loja.endereco) AS 'origem', loja.id_regiao AS 'id_regiao_loja', regiao.id AS 'id_destino', regiao.descricao AS 'destino', frete.preco FROM tb_fretes AS frete, tb_regioes AS regiao, tb_lojas AS loja WHERE frete.tabela_excluida = ? AND frete.id_origem = loja.id AND frete.id_destino = regiao.id AND loja.loja_excluida = 0 AND regiao.regiao_excluida = 0`, [
+        frete._tabela_excluida
+      ], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -77,7 +79,7 @@ class FreteModel {
 
   atualizarFrete(frete) {
     return new Promise((resolve, reject) => {
-      conect.query(`UPDATE tb_fretes SET id_origem = ?, id_destino = ?, preco = ? WHERE id`, [
+      conect.query(`UPDATE tb_fretes SET id_origem = ?, id_destino = ?, preco = ? WHERE id = ?`, [
         frete._id_origem, frete._id_destino, frete._preco, frete._id], (err, result) => {
           if (err) {
             console.log(err.message);
@@ -92,7 +94,7 @@ class FreteModel {
 
   desabilitarFrete(frete) {
     return new Promise((resolve, reject) => {
-      conect.query(`UPDATE tb_fretes SET tabela_excluida = ? WHERE id`, [
+      conect.query(`UPDATE tb_fretes SET tabela_excluida = ? WHERE id = ?`, [
         frete._tabela_excluida, frete._id], (err, result) => {
           if (err) {
             console.log(err.message);

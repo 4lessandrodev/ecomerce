@@ -15,6 +15,8 @@ const renderizar = (req, res, next, lojas, regioes) => {
 //-------------------------------------------------------------------------------------------
 const salvarLoja = (req, res, next) => {
   let loja = new Loja(req.body.razao_social, req.body.nome_fantasia, req.body.cnpj_cpf, req.body.cep, req.body.cidade, req.body.estado, req.body.endereco, req.body.phone, req.body.email, req.body.id_regiao, req.body.bairro, req.body.status);
+  loja.endereco = `${req.body.endereco} ${req.body.numero}`;
+  console.log(loja);
   loja.salvarLoja(loja).then(loja => {
     res.redirect('loja');
   }).catch(err => {

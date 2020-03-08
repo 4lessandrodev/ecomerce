@@ -1,20 +1,43 @@
 const Frete = require('./../models/FreteModel');
+const Loja = require('./../models/LojaModel');
+const Regiao = require('./../models/RegiaoModel');
 
+//------------------------------------------------------------------------
+const renderizar = (req, res, next, fretes, lojas, regioes) => {
+  res.render('admin/tabela-frete', {
+    fretes,
+    regioes,
+    lojas,
+    data: '',
+    navbar: true,
+    pagina: 'Fretes por região',
+    btnLabel: 'Novo frete'
+  });
+};
 //------------------------------------------------------------------------
 const salvarFrete = (req, res, next) => {
   let frete = new Frete(req.body.id_origem, req.body.id_destino, req.body.preco);
-  frete.salvarFrete(frete).then(frete => {
-    res.send(frete);
+  frete.salvarFrete(frete).then(result => {
+    res.redirect('frete');
   }).catch(err => {
     res.send(err.message);
   });
 };
 //------------------------------------------------------------------------
 const editarFrete = (req, res, next) => {
+  let loja = new Loja();
+  let regiao = new Regiao();
   let frete = new Frete(req.body.id_origem, req.body.id_destino, req.body.preco);
   frete.id = req.body.id;
-  frete.atualizarFrete(frete).then(frete => {
-    res.send(frete);
+  console.log(frete);
+  frete.atualizarFrete(frete).then(result => {
+    frete.listarFretes(frete).then(fretes => {
+      loja.listarLojasAtivasParaFrete(loja).then(lojas => {
+        regiao.listarRegioesAtivas(regiao).then(regioes => {
+          renderizar(req, res, next, fretes, lojas, regioes);
+        });
+      });
+    });
   }).catch(err => {
     res.send(err.message);
   });
@@ -22,10 +45,10 @@ const editarFrete = (req, res, next) => {
 //------------------------------------------------------------------------
 const desabilitarFrete = (req, res, next) => {
   let frete = new Frete();
-  frete.id = req.body.id;
+  frete.id = req.params.id;
   frete.tabela_excluida = 1;
-  frete.desabilitarFrete(frete).then(frete => {
-    res.send(frete);
+  frete.desabilitarFrete(frete).then(result => {
+    res.send(result);
   }).catch(err => {
     res.send(err.message);
   });
@@ -33,8 +56,14 @@ const desabilitarFrete = (req, res, next) => {
 //------------------------------------------------------------------------
 const listarFretes = (req, res, next) => {
   let frete = new Frete();
+  let loja = new Loja();
+  let regiao = new Regiao();
   frete.listarFretes(frete).then(fretes => {
-    res.send(fretes);
+    loja.listarLojasAtivasParaFrete(loja).then(lojas => {
+      regiao.listarRegioesAtivas(regiao).then(regioes => {
+        renderizar(req, res, next, fretes, lojas, regioes);
+      });
+    });
   }).catch(err => {
     res.send(err.message);
   });

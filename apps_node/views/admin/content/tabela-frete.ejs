@@ -16,7 +16,7 @@
               <select id="id_origem" class="form-control" name="id_origem">
                 <option selected>Selecione...</option>
                 <% lojas.forEach(function(loja){ %>
-                <option value="<%= loja.id%>"><%=loja.socialName%></option>
+                <option value="<%= loja.id%>"><%=loja.razao_social%> | <%=loja.endereco%></option>
                 <% }); %>
               </select>
             </div>
@@ -25,7 +25,7 @@
               <select id="id_destino" class="form-control" name="id_destino">
                 <option selected>Selecione...</option>
                 <% regioes.forEach(function(regiao){ %>
-                <option value="<%= regiao.id%>"><%=regiao.description%></option>
+                <option value="<%= regiao.id%>"><%=regiao.descricao%></option>
                 <% }); %>
               </select>
             </div>
@@ -44,7 +44,7 @@
 
 
       <!--------------------------------------------------------------------------------------------->
-      <!--CADASTRAR NOVO FRETE-->
+      <!--EDITAR FRETE-->
       <section class="container formulario display-none" id="form-edit">
         <div style="margin-bottom: 1em;">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close"
@@ -60,7 +60,7 @@
               <select id="id_origem" class="form-control" name="id_origem">
                 <option selected>Selecione...</option>
                 <% lojas.forEach(function(loja){ %>
-                <option value="<%= loja.id%>"><%=loja.socialName%></option>
+                <option value="<%= loja.id%>"><%=loja.razao_social%> | <%=loja.endereco%></option>
                 <% }); %>
               </select>
             </div>
@@ -109,11 +109,11 @@
             </tr>
           </thead>
           <tbody>
-            <% fretes.forEach(function(row){ %>
-            <tr data-row="<%= JSON.stringify(row)%>">
-              <td scope="row"><%=row.razao_social%></td>
-              <td><%=row.descricao%></td>
-              <td><%=row.preco%></td>
+            <% fretes.forEach(function(frete){ %>
+            <tr data-row="<%= JSON.stringify(frete)%>">
+              <td scope="row"><%=frete.origem%></td>
+              <td><%=frete.destino%></td>
+              <td><%=frete.preco%></td>
               <td>
                 <button class="btn btn-excluir"><i class="fas fa-trash-alt"></i></button>
               </td>

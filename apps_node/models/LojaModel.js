@@ -100,7 +100,7 @@ class LojaModel {
     return new Promise((resolve, reject) => {
       conect.query(`INSERT INTO tb_lojas(razao_social, nome_fantasia, cnpj_cpf, cep, cidade, estado, endereco,
         phone, email, status, bairro, id_regiao) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)`, [
-        loja._razao_social, loja._nome_fantasia, loja._cnpj_cpf, loja._cep, loja._cidade, loja._cidade, loja._estado,
+        loja._razao_social, loja._nome_fantasia, loja._cnpj_cpf, loja._cep, loja._cidade, loja._estado,
         loja._endereco, loja._phone, loja._email, loja._status, loja._bairro, loja._id_regiao
       ], (err, result) => {
         if (err) {
@@ -129,7 +129,7 @@ class LojaModel {
 
   listarLojasAtivas(loja) {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT * FROM tb_lojas WHERE loja_excluida = ? AND status`, [loja._loja_excluida, loja._status], (err, result) => {
+      conect.query(`SELECT * FROM tb_lojas WHERE loja_excluida = ? AND status = ?`, [loja._loja_excluida, loja._status], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -140,10 +140,25 @@ class LojaModel {
     });
   }
 
+
+  listarLojasAtivasParaFrete(loja) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT l.id, l.razao_social, l.endereco FROM tb_lojas AS l WHERE loja_excluida = ? AND status = ?`, [loja._loja_excluida, loja._status], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
   atualizarLoja(loja) {
     return new Promise((resolve, reject) => {
       conect.query(`UPDATE tb_lojas SET razao_social = ?, nome_fantasia = ?, cnpj_cpf = ?, cep = ?, cidade = ?, estado = ?, endereco = ?,
-        phone = ?, email = ?, status = ?, bairro = ? WHERE id_regiao = ? WHERE id = ?`, [
+        phone = ?, email = ?, status = ?, bairro = ?, id_regiao = ? WHERE id = ?`, [
         loja._razao_social, loja._nome_fantasia, loja._cnpj_cpf, loja._cep, loja._cidade, loja._estado,
         loja._endereco, loja._phone, loja._email, loja._status, loja._bairro, loja._id_regiao, loja._id
       ], (err, result) => {

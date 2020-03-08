@@ -78,7 +78,7 @@
             </div>
 
             <div class="form-group col-md-6">
-              <label for="rua"><strong>Rua</strong></label>
+              <label for="endereco"><strong>Rua</strong></label>
               <input type="text" class="form-control" id="endereco" name="endereco" maxlength="30">
             </div>
 
@@ -126,7 +126,7 @@
       <!------------------------------------------------------------------------------------------>
 
       <!------------------------------------------------------------------------------------------>
-      <!--CADASTRO DE NOVA LOJA-->
+      <!--CADASTRO DE EDITAR LOJA-->
       <section class="container formulario display-none" id="form-edit">
         <div style="margin-bottom: 1em;">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close-edit"
@@ -135,7 +135,7 @@
           </button>
         </div>
 
-        <!--FORMULÁRIO DE CADASTRO DE LOJAS-->
+        <!--FORMULÁRIO DE EDICAO DE LOJAS-->
         <form method="POST" action="/admin/editar-loja">
           <input type="hidden" id="id" name="id">
           <div class="form-row">
@@ -208,12 +208,7 @@
               <input type="text" class="form-control" id="endereco" name="endereco" maxlength="30">
             </div>
 
-            <div class="form-group col-md-2">
-              <label for="numero"><strong>Número</strong></label>
-              <input type="number" class="form-control" id="numero" name="numero" maxlength="11">
-            </div>
-
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-6">
               <label for="id_regiao"><strong>Região</strong></label>
               <select id="id_regiao" class="form-control" name="id_regiao">
                 <option selected disabled>Selecione...</option>
@@ -278,8 +273,8 @@
           <tbody>
             <% lojas.forEach(function(row){ %>
             <tr data-row="<%= JSON.stringify(row)%>">
-              <th scope="row"><%=row.cnpjRegister%></th>
-              <td><%=row.socialName%></td>
+              <th scope="row"><%=row.cnpj_cpf%></th>
+              <td><%=row.razao_social%></td>
               <td><%=row.phone%></td>
               <td><%=row.email%></td>
               <td><% if(row.status){ %>Ativo<% }else{ %>Bloqueado<% }; %></td>
