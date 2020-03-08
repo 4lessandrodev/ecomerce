@@ -1,4 +1,5 @@
     <main>
+      <!------------------------------------------------------------------------------------------------------->
       <section class="container formulario display-none" id="form-new">
         <div style="margin-bottom: 1em;">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close-category"
@@ -6,15 +7,14 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-
-
+        <!------------------------------------------------------------------------------------------------------->
         <!-- FORMULÁRIO DE CADASTRO DE UNIDADE DE MEDIDA-->
-        <form method="POST" action="/admin/unidades-medida">
+        <form method="POST" action="/admin/unidade-medida">
           <input type="hidden" id="id" name="id">
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="descricao"><strong>Unidade de Medida</strong></label>
-              <input type="text" class="form-control" id="descricao" name="description" placeholder="Descrição">
+              <input type="text" class="form-control" id="descricao" name="descricao" placeholder="Descrição">
             </div>
             <div class="form-group col-md-4">
               <label for="inputState"><strong>Status</strong></label>
@@ -31,26 +31,52 @@
         </form>
       </section>
       <!-- FIM FORMULÁRIO DE CADASTRO DE UNIDADE DE MEDIDA-->
+      <!------------------------------------------------------------------------------------------------------->
+
+
+
+      <!------------------------------------------------------------------------------------------------------->
+      <section class="container formulario display-none" id="form-edit">
+        <div style="margin-bottom: 1em;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close"
+            onclick="Utils.ocultarFormulario('#form-edit', 'display-none', true)">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <!------------------------------------------------------------------------------------------------------->
+        <!-- FORMULÁRIO DE CADASTRO DE UNIDADE DE MEDIDA-->
+        <form method="POST" action="/admin/editar-unidade-medida">
+          <input type="hidden" id="id" name="id">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="descricao"><strong>Unidade de Medida</strong></label>
+              <input type="text" class="form-control" id="descricao" name="descricao" placeholder="Descrição">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="inputState"><strong>Status</strong></label>
+              <select id="inputState" class="form-control" name="status">
+                <option selected>Selecione...</option>
+                <option value="1">Ativo</option>
+                <option value="0">Bloqueado</option>
+              </select>
+            </div>
+            <div class="form-group col-md-2">
+              <button type="submit" class="btn btn-primary form-control botao-salvar">Salvar</button>
+            </div>
+          </div>
+        </form>
+      </section>
+      <!-- FIM FORMULÁRIO DE CADASTRO DE UNIDADE DE MEDIDA-->
+      <!------------------------------------------------------------------------------------------------------->
+
 
 
       <!-- SCRIPT PARA ENVIAR O FORMULÁRIO -->
       <script src="./../javascripts/js/script-formsave.js"></script>
-      <script>
-        let form = document.querySelector('main form');
-
-        form.save().then(json => {
-
-          window.location.reload();
-
-        }).catch(err => {
-
-          console.log(err);
-
-        });
-      </script>
-      <!-- FIM DO SCRIPT PARA ENVIAR O FORMULÁRIO -->
 
 
+
+      <!------------------------------------------------------------------------------------------------------->
       <!-- LISTA DE CATEGORIA DE PRODUTO-->
       <section class="container list-itens-container table-responsive-md">
         <div class="navbar navbar-light">
@@ -70,16 +96,16 @@
             </tr>
           </thead>
           <tbody>
-            <% unidMedida.forEach(function(row){ %>
+            <% unidades.forEach(function(row){ %>
             <tr data-row="<%= JSON.stringify(row)%>">
               <th scope="row"><%=row.id%></th>
-              <td><%=row.description%></td>
+              <td><%=row.descricao%></td>
               <td><% if(row.status){ %>Ativo<% }else{ %>Bloqueado<% }; %></td>
               <td>
                 <button class="btn btn-excluir"><i class="fas fa-trash-alt"></i></button>
               </td>
               <td>
-                <button class="btn btn-editar" onclick="Utils.exibirFormulario('#form-new', 'display-none')"><i
+                <button class="btn btn-editar" onclick="Utils.exibirFormulario('#form-edit', 'display-none')"><i
                     class="fa fa-pencil-alt"></i></button>
               </td>
             </tr>
@@ -88,12 +114,12 @@
         </table>
       </section>
     </main>
-
+    <!------------------------------------------------------------------------------------------------------->
     <script>
       let buttonsEdit = document.querySelectorAll('.btn-editar');
       let buttonsDelete = document.querySelectorAll('.btn-excluir');
 
-      let mainForm = document.querySelector('main form');
+      let mainForm = document.querySelector('main #form-edit');
       for (let btn of buttonsEdit) {
         btn.addEventListener('click', function (e) {
           let tr = e.path.find(elemento => {
@@ -125,8 +151,8 @@
 
           let data = JSON.parse(tr.dataset.row);
 
-          fetch(`/admin/unidades-medida/${data.id}`, {
-              method: 'POST'
+          fetch(`/admin/unidade-medida/${data.id}`, {
+              method: 'DELETE'
             }).then(response => response.json())
             .then(json => {
               window.location.reload();
@@ -134,3 +160,4 @@
         });
       }
     </script>
+    <!------------------------------------------------------------------------------------------------------->

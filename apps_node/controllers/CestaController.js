@@ -1,10 +1,25 @@
 const Cesta = require('./../models/CestaModel');
+const Produto = require('./../models/ProdutoModel');
+const CategoriaCesta = require('./../models/CategoriaCestasModel');
 
+//--------------------------------------------------------------------------------
+const renderizar = (req, res, next, unidades, cestas = [], categorias = [], produtos = []) => {
+  res.render('admin/cestas', {
+    unidades,
+    data: '',
+    navbar: true,
+    pagina: 'Cestas',
+    btnLabel: 'Nova cesta',
+    categorias,
+    produtos,
+    cestas
+  });
+};
 //---------------------------------------------------------------------------------------------
 const salvarCesta = (req, res, next) => {
   let cesta = new Cesta(req.body.descricao, req.body.id_categoria_cesta, req.body.preco, req.body.informacoes_nutricionais, req.body.alteracoes_permitidas, req.body.imagem, req.body.status);
   cesta.salvarCesta(cesta).then(cesta => {
-    res.send(cesta);
+    res.redirect('cestas');
   }).catch(err => {
     res.send(err.message);
   });
@@ -13,8 +28,10 @@ const salvarCesta = (req, res, next) => {
 const editarCesta = (req, res, next) => {
   let cesta = new Cesta(req.body.descricao, req.body.id_categoria_cesta, req.body.preco, req.body.informacoes_nutricionais, req.body.alteracoes_permitidas, req.body.imagem, req.body.status);
   cesta.id = req.body.id;
-  cesta.atualizarCesta(cesta).then(cesta => {
-    res.send(cesta);
+  cesta.atualizarCesta(cesta).then(result => {
+    cesta.listarTodasCestas(cesta).then(cestas => {
+      renderizar(req, res, next, cestas);
+    });
   }).catch(err => {
     res.send(err.message);
   });
@@ -34,7 +51,7 @@ const desabilitarCesta = (req, res, next) => {
 const listarCestasAtivas = (req, res, next) => {
   let cesta = new Cesta();
   cesta.listarCestasAtivas(cesta).then(cestas => {
-    res.send(cestas);
+    renderizar(req, res, next, cestas);
   }).catch(err => {
     res.send(err.message);
   });
@@ -42,8 +59,15 @@ const listarCestasAtivas = (req, res, next) => {
 //---------------------------------------------------------------------------------------------
 const listarTodasCestas = (req, res, next) => {
   let cesta = new Cesta();
+  let produto = new Produto();
+  console.log(produto);
+  let categoria = new CategoriaCesta();
   cesta.listarTodasCestas(cesta).then(cestas => {
-    res.send(cestas);
+    categoria.listarCategoriaCestasAtivas(categoria).then(categorias => {
+      produto.listarTodosProdutos(produto).then(produtos => {
+        renderizar(req, res, next, cestas, categorias, produtos);
+      });
+    });
   }).catch(err => {
     res.send(err.message);
   });

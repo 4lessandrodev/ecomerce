@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var hostname = 'localhost';
 var port = 3000;
-var backlog = () => console.log(`Aplicação rodando na porta ${port}`);
+var backlog = () => console.log(`Aplicação rodando... acesse em: ${hostname}:${port}`);
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');

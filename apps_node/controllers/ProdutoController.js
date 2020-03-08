@@ -1,5 +1,20 @@
 const Produto = require('./../models/ProdutoModel');
+const Categoria = require('./../models/CategoriaProdutoModel');
+const UndMedida = require('./../models/UnidadeMedidaModel');
 
+//--------------------------------------------------------------------------------
+const renderizar = (req, res, next, produtos, categorias, unidade) => {
+  res.render('admin/produtos', {
+    produtos,
+    data: '',
+    navbar: true,
+    pagina: 'Produtos',
+    btnLabel: 'Novo Produto',
+    categorias,
+    unidade,
+    fornecedor: []
+  });
+};
 //-----------------------------------------------------------------------------------
 const salvarProduto = (req, res, next) => {
   let produto = new Produto(
@@ -7,7 +22,7 @@ const salvarProduto = (req, res, next) => {
     req.body.imagem, req.body.status, req.body.produto_especial, req.body.fator_multiplicador
   );
   produto.salvarProduto(produto).then(produto => {
-    res.send(produto);
+    res.redirect('produto');
   }).catch(err => {
     res.send(err.message);
   });
@@ -28,6 +43,7 @@ const editarProduto = (req, res, next) => {
 //-----------------------------------------------------------------------------------
 const listarProdutoEspeciaisAtivos = (req, res, next) => {
   let produto = new Produto();
+  produto.produto_especial = 1;
   produto.listarProdutosEspeciaisAtivos(produto).then(produto => {
     res.send(produto);
   }).catch(err => {
@@ -37,8 +53,14 @@ const listarProdutoEspeciaisAtivos = (req, res, next) => {
 //-----------------------------------------------------------------------------------
 const listarTodosProdutos = (req, res, next) => {
   let produto = new Produto();
-  produto.listarTodosProdutos(produto).then(produto => {
-    res.send(produto);
+  let categoria = new Categoria();
+  let unidade = new UndMedida();
+  produto.listarTodosProdutos(produto).then(produtos => {
+    categoria.listarCategoriasAtivas(categoria).then(categorias => {
+      unidade.listarUnidadesMedidaAtivas(unidade).then(unidades => {
+        renderizar(req, res, next, produtos, categorias, unidades);
+      });
+    });
   }).catch(err => {
     res.send(err.message);
   });

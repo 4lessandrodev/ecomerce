@@ -1,5 +1,15 @@
 const Cliente = require('./../models/ClienteModel');
 
+//--------------------------------------------------------------------------------
+const renderizar = (req, res, next, unidades) => {
+  res.render('admin/clientes', {
+    unidades,
+    data: '',
+    navbar: true,
+    pagina: 'Unidades Medidas',
+    btnLabel: 'unidade medida'
+  });
+};
 //-----------------------------------------------------------------------------
 const salvarCliente = (req, res, next) => {
   let endereco = req.body.endereco + req.body.numero;

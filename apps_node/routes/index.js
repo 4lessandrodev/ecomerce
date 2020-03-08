@@ -3,10 +3,11 @@ var router = express.Router();
 const indexController = require('../controllers/IndexController');
 const contactController = require('../controllers/ContatosController');
 
+
 //------------------------------------------------------------------------------------------------------
 //Rota para renderizar a pagina principal  
 router.get('/', (req, res, next) => {
-  res.render('index', { cestas: [], produtos: [] });
+  indexController.carregarIndex(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
 //Rota para renderizar a pagina de contato

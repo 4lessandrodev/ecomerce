@@ -107,13 +107,14 @@ class ProdutoModel {
   }
 
 
+
   listarTodosProdutos(produto) {
     return new Promise((resolve, reject) => {
       conect.query(`
-      SELECT p.imagem, p.descricao, p.info_nutricional, c.descricao AS categoria, p.status, p.produto_especial, p.fator_multiplicador, p.preco_venda, p.data_cadastro 
+      SELECT p.id, p.imagem, p.descricao, p.info_nutricional, c.descricao AS categoria, p.status, p.produto_especial, p.fator_multiplicador, p.preco_venda, p.data_cadastro, p.id_unidade_medida, p.id_categoria_produto
       FROM tb_produtos AS p, tb_categoria_produtos AS c, tb_und_medidas AS u
-      WHERE p.produto_excluido = ? AND c.id = p.id_categoria_produto AND u.id = p.id_unidade_medida`, [
-        produto._produto_excluido], (err, result) => {
+      WHERE p.produto_excluido = ? AND c.id = p.id_categoria_produto AND u.id = p.id_unidade_medida AND p.status = ?`, [
+        produto._produto_excluido, produto._status], (err, result) => {
           if (err) {
             console.log(err.message);
             reject(err.message);
@@ -127,10 +128,10 @@ class ProdutoModel {
   listarProdutosEspeciaisAtivos(produto) {
     return new Promise((resolve, reject) => {
       conect.query(`
-      SELECT p.imagem, p.descricao, p.info_nutricional, c.descricao AS categoria, p.status, p.produto_especial, p.fator_multiplicador, p.preco_venda, p.data_cadastro 
+      SELECT p.id, p.imagem, p.descricao, p.info_nutricional, c.descricao AS categoria, p.status, p.produto_especial, p.fator_multiplicador, p.preco_venda, p.data_cadastro, p.id_unidade_medida, p.id_categoria_produto 
       FROM tb_produtos AS p, tb_categoria_produtos AS c, tb_und_medidas AS u
       WHERE p.produto_excluido = ? AND p.status = ? AND p.produto_especial = ? AND c.id = p.id_categoria_produto AND u.id = p.id_unidade_medida`, [
-        produto._produto_excluido, produto._status, p._produto_especial], (err, result) => {
+        produto._produto_excluido, produto._status, produto._produto_especial], (err, result) => {
           if (err) {
             console.log(err.message);
             reject(err.message);

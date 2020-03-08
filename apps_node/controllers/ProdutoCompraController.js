@@ -1,5 +1,6 @@
 const ProdutoCompra = require('./../models/ProdutoCompraModel');
 
+
 //------------------------------------------------------------------
 const salvarProdutoCompra = (req, res, next) => {
   let produtoCompra = new ProdutoCompra(req.body.id_produto, req.body.id_compra);

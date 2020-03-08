@@ -9,9 +9,6 @@
 
 
         <form method="POST" action="/admin/cestas">
-          <input type="hidden" id="id_cesta" name="id_cesta">
-          <input type="hidden" id="array" name="array">
-          <input type="hidden" id="item_key" name="item_key">
           <div class="form-row">
             <div class="form-group col-md-2" id="div-imagem">
               <label for="imageCesta" class="caixaImg">
@@ -27,39 +24,40 @@
 
 
             <div class="form-group col-md-4">
-              <label for="descriptionCesta"><strong>Descrição</strong></label>
+              <label for="descricao"><strong>Descrição</strong></label>
               <input type="text" class="form-control" id="descricao" name="descricao">
             </div>
 
             <div class="form-group col-md-4">
-              <label for="categoryCesta"><strong>Categoria</strong></label>
+              <label for="id_categoria_cesta"><strong>Categoria</strong></label>
               <select class="form-control" id="id_categoria_cesta" name="id_categoria_cesta">
                 <option selected>Selecione...</option>
-                <% categoriasCestas.forEach(function(categ){ %>
+                <% categorias.forEach(function(categ){ %>
                 <option value="<%= categ.id%>"><%=categ.description%></option>
                 <% }); %>
               </select>
             </div>
 
             <div class="form-group col-md-2">
-              <label for="salesPriceCesta"><strong>Preço de Venda</strong></label>
+              <label for="preco"><strong>Preço de Venda</strong></label>
               <input type="number" class="form-control" id="preco" name="preco">
             </div>
 
             <div class="form-group col-md-6">
               <label for="itensCesta"><strong>Produtos da Cesta</strong></label>
               <select class="mdb-select md-form form-control" multiple size="5" name="itensCesta" id="itensCesta"
-                multiple data-item="<%= JSON.stringify(chaves)%>">
-                <% productList.forEach(function(product){ %>
-                <option value="<%= product.idProd%>"><%=product.nameProd%> -
-                  <% if(product.statusProd){ %>Ativo<% }else{ %><i>Bloqueado</i><% }; %>
+                multiple data-item="<%= JSON.stringify(produtos)%>">
+                <% produtos.forEach(function(produto){ %>
+                <option value="<%= produto.id%>"><%=produto.descricao%> -
+                  <% if(produto.status){ %>Ativo<% }else{ %><i>Bloqueado</i><% }; %>
                   <% }); %>
               </select>
             </div>
 
             <div class="form-group col-md-6">
-              <label for="nutrInfoCesta"><strong>Informações Nutricionais</strong></label>
-              <textarea class="form-control" id="informacoes_nutricionais" rows="5" name="informacoes_nutricionais"></textarea>
+              <label for="informacoes_nutricionais"><strong>Informações Nutricionais</strong></label>
+              <textarea class="form-control" id="informacoes_nutricionais" rows="5"
+                name="informacoes_nutricionais"></textarea>
             </div>
 
             <div class="form-group col-md-4">
@@ -68,12 +66,12 @@
             </div>
 
             <div class="form-group col-md-4">
-              <label for="changesCesta"><strong>Quantidade de Alterações Permitidas</strong></label>
+              <label for="alteracoes_permitidas"><strong>Quantidade de Alterações Permitidas</strong></label>
               <input type="number" class="form-control" id="alteracoes_permitidas" name="alteracoes_permitidas">
             </div>
 
             <div class="form-group col-md-4">
-              <label for="statusCesta"><strong>Status</strong></label>
+              <label for="status"><strong>Status</strong></label>
               <select id="status" class="form-control" name="status">
                 <option selected>Selecione...</option>
                 <option value="1">Ativo</option>
@@ -136,11 +134,11 @@
           <tbody>
             <% cestas.forEach(function(cesta){ %>
             <tr data-row="<%= JSON.stringify(cesta)%>">
-              <th scope="row"><img src="/<%=cesta.imageCesta%>" style="width: 2em; height: 2em;"></th>
-              <td><%=cesta.descriptionCesta%></td>
-              <td><%=cesta.salesPriceCesta%></td>
-              <td><% if(cesta.statusCesta){ %>Ativo<% }else{ %>Bloqueado<% }; %></td>
-              <td><%=cesta.description%></td>
+              <th scope="row"><img src="/<%=cesta.imagem%>" style="width: 2em; height: 2em;"></th>
+              <td><%=cesta.descricao%></td>
+              <td><%=cesta.preco%></td>
+              <td><% if(cesta.status){ %>Ativo<% }else{ %>Bloqueado<% }; %></td>
+              <td><%=cesta.categoria%></td>
               <td>
                 <button class=" btn btn-excluir"><i class="fas fa-trash-alt"></i></button>
               </td>
