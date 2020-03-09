@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var formidable = require('formidable');
 var hostname = 'localhost';
 var port = 3000;
 var backlog = () => console.log(`Aplicação rodando... acesse em: ${hostname}:${port}`);
@@ -30,6 +31,27 @@ app.use('/users', usersRouter);
 app.use('/admin', adminRouter);
 
 //--------------------------------------------------
+
+//REALIZAR O UPLOAD DE ARQUIVOS 
+//-----------------------------------------------------------------
+app.post('/images/uploads', (req, res, next) => {
+  const form = formidable({
+    multiples: true,
+    uploadDir: path.join(__dirname, "/public/images/uploads"),
+    keepExtensions: true
+  });
+
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      next(err);
+      return;
+    }
+    var caminho = files.imagem.path;
+    var caminhoDoArquivo = caminho.slice(caminho.indexOf('public\\images\\'), caminho.length);
+    res.json({ caminhoDoArquivo });
+  });
+});
+//-----------------------------------------------------------------
 
 
 // catch 404 and forward to error handler
