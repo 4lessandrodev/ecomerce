@@ -116,4 +116,43 @@ class Utils {
         });
     }
   }
+
+  static adicionarProdutoNaCesta(produto) {
+    let id_cesta = parseInt(document.querySelector('#form-edit #id').value);
+    let id_produto = parseInt(produto.querySelector('input[type=hidden]').value);
+    return fetch(`/admin/produto-para-cesta/${id_produto}/${id_cesta}`, {
+      method: 'POST'
+    }).then(res => {
+      if (!res.ok) {
+        throw new Error('Erro ao salvar o produto na cesta arquivo Utils' + res.Response.json());
+      }
+      return res;
+    }).then(res => {
+      let json = res.json();
+      return json;
+    });
+  }
+
+
+
+  static excluirProdutoDaCesta(produto) {
+    let id_cesta = parseInt(document.querySelector('#form-edit #id').value);
+    let id_produto = parseInt(produto.querySelector('input[type=hidden]').value);
+
+    return fetch(`/admin/produto-para-cesta/${id_produto}/${id_cesta}`, {
+      method: 'DELETE'
+    }).then(res => {
+      if (!res.ok) {
+        throw new Error('Erro ao excluir o produto na cesta arquivo Utils' + res.json());
+      }
+      return res;
+    }).then(res => {
+      let json = res.json();
+      return json;
+    });
+  }
+
+
+
 }
+

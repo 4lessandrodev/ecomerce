@@ -39,7 +39,7 @@ td .btn-excluir {
 
 .botoes-a-direita {
   text-align: right;
-  margin: 0 2em 0 0;
+  margin: 0 1em 0 0;
 }
 
 .btn-cancelar,
@@ -109,4 +109,15 @@ td .btn-excluir {
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   text-align: center;
+}
+
+button:disabled {
+  background-color: transparent !important;
+  color: black !important;
+}
+
+#lista-produtos {
+  -webkit-box-shadow: 45px 34px 50em 50em rgba(0, 0, 0, 0.43);
+  -moz-box-shadow: 45px 34px 50em 50em rgba(0, 0, 0, 0.43);
+  box-shadow: 45px 34px 50em 50em rgba(0, 0, 0, 0.43);
 }

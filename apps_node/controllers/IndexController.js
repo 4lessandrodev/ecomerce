@@ -1,14 +1,15 @@
 var Inscricao = require('../models/InscricaoModel');
 const Produto = require('./../models/ProdutoModel');
+const Cesta = require('./../models/CestaModel');
 
 
 
 
 //------------------------------------------------------------------------------------------------------
-const renderizar = (req, res, next, produtos) => {
+const renderizar = (req, res, next, produtos, cestas) => {
   res.render('index', {
     produtos,
-    cestas: []
+    cestas
   });
 };
 //------------------------------------------------------------------------------------------------------
@@ -23,9 +24,12 @@ const inscrever = (req, res, next) => {
 //------------------------------------------------------------------------------------------------------
 const carregarIndex = (req, res, next) => {
   let produto = new Produto();
+  let cesta = new Cesta();
   produto.produto_especial = 1;
   produto.listarProdutosEspeciaisAtivos(produto).then(produtos => {
-    renderizar(req, res, next, produtos);
+    cesta.listarCestasAtivas(cesta).then(cestas => {
+      renderizar(req, res, next, produtos, cestas);
+    });
   }).catch(err => {
     console.log(err);
     res.send(err.message);

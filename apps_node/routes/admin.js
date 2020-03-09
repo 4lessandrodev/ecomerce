@@ -12,6 +12,8 @@ const produtoController = require('../controllers/ProdutoController');
 const cestaController = require('../controllers/CestaController');
 const clienteController = require('../controllers/ClienteController');
 const pedidoController = require('../controllers/PedidosController');
+//------------------------------------------------------------------------------------------------------
+const produtoParaCestaController = require('../controllers/ProdutosParaCestaController');
 
 
 //------------------------------------------------------------------------------------------------------
@@ -314,6 +316,21 @@ router.post('/editar-cliente', (req, res, next) => {
 //Deletar um cliente
 router.delete('/cliente/:id', (req, res, next) => {
   clienteController.desabilitarCliente(req, res, next);
+});
+//------------------------------------------------------------------------------------------------------
+
+
+
+//PRODUTOS PARA CESTAS
+//------------------------------------------------------------------------------------------------------
+//Salvar chave de produtos para cesta
+router.post('/produto-para-cesta/:id_produto/:id_cesta', (req, res, next) => {
+  produtoParaCestaController.salvarProdParaCesta(req, res, next);
+});
+//------------------------------------------------------------------------------------------------------
+//Deletar uma chave de produto para cesta
+router.delete('/produto-para-cesta/:id_produto/:id_cesta', (req, res, next) => {
+  produtoParaCestaController.excluirProdParaCesta(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
 

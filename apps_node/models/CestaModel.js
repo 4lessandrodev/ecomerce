@@ -77,8 +77,13 @@ class CestaModel {
 
   salvarCesta(cesta) {
     return new Promise((resolve, reject) => {
-      conect.query(`INSERT INTO tb_cestas(imagem, descricao, id_categoria_c_cesta, status, preco,
-        alteracoes_permitidas, informacoes_nutricionais, cesta_excluida) VALUES(?,?,?,?,?,?,?)`, [cesta._imagem, cesta._descricao, cesta._id_categoria_c_cesta, cesta._status, cesta._preco, cesta._alteracoes_permitidas, cesta.__informacoes_nutricionais, cesta._cesta_excluida], (err, result) => {
+      conect.query(`
+      INSERT INTO tb_cestas(imagem, descricao, id_categoria_cesta, status, preco,
+        alteracoes_permitidas, informacoes_nutricionais, cesta_excluida)
+        VALUES(?,?,?,?,?,?,?,?)`, [
+        cesta._imagem, cesta._descricao, cesta._id_categoria_cesta, cesta._status, cesta._preco, cesta._alteracoes_permitidas,
+        cesta.__informacoes_nutricionais, cesta._cesta_excluida
+      ], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -92,9 +97,9 @@ class CestaModel {
 
   listarTodasCestas(cesta) {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT c.id, c.imagem, c.descricao AS 'cesta', cc.descricao AS 'categoria', p.descricao, p.status, p.fator_multiplicador, c.preco, c.alteracoes_permitidas, c.informacoes_nutricionais
-FROM tb_cestas AS c, tb_produtos_para_cesta AS pc, tb_produtos AS p, tb_categoria_cestas AS cc 
-WHERE cesta_excluida = ? AND c.id = pc.id_cesta AND p.id = pc.id_produto AND cc.id = c.id_categoria_cesta GROUP BY c.id`, [
+      conect.query(`SELECT c.imagem, c.id, c.descricao, cc.descricao AS 'categoria', c.preco, c.alteracoes_permitidas, c.informacoes_nutricionais, c.status, c.id_categoria_cesta
+FROM tb_cestas AS c, tb_categoria_cestas AS cc 
+WHERE cesta_excluida = 0 AND cc.id = c.id_categoria_cesta GROUP BY c.id`, [
         cesta._cesta_excluida], (err, results) => {
           if (err) {
             console.log(err.message);
@@ -109,7 +114,7 @@ WHERE cesta_excluida = ? AND c.id = pc.id_cesta AND p.id = pc.id_produto AND cc.
 
   listarCestasAtivas(cesta) {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT c.id, c.imagem, c.descricao AS 'cesta', cc.descricao AS 'categoria', p.descricao, p.status, p.fator_multiplicador, c.preco, c.alteracoes_permitidas, c.informacoes_nutricionais
+      conect.query(`SELECT c.id, c.imagem, c.descricao, cc.descricao AS 'categoria', p.descricao AS 'produtos', p.status, p.fator_multiplicador, c.preco, c.alteracoes_permitidas, c.informacoes_nutricionais
 FROM tb_cestas AS c, tb_produtos_para_cesta AS pc, tb_produtos AS p, tb_categoria_cestas AS cc 
 WHERE c.cesta_excluida = ? AND c.id = pc.id_cesta AND p.id = pc.id_produto AND cc.id = c.id_categoria_cesta AND c.status = ? GROUP BY c.id`, [
         cesta._cesta_excluida, cesta._status], (err, results) => {

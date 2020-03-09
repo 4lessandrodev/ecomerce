@@ -1,7 +1,7 @@
 const conect = require('./../config/CONECT_BD');
 class ProdutosParaCestaModel {
   constructor (id_produto, id_cesta) {
-    this._id = id;
+    this._id = null;
     this._id_produto = id_produto;
     this._id_cesta = id_cesta;
   }
@@ -68,7 +68,7 @@ class ProdutosParaCestaModel {
 
   excluirProdutoParaCesta(produto) {
     return new Promise((resolve, reject) => {
-      conect.query(`DELETE FROM tb_produtos_para_cesta WHERE id = ?`, [produto._id], (err, result) => {
+      conect.query(`DELETE FROM tb_produtos_para_cesta WHERE id_produto = ? AND id_cesta = ?`, [produto._id_produto, produto._id_cesta, produto._id], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -79,6 +79,45 @@ class ProdutosParaCestaModel {
     });
   }
 
+
+  listarProdutosDeUmaCestaEspecifica(produto) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT produto.id AS 'id_produto', cesta.id AS 'id_cesta', cesta.imagem AS 'imagem_cesta', produto.imagem AS 'imagem_produto', produto.descricao AS 'descricao_produto', cesta.descricao AS 'descricao_cesta', produto.fator_multiplicador, cesta.preco
+FROM tb_produtos_para_cesta AS pc, tb_produtos AS produto, tb_cestas AS cesta
+WHERE produto.id = pc.id_produto AND pc.id_cesta = cesta.id AND cesta.id = ?`, [produto._id_cesta], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  listarProdutosDeCestas(produto) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT produto.id AS 'id_produto', cesta.id AS 'id_cesta', cesta.imagem AS 'imagem_cesta', produto.imagem AS 'imagem_produto', produto.descricao AS 'descricao_produto', cesta.descricao AS 'descricao_cesta', produto.fator_multiplicador, cesta.preco
+FROM tb_produtos_para_cesta AS pc, tb_produtos AS produto, tb_cestas AS cesta
+WHERE produto.id = pc.id_produto AND pc.id_cesta = cesta.id`, (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  /*
+   
+   SELECT produto.id AS 'id_produto', cesta.id AS 'id_cesta', cesta.imagem AS 'imagem_cesta', produto.imagem AS 'imagem_produto', produto.descricao AS 'descricao_produto', cesta.descricao AS 'descricao_cesta', produto.fator_multiplicador, cesta.preco
+FROM tb_produtos_para_cesta AS pc, tb_produtos AS produto, tb_cestas AS cesta
+WHERE produto.id = pc.id_produto AND pc.id_cesta = cesta.id AND cesta.id = 1
+
+
+   */
 
 
 }
