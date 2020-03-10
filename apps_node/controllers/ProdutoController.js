@@ -12,7 +12,8 @@ const renderizar = (req, res, next, produtos, categorias, unidade) => {
     btnLabel: 'Novo Produto',
     categorias,
     unidade,
-    fornecedor: []
+    fornecedor: [],
+    local: 'http://localhost:3000'
   });
 };
 //-----------------------------------------------------------------------------------

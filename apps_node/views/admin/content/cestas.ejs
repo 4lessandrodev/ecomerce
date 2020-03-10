@@ -46,11 +46,12 @@
 
           <form method="POST" action="/admin/cesta">
             <div class="form-row">
-              <div class="form-group col-md-2" id="div-imagem-nova">
+              <div class="form-group col-md-2" id="div-imagem-nova" onclick="Utils.uploadImg(this)">
                 <label for="imagem" class="caixaImg">
-                  <input type="file" hidden name="imagem" id="imagem" accept="image/png">
+                  <input type="hidden" value="/images/images/SemImagem-300x300px.png" name="imagem">
+                  <input type="file" hidden id="imagem-nova-input" accept="image/png">
                   <img src="../../../images/images/SemImagem-300x300px.png" alt="Imagem" class="imagem rounded-circle"
-                    id="imagem-img">
+                    id="imagem-nova-img">
                   <div class="sobreposicao">
                     <h5 class="texto">Adicionar Imagem</h5>
                     <span class="icone"><i class="fas fa-chevron-circle-up"></i></span>
@@ -140,11 +141,12 @@
 
           <form method="POST" action="/admin/editar-cesta">
             <div class="form-row">
-              <div class="form-group col-md-2" id="div-imagem-edit">
+              <div class="form-group col-md-2" id="div-imagem-edit" onclick="Utils.uploadImg(this)">
                 <label for="imagem" class="caixaImg">
-                  <input type="file" hidden name="imagem" id="imagem" accept="image/png">
+                  <input type="hidden" name="imagem" value="">
+                  <input type="file" hidden id="imagem-edit-input" accept="image/png">
                   <img src="../../../images/images/SemImagem-300x300px.png" alt="Imagem" class="imagem rounded-circle"
-                    id="imagem-img">
+                    id="imagem-edited">
                   <div class="sobreposicao">
                     <h5 class="texto">Adicionar Imagem</h5>
                     <span class="icone"><i class="fas fa-chevron-circle-up"></i></span>
@@ -224,12 +226,11 @@
         </section>
         <!------------------------------------------------------------------------------------------------------------>
 
-
-        <script src="../../../javascripts/js/script-filereader.js"></script>
         <script src="../../../javascripts/js/script-formsave.js"></script>
         <script>
-          new Scriptfilereader('#div-imagem-nova [type=file]', '#div-imagem-nova img');
-          new Scriptfilereader('#div-imagem-edit [type=file]', '#div-imagem-edit img');
+          //Função statica de ler a imagem e gerar um arquivo base 64 exibindo o em uma tag img
+          Utils.leitorDeImagem('#imagem-edit-input', '#imagem-edited', Utils.atribuirImagem);
+          Utils.leitorDeImagem('#imagem-nova-input', '#imagem-nova-img', Utils.atribuirImagem);
         </script>
 
         <!------------------------------------------------------------------------------------------------------------>
@@ -254,20 +255,22 @@
                 <th scope="col" class="col-small">Editar</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="listagem-cestas">
               <% cestas.forEach(function(cesta){ %>
               <tr data-row="<%= JSON.stringify(cesta)%>">
-                <th scope="row"><img src="/<%=cesta.imagem%>" style="width: 2em; height: 2em;"></th>
+                <th scope="row"><img
+                    src="<%if(cesta.imagem.length > 50){%><%=cesta.imagem%><%}else{%><%=local%><%=cesta.imagem%><% }; %>"
+                    style="width: 4em; height: 4em" alt="Sem imagem"></th>
                 <td><%=cesta.descricao%></td>
                 <td><%=cesta.preco%></td>
                 <td><% if(cesta.status){ %>Ativo<% }else{ %>Bloqueado<% }; %></td>
                 <td><%=cesta.categoria%></td>
 
                 <td>
-                  <ul>
+                  <ol>
                     <% produtos_de_cestas.forEach(function(item){ %>
                     <% if(item.id_cesta == cesta.id){ %> <li><%=item.descricao_produto%></li><% }%> <% }); %>
-                  </ul>
+                  </ol>
                 </td>
                 <td>
                   <button class=" btn btn-excluir"><i class="fas fa-trash-alt"></i></button>
@@ -317,8 +320,8 @@
           for (let inputName in data) {
             switch (inputName) {
               case 'imagem':
-                mainForm.querySelector('img').src = '/' + data[inputName];
-                //mainForm.querySelector('input[type=file]').file = data[inputName];
+                mainForm.querySelector('img').src = data[inputName];
+                mainForm.querySelector(`input[name=${inputName}]`).value = data[inputName];
                 break;
               default:
                 let input = mainForm.querySelector(`[name=${inputName}`);

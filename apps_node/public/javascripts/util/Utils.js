@@ -1,4 +1,3 @@
-
 class Utils {
   static exibirFormulario(element, classe, reset = false, editar = false) {
     let item = document.querySelector(element);
@@ -28,8 +27,8 @@ class Utils {
     }
   }
 
-  static uploadImg() {
-    document.querySelector("input[type='file']").click();
+  static uploadImg(form) {
+    form.querySelector("input[type='file']").click();
   }
 
   static getItemById(el, id = null) {
@@ -117,6 +116,7 @@ class Utils {
     }
   }
 
+
   static adicionarProdutoNaCesta(produto) {
     let id_cesta = parseInt(document.querySelector('#form-edit #id').value);
     let id_produto = parseInt(produto.querySelector('input[type=hidden]').value);
@@ -124,10 +124,12 @@ class Utils {
       method: 'POST'
     }).then(res => {
       if (!res.ok) {
-        throw new Error('Erro ao salvar o produto na cesta arquivo Utils' + res.Response.json());
+        swal("Oops!", "Algo errado ocorreu!", "error");
+        throw new Error('Erro ao salvar o produto na cesta arquivo Utils');
       }
       return res;
     }).then(res => {
+      swal("Boa!", "Produto adicionado com sucesso!", "success");
       let json = res.json();
       return json;
     });
@@ -138,21 +140,44 @@ class Utils {
   static excluirProdutoDaCesta(produto) {
     let id_cesta = parseInt(document.querySelector('#form-edit #id').value);
     let id_produto = parseInt(produto.querySelector('input[type=hidden]').value);
-
     return fetch(`/admin/produto-para-cesta/${id_produto}/${id_cesta}`, {
       method: 'DELETE'
     }).then(res => {
       if (!res.ok) {
-        throw new Error('Erro ao excluir o produto na cesta arquivo Utils' + res.json());
+        swal("Oops!", "Algo errado ocorreu!", "error");
+        throw new Error('Erro ao excluir o produto na cesta arquivo Utils');
       }
       return res;
     }).then(res => {
+      swal("Boa!", "Produto adicionado com sucesso!", "success");
       let json = res.json();
       return json;
     });
   }
 
 
+  static leitorDeImagem(inputFile, img, callback) {
+    document.querySelector(inputFile).addEventListener('change', e => {
+      callback(e.target.files[0]).then(result => {
+        document.querySelector(img).src = result;
+        document.querySelector('input[name=imagem]').value = result;
+      });
+    });
+  }
+
+  static atribuirImagem(file) {
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader();
+      reader.onload = function () {
+        resolve(reader.result);
+      };
+      reader.onerror = function () {
+        reject('Não foi possível ler a imagem');
+      };
+      reader.readAsDataURL(file);
+    });
+  }
 
 }
+
 

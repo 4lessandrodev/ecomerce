@@ -13,7 +13,8 @@ const renderizar = (req, res, next, cestas, categorias, produtos, produtos_de_ce
     categorias,
     produtos,
     cestas,
-    produtos_de_cestas
+    produtos_de_cestas,
+    local: 'http://localhost:3000'
   });
 };
 //---------------------------------------------------------------------------------------------

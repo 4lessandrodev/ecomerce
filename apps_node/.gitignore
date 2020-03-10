@@ -15,3 +15,6 @@ CONECT_BD.js
 
 #Anotações 
 README.txt
+
+#Ignorar arquivos de imagem
+/public/images/uploads

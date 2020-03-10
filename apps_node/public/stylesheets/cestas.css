@@ -54,6 +54,9 @@ td .btn-excluir {
   width: 8em;
   display: inline-block;
   border-radius: 180px;
+  box-shadow: 2px 2px 2px darkgreen;
+  padding: 0.2em;
+  margin: 0.2em;
 }
 
 /* deixar a imagem do tamanho da div*/
@@ -120,4 +123,21 @@ button:disabled {
   -webkit-box-shadow: 45px 34px 50em 50em rgba(0, 0, 0, 0.43);
   -moz-box-shadow: 45px 34px 50em 50em rgba(0, 0, 0, 0.43);
   box-shadow: 45px 34px 50em 50em rgba(0, 0, 0, 0.43);
+}
+
+table ol {
+  margin: 0 1em;
+  padding: 0;
+}
+
+table ol li {
+  padding: 0.4em;
+  margin: 0;
+  line-height: 7px;
+}
+
+table ol li:hover {
+  box-shadow: none;
+  color: darkgreen;
+  background-color: white;
 }
