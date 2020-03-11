@@ -7,7 +7,14 @@ const renderizar = (req, res, next, fornecedores) => {
     data: '',
     navbar: true,
     pagina: 'Fornecedores',
-    btnLabel: 'Novo Fornecedor'
+    btnLabel: 'Novo Fornecedor',
+
+    btn: {
+      label: 'Voltar',
+      classe: 'display-none',
+      classe2: '',
+      caminho: '/admin'
+    }
   });
 };
 //--------------------------------------------------------------------------------

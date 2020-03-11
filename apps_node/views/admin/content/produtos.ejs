@@ -12,11 +12,12 @@
 
         <form method="POST" action="/admin/produto">
           <div class="form-row">
-            <div class="form-group col-md-2" id="div-imagem-nova">
-              <label for="imagem" class="caixaImg">
-                <input type="file" hidden name="imagem" id="imagem" accept="image/png">
+            <div class="form-group col-md-2" id="div-imagem-nova" onclick="Utils.uploadImg(this)">
+              <label for=" imagem" class="caixaImg">
+                <input type="hidden" value="/images/images/SemImagem-300x300px.png" name="imagem">
+                <input type="file" hidden id="imagem-nova-input" accept="image/png">
                 <img src="./../images/images/SemImagem-300x300px.png" alt="Imagem" class="imagem rounded-circle"
-                  id="imagem-prod">
+                  id="imagem-nova-img">
                 <div class="sobreposicao">
                   <h5 class="texto">Adicionar Imagem</h5>
                   <span class="icone"><i class="fas fa-chevron-circle-up"></i></span>
@@ -117,11 +118,12 @@
 
         <form method="POST" action="/admin/editar-produto">
           <div class="form-row">
-            <div onclick="Utils.uploadImg()" class="form-group col-md-2" id="div-imagem-edit">
+            <div class="form-group col-md-2" id="div-imagem-edit" onclick="Utils.uploadImg(this)">
               <label for="imagem" class="caixaImg">
-                <input type="file" hidden name="imagem" id="imagem" accept="image/png">
+                <input type="hidden" value="/images/images/SemImagem-300x300px.png" name="imagem" id="imagem">
+                <input type="file" hidden accept="image/png" id="imagem-edit-input">
                 <img src="./../images/images/SemImagem-300x300px.png" alt="Imagem" class="imagem rounded-circle"
-                  id="imagem">
+                  id="imagem-edit-img">
                 <div class="sobreposicao">
                   <h5 class="texto">Adicionar Imagem</h5>
                   <span class="icone"><i class="fas fa-chevron-circle-up"></i></span>
@@ -208,15 +210,11 @@
         </form>
       </section>
       <!--------------------------------------------------------------------------------------------------------------------->
-
-
-      <script src="../../../javascripts/js/script-filereader.js"></script>
-      <script src="../../../javascripts/js/script-formsave.js"></script>
       <script>
-        new Scriptfilereader('#div-imagem-nova [type=file]', '#div-imagem-nova img');
-        new Scriptfilereader('#div-imagem-edit [type=file]', '#div-imagem-edit img');
+        //Função statica de ler a imagem e gerar um arquivo base 64 exibindo o em uma tag img
+        Utils.leitorDeImagem('#imagem-nova-input', '#imagem-nova-img', Utils.atribuirImagem);
+        Utils.leitorDeImagem('#imagem-edit-input', '#imagem-edit-img', Utils.atribuirImagem);
       </script>
-
       <!--------------------------------------------------------------------------------------------------------------------->
       <section class="container list-itens-container table-responsive-md">
         <div class="navbar navbar-light">
@@ -240,14 +238,16 @@
           <tbody>
             <% produtos.forEach(function(produto){ %>
             <tr data-row="<%= JSON.stringify(produto)%>">
-              <th scope="row"><img src="/<%=produto.imageProd%>" style="width: 2em; height: 2em;"></th>
+              <th scope="row"><img
+                  src="<%if(produto.imagem.length > 50){%><%=produto.imagem%><%}else{%><%=local%><%=produto.imagem%><% }; %>"
+                  style="width: 4em; height: 4em" alt="Sem imagem"></th>
               <td><%=produto.descricao %></td>
               <td><%=produto.preco_venda %></td>
               <td><% if(produto.produto_especial){ %>Especial<% }else{ %>Normal<% }; %></td>
               <td><% if(produto.status){ %>Ativo<% }else{ %>Bloqueado<% }; %></td>
               <td>
                 <button class="btn btn-excluir"><i class="fas fa-trash-alt"></i></button>
-              </td>
+                </ td>
               <td>
                 <button class="btn btn-editar" onclick="Utils.exibirFormulario('#form-edit', 'display-none')"><i
                     class="fa fa-pencil-alt"></i></button>
@@ -284,8 +284,9 @@
           for (let inputName in data) {
             switch (inputName) {
               case 'imagem':
-                mainForm.querySelector('img').src = '/' + data[inputName];
+                mainForm.querySelector('img').src = data[inputName];
                 mainForm.querySelector('input[type=file]').file = data[inputName];
+                mainForm.querySelector('#imagem').value = data[inputName];
                 break;
               default:
                 let input = mainForm.querySelector(`[name=${inputName}`);

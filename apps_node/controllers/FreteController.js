@@ -11,7 +11,14 @@ const renderizar = (req, res, next, fretes, lojas, regioes) => {
     data: '',
     navbar: true,
     pagina: 'Fretes por região',
-    btnLabel: 'Novo frete'
+    btnLabel: 'Novo frete',
+
+    btn: {
+      label: 'Voltar',
+      classe: 'display-none',
+      classe2: '',
+      caminho: '/admin'
+    }
   });
 };
 //------------------------------------------------------------------------

@@ -95,6 +95,24 @@ WHERE produto.id = pc.id_produto AND pc.id_cesta = cesta.id AND cesta.id = ?`, [
     });
   }
 
+
+  listarDescricaoProdutosDeUmaCestaEspecifica(produto) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT produto.id, produto.imagem, produto.descricao, produto.fator_multiplicador
+FROM tb_produtos_para_cesta AS pc, tb_produtos AS produto, tb_cestas AS cesta
+WHERE produto.id = pc.id_produto AND pc.id_cesta = cesta.id AND cesta.id = ?`, [produto._id_cesta], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+
+
   listarProdutosDeCestas(produto) {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT produto.id AS 'id_produto', cesta.id AS 'id_cesta', cesta.imagem AS 'imagem_cesta', produto.imagem AS 'imagem_produto', produto.descricao AS 'descricao_produto', cesta.descricao AS 'descricao_cesta', produto.fator_multiplicador, cesta.preco

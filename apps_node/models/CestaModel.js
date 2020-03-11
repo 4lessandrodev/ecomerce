@@ -129,6 +129,21 @@ WHERE c.cesta_excluida = ? AND c.id = pc.id_cesta AND p.id = pc.id_produto AND c
   }
 
 
+  listarCestaEspecifica(cesta) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT * FROM tb_cestas AS cesta WHERE cesta.id = ? AND cesta.cesta_excluida = ?`, [
+        cesta._id, cesta._cesta_excluida], (err, results) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(results);
+          }
+        });
+    });
+  }
+
+
   atualizarCesta(cesta) {
     return new Promise((resolve, reject) => {
       conect.query(`UPDATE tb_cestas SET imagem = ?, descricao = ?, id_categoria_cesta = ?, status = ?, preco = ?,

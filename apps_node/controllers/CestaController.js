@@ -14,7 +14,35 @@ const renderizar = (req, res, next, cestas, categorias, produtos, produtos_de_ce
     produtos,
     cestas,
     produtos_de_cestas,
-    local: 'http://localhost:3000'
+    local: 'http://localhost:3000',
+
+    btn: {
+      label: 'Voltar',
+      classe: 'display-none',
+      classe2: '',
+      caminho: '/admin/cesta'
+    }
+  });
+};
+//---------------------------------------------------------------------------------------------
+const renderizarPaginaEditar = (req, res, next, cesta, categorias, produtos, produtos_da_cesta) => {
+  res.render('admin/editar-cesta', {
+    data: '',
+    navbar: true,
+    pagina: 'Editar Cesta',
+    btnLabel: '',
+    categorias,
+    produtos,
+    cesta,
+    produtos_da_cesta,
+    local: 'http://localhost:3000',
+
+    btn: {
+      label: 'Voltar',
+      classe: '',
+      classe2: 'display-none',
+      caminho: '/admin/cesta'
+    }
   });
 };
 //---------------------------------------------------------------------------------------------
@@ -72,12 +100,12 @@ const listarCestasAtivas = (req, res, next) => {
 //---------------------------------------------------------------------------------------------
 const listarTodasCestas = (req, res, next) => {
   let cesta = new Cesta();
-  let produto = new Produto();
-  let categoria = new CategoriaCesta();
-  let produtosDeCesta = new ProdutosDeCesta();
   cesta.listarTodasCestas(cesta).then(cestas => {
+    let categoria = new CategoriaCesta();
     categoria.listarCategoriaCestasAtivas(categoria).then(categorias => {
+      let produto = new Produto();
       produto.listarTodosProdutos(produto).then(produtos => {
+        let produtosDeCesta = new ProdutosDeCesta();
         produtosDeCesta.listarProdutosDeCestas(produtosDeCesta).then(produtos_de_cestas => {
           renderizar(req, res, next, cestas, categorias, produtos, produtos_de_cestas);
         });
@@ -87,6 +115,27 @@ const listarTodasCestas = (req, res, next) => {
     res.send(err.message);
   });
 };
+
+const listarCestaSelecionada = (req, res, next) => {
+  let cesta = new Cesta();
+  cesta.id = req.params.id;
+  let produto = new Produto();
+  let categoria = new CategoriaCesta();
+  let produtosDeCesta = new ProdutosDeCesta(null, cesta.id);
+  cesta.listarCestaEspecifica(cesta).then(cesta => {
+    categoria.listarCategoriaCestasAtivas(categoria).then(categorias => {
+      produto.listarTodosProdutos(produto).then(produtos => {
+        produtosDeCesta.listarDescricaoProdutosDeUmaCestaEspecifica(produtosDeCesta).then(produtos_da_cesta => {
+          renderizarPaginaEditar(req, res, next, cesta[0], categorias, produtos, produtos_da_cesta);
+        });
+      });
+    });
+  }).catch(err => {
+    res.send(err.message);
+  });
+
+
+};
 //---------------------------------------------------------------------------------------------
 
-module.exports = { salvarCesta, editarCesta, desabilitarCesta, listarCestasAtivas, listarTodasCestas };
+module.exports = { salvarCesta, editarCesta, desabilitarCesta, listarCestasAtivas, listarTodasCestas, listarCestaSelecionada };

@@ -9,7 +9,14 @@ const Cesta = require('./../models/CestaModel');
 const renderizar = (req, res, next, produtos, cestas) => {
   res.render('index', {
     produtos,
-    cestas
+    cestas,
+
+    btn: {
+      label: 'Voltar',
+      classe: 'display-none',
+      classe2: '',
+      caminho: '/admin'
+    }
   });
 };
 //------------------------------------------------------------------------------------------------------

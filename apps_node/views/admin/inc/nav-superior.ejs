@@ -4,9 +4,16 @@
             onclick="location.href='/admin';"><i class="fas fa-home"></i></button>
         </div>
         <a class="navbar-brand" href="/admin">
-          <img src="./../images/images/favicon.png" width=" 30" height="30" class="d-inline-block align-top" alt="">
+          <img src="../../images/images/favicon.png" width=" 30" height="30" class="d-inline-block align-top" alt="">
           <%=pagina%>
         </a>
-        <button class="btn btn-outline-success my-2 my-sm-0" type="button" id="btn-new" style="margin: 1em"
-          onclick="Utils.exibirFormulario('#form-new', 'display-none', true)"><%=btnLabel%></button>
+
+
+        <a href="<%=btn.caminho%>">
+          <button class="btn btn-outline-success my-2 my-sm-0 <%=btn.classe%> " type="button" id="btn-new"
+            style="margin: 1em"><%=btn.label%> </button></a>
+
+        <button class="btn btn-outline-success my-2 my-sm-0 <%=btn.classe2%>" type="button" id="btn-new"
+          style="margin: 1em" onclick="Utils.exibirFormulario('#form-new', 'display-none', true)"><%=btnLabel%></button>
+
       </div>

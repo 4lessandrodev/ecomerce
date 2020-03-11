@@ -13,7 +13,14 @@ const renderizar = (req, res, next, produtos, categorias, unidade) => {
     categorias,
     unidade,
     fornecedor: [],
-    local: 'http://localhost:3000'
+    local: 'http://localhost:3000',
+
+    btn: {
+      label: 'Voltar',
+      classe: 'display-none',
+      classe2: '',
+      caminho: '/admin'
+    }
   });
 };
 //-----------------------------------------------------------------------------------

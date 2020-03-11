@@ -7,7 +7,14 @@ const renderizar = (req, res, next, regioes) => {
     data: '',
     navbar: true,
     pagina: 'Regiões',
-    btnLabel: 'Nova regiao'
+    btnLabel: 'Nova regiao',
+
+    btn: {
+      label: 'Voltar',
+      classe: 'display-none',
+      classe2: '',
+      caminho: '/admin'
+    }
   });
 };
 //--------------------------------------------------------------------------------

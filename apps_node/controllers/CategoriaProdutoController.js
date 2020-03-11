@@ -6,7 +6,14 @@ const renderizarPaginaCategoria = (req, res, next, categorias) => {
     data: '',
     navbar: true,
     pagina: 'Categoria produtos',
-    btnLabel: 'categoria produto'
+    btnLabel: 'Nova categ. produto',
+
+    btn: {
+      label: 'Voltar',
+      classe: 'display-none',
+      classe2: '',
+      caminho: '/admin'
+    }
   });
 };
 

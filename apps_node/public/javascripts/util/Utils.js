@@ -117,9 +117,11 @@ class Utils {
   }
 
 
+  //ADICIONAR PRODUTO NA CESTA 
   static adicionarProdutoNaCesta(produto) {
-    let id_cesta = parseInt(document.querySelector('#form-edit #id').value);
+    let id_cesta = parseInt(document.querySelector('#id').value);
     let id_produto = parseInt(produto.querySelector('input[type=hidden]').value);
+    let descricao = produto.textContent;
     return fetch(`/admin/produto-para-cesta/${id_produto}/${id_cesta}`, {
       method: 'POST'
     }).then(res => {
@@ -129,6 +131,12 @@ class Utils {
       }
       return res;
     }).then(res => {
+
+      //Adicionar elemento no html 
+      var select = document.querySelector('#produtos').innerHTML;
+      var option = `<option value="${id_produto}">${descricao}</option>`;
+      select = select + option;
+      select = document.querySelector('#produtos').innerHTML = select;
       swal("Boa!", "Produto adicionado com sucesso!", "success");
       let json = res.json();
       return json;
@@ -137,9 +145,21 @@ class Utils {
 
 
 
-  static excluirProdutoDaCesta(produto) {
-    let id_cesta = parseInt(document.querySelector('#form-edit #id').value);
-    let id_produto = parseInt(produto.querySelector('input[type=hidden]').value);
+  static excluirProdutoDaCesta() {
+    let id_produto = null;
+    let produtoEl;
+    let produtos = document.querySelector('#produtos');
+    for (let produto of produtos) {
+      if (produto.selected) {
+        id_produto = produto.value;
+        produtoEl = produto;
+      }
+    }
+    if (id_produto == null || id_produto == '' || id_produto == undefined) {
+      swal("Oops!", "Você esqueceu de selecionar o produto", "info");
+      return false;
+    }
+    let id_cesta = parseInt(document.querySelector('#id').value);
     return fetch(`/admin/produto-para-cesta/${id_produto}/${id_cesta}`, {
       method: 'DELETE'
     }).then(res => {
@@ -149,7 +169,8 @@ class Utils {
       }
       return res;
     }).then(res => {
-      swal("Boa!", "Produto adicionado com sucesso!", "success");
+      produtoEl.remove();
+      swal("Boa!", "Produto removido com sucesso!", "success");
       let json = res.json();
       return json;
     });
@@ -177,6 +198,10 @@ class Utils {
       reader.readAsDataURL(file);
     });
   }
+
+
+
+
 
 }
 

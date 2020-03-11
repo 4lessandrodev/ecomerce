@@ -9,7 +9,14 @@ const renderizar = (req, res, next, lojas, regioes) => {
     data: '',
     navbar: true,
     pagina: 'Lojas',
-    btnLabel: 'Nova loja'
+    btnLabel: 'Nova loja',
+
+    btn: {
+      label: 'Voltar',
+      classe: 'display-none',
+      classe2: '',
+      caminho: '/admin'
+    }
   });
 };
 //-------------------------------------------------------------------------------------------

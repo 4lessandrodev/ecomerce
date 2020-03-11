@@ -1,0 +1,114 @@
+    <main>
+      <!--------------------------------------------------------------------------------------------------------------------->
+      <!--FORMULARIO EDIÇÃO DE UM PRODUTO-->
+      <section class="container formulario display-none" id="form-edit">
+        <div style="margin-bottom: 1em;">
+          <a href="/admin/produto">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close-edit">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </a>
+        </div>
+
+        <form method="POST" action="/admin/editar-produto">
+          <div class="form-row">
+            <div class="form-group col-md-2" id="div-imagem-edit" onclick="Utils.uploadImg(this)">
+              <label for="imagem" class="caixaImg">
+                <input type="hidden" value="<%=produto.imagem%>" name="imagem" id="imagem">
+                <input type="file" hidden accept="image/png" id="imagem-edit-input">
+                <img src="<%=produto.imagem%>" alt="Imagem" class="imagem rounded-circle" id="imagem-edit-img">
+                <div class="sobreposicao">
+                  <h5 class="texto">Adicionar Imagem</h5>
+                  <span class="icone"><i class="fas fa-chevron-circle-up"></i></span>
+                </div>
+              </label>
+            </div>
+
+
+            <div class="form-group col-md-4">
+              <label for="descricao"><strong>Descrição</strong></label>
+              <input type="text" class="form-control" id="descricao" name="descricao" required
+                value="<%=produto.descricao%> ">
+            </div>
+
+            <div class="form-group col-md-4">
+              <label for="id_categoria_produto"><strong>Categoria</strong></label>
+              <select class="form-control" id="id_categoria_produto" name="id_categoria_produto">
+                <option disabled>Selecione...</option>
+                <% categorias.forEach(function(categ){ %>
+                <option value="<%= categ.id%>" <% if(produto.id_categoria_produto == categ.id){%>selected<% }%>>
+                  <%=categ.descricao%></option>
+                <% }); %>
+              </select>
+            </div>
+
+            <div class="form-group col-md-2">
+              <label for="preco_venda"><strong>Preço</strong></label>
+              <input type="text" class="form-control" id="preco_venda" name="preco_venda" required
+                value="<%=produto.preco_venda %> ">
+            </div>
+
+            <div class="form-group col-md-3">
+              <label for="id_unidade_medida"><strong>Und. Medida</strong></label>
+              <select id="id_unidade_medida" class="form-control" id="id_unidade_medida" name="id_unidade_medida">
+                <option disabled>Selecione...</option>
+                <% unidade.forEach(function(und){ %>
+                <option value="<%= und.id%>" <%if(und.id == produto.id_unidade_medida){%>Selected<%} %>>
+                  <%=und.descricao%></option>
+                <% }); %>
+              </select>
+            </div>
+
+
+            <div class="form-group col-md-3">
+              <label for="produto_especial"><strong>Tipo de Produto</strong></label>
+              <select id="produto_especial" class="form-control" name="produto_especial">
+                <option disabled>Selecione...</option>
+                <option value="1">Produtos Especiais</option v>
+                <option value="0">Produto Normal</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-3">
+              <label for="fator_multiplicador"><strong>Fator Multiplicador</strong></label>
+              <input type="number" class="form-control" id="fator_multiplicador" name="fator_multiplicador"
+                value="<%=produto.fator_multiplicador %> ">
+            </div>
+
+            <div class="form-group col-md-3">
+              <label for="status"><strong>Status</strong></label>
+              <select id="status" class="form-control" name="status">
+                <option disabled>Selecione...</option>
+                <option value="1" <% if(produto.status == 1){%>Selected<% } %>>Ativo</option>
+                <option value="0" <% if(produto.status == 0){%>Selected<% } %>>Bloqueado</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="fornecedor"><strong>Fornecedor</strong></label>
+              <select class="mdb-select md-form form-control" id="fornecedor" multiple size="5" name="fornecedor"
+                disabled>
+              </select>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="info_nutricional"><strong>Informações Nutricionais</strong></label>
+              <textarea class="form-control" id="info_nutricional" rows="5" name="info_nutricional"></textarea>
+            </div>
+
+          </div>
+          <div class="botoes-a-direita">
+            <button type="reset" class="btn btn-success btn-cancelar">Cancelar</button>
+            <button type="submit" class="btn btn-primary botao-salvar">Salvar</button>
+          </div>
+          </div>
+        </form>
+      </section>
+      <!--------------------------------------------------------------------------------------------------------------------->
+      <script>
+        //Função statica de ler a imagem e gerar um arquivo base 64 exibindo o em uma tag img
+        Utils.leitorDeImagem('#imagem-edit-input', '#imagem-edit-img', Utils.atribuirImagem);
+      </script>
+      <!--------------------------------------------------------------------------------------------------------------------->
+    </main>
+    <!--------------------------------------------------------------------------------------------------------------------->

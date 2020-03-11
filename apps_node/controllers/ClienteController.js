@@ -7,7 +7,14 @@ const renderizar = (req, res, next, unidades) => {
     data: '',
     navbar: true,
     pagina: 'Unidades Medidas',
-    btnLabel: 'unidade medida'
+    btnLabel: 'unidade medida',
+
+    btn: {
+      label: 'Voltar',
+      classe: 'display-none',
+      classe2: '',
+      caminho: '/admin'
+    }
   });
 };
 //-----------------------------------------------------------------------------

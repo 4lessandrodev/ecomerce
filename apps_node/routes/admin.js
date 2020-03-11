@@ -248,22 +248,27 @@ router.delete('/produto/:id', (req, res, next) => {
 
 //CESTAS
 //------------------------------------------------------------------------------------------------------
-//Renderizar a pagina de admin de lojas
+//Renderizar a pagina de admin de cesta
 router.get('/cesta', (req, res, next) => {
   cestaController.listarTodasCestas(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
-//Salvar uma lojas
+//Salvar uma cesta
 router.post('/cesta', (req, res, next) => {
   cestaController.salvarCesta(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
-//Editar uma lojas
+//Editar uma cesta
 router.post('/editar-cesta', (req, res, next) => {
   cestaController.editarCesta(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
-//Deletar uma lojas
+//Editar uma cesta
+router.get('/editar-cesta/:id', (req, res, next) => {
+  cestaController.listarCestaSelecionada(req, res, next);
+});
+//------------------------------------------------------------------------------------------------------
+//Deletar uma cesta
 router.delete('/cesta/:id', (req, res, next) => {
   cestaController.desabilitarCesta(req, res, next);
 });
