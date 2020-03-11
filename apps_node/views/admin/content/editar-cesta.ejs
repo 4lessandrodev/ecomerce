@@ -62,7 +62,7 @@
               </div>
               <div class="form-group col-md-2">
                 <label for="id"><strong>Cod. Cesta</strong></label>
-                <input type="number" class="form-control" id="id" disabled name="id" value="<%=cesta.id%>">
+                <input type="number" class="form-control" id="id" readonly name="id" value="<%=cesta.id%>">
               </div>
               <div class="form-group col-md-4">
                 <label for="descricao"><strong>Descrição</strong></label>
@@ -98,7 +98,7 @@
 
               <div class="form-group col-md-6">
                 <label for="informacoes_nutricionais"><strong>Informações Nutricionais</strong></label>
-                <textarea class="form-control" id="informacoes_nutricionais" rows="5"
+                <textarea class="form-control" id="informacoes_nutricionais" rows="5" maxlength="200"
                   name="informacoes_nutricionais"><%=cesta.informacoes_nutricionais%> </textarea> <div
                     class="alert alert-warning display-none" role="alert" style="margin-top: 0.5em;" id="alerta">
                     Antes de adicionar um produto é necessário salvar a cesta!

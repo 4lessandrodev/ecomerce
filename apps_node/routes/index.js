@@ -17,7 +17,7 @@ router.get('/contact', (req, res, next) => {
 //------------------------------------------------------------------------------------------------------
 //Rota para renderizar a pagina de cestas da semana
 router.get('/cestas', (req, res, next) => {
-  res.render('cestas', { cestas: [], produtos: [] });
+  indexController.carregarMercearia(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
 //Rota para renderizar a pagina de carrinho com os itens adicionados
@@ -38,6 +38,11 @@ router.post('/contact', (req, res, next) => {
 //Rota para renderizar a pagina de login
 router.get('/login', (req, res, next) => {
   res.render('login', { body: [] });
+});
+//------------------------------------------------------------------------------------------------------
+//Rota para renderizar a pagina de login
+router.get('/register', (req, res, next) => {
+  res.render('register', { body: [], regioes: [] });
 });
 //------------------------------------------------------------------------------------------------------
 

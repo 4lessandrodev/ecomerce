@@ -6,13 +6,13 @@ const renderizar = (req, res, next, unidades) => {
     unidades,
     data: '',
     navbar: true,
-    pagina: 'Unidades Medidas',
-    btnLabel: 'unidade medida',
+    pagina: 'Cliente',
+    btnLabel: 'Cliente',
 
     btn: {
       label: 'Voltar',
-      classe: 'display-none',
-      classe2: '',
+      classe: '',
+      classe2: 'display-none',
       caminho: '/admin'
     }
   });

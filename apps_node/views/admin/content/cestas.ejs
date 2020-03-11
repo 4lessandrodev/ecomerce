@@ -176,11 +176,12 @@
                   </ol>
                 </td>
                 <td>
-                  <button class=" btn btn-excluir"><i class="fas fa-trash-alt"></i></button>
+                  <button class=" btn btn-excluir" onclick="excluirItem(this)"> <input type="hidden"
+                      value="<%=cesta.id%>"><i class="fas fa-trash-alt"></i></button>
                 </td>
                 <td>
-                  <button class="btn btn-editar"><a href="/admin/editar-cesta/<%=cesta.id%>"><i
-                        class="fa fa-pencil-alt"></i></a></button>
+                  <a href="/admin/editar-cesta/<%=cesta.id%>">
+                    <button class="btn btn-editar"><i class="fa fa-pencil-alt"></i></button></a>
                 </td>
               </tr>
               <% }); %>
@@ -192,24 +193,16 @@
     </main>
 
     <script>
-      let buttonsDelete = document.querySelectorAll('.btn-excluir');
       let alerta = document.querySelector('#alerta');
       let butonsDisabled = document.querySelectorAll('#form-new .btn-add');
-      let data = JSON.parse(tr.dataset.row);
 
-      for (let btn of buttonsDelete) {
-        btn.addEventListener('click', function (e) {
-          let tr = e.path.find(elemento => {
-            return (elemento.tagName.toUpperCase() == 'TR');
+      const excluirItem = (e) => {
+        let id = e.querySelector('input[type=hidden]').value
+        fetch(`/admin/cesta/${id}`, {
+            method: 'DELETE'
+          }).then(response => response.json())
+          .then(json => {
+            window.location.reload();
           });
-
-          let data = JSON.parse(tr.dataset.row);
-          fetch(`/admin/cesta/${data.id}`, {
-              method: 'DELETE'
-            }).then(response => response.json())
-            .then(json => {
-              window.location.reload();
-            })
-        });
-      }
+      };
     </script>

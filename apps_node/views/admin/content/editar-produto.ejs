@@ -1,7 +1,7 @@
     <main>
       <!--------------------------------------------------------------------------------------------------------------------->
       <!--FORMULARIO EDIÇÃO DE UM PRODUTO-->
-      <section class="container formulario display-none" id="form-edit">
+      <section class="container formulario" id="form-edit">
         <div style="margin-bottom: 1em;">
           <a href="/admin/produto">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close-edit">
@@ -23,15 +23,17 @@
                 </div>
               </label>
             </div>
-
-
+            <div class="form-group col-md-2">
+              <label for="id"><strong>Cod. Produto</strong></label>
+              <input type="number" class="form-control" id="id" readonly name="id" value="<%=produto.id%>">
+            </div>
             <div class="form-group col-md-4">
               <label for="descricao"><strong>Descrição</strong></label>
               <input type="text" class="form-control" id="descricao" name="descricao" required
                 value="<%=produto.descricao%> ">
             </div>
 
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-2">
               <label for="id_categoria_produto"><strong>Categoria</strong></label>
               <select class="form-control" id="id_categoria_produto" name="id_categoria_produto">
                 <option disabled>Selecione...</option>
@@ -71,8 +73,8 @@
 
             <div class="form-group col-md-3">
               <label for="fator_multiplicador"><strong>Fator Multiplicador</strong></label>
-              <input type="number" class="form-control" id="fator_multiplicador" name="fator_multiplicador"
-                value="<%=produto.fator_multiplicador %> ">
+              <input type="text" class="form-control" id="fator_multiplicador" name="fator_multiplicador"
+                value="<%=produto.fator_multiplicador%> ">
             </div>
 
             <div class="form-group col-md-3">
@@ -93,7 +95,8 @@
 
             <div class="form-group col-md-6">
               <label for="info_nutricional"><strong>Informações Nutricionais</strong></label>
-              <textarea class="form-control" id="info_nutricional" rows="5" name="info_nutricional"></textarea>
+              <textarea class="form-control" id="info_nutricional" rows="5" name="info_nutricional"
+                maxlength="200"><%=produto.info_nutricional%> </textarea>
             </div>
 
           </div>

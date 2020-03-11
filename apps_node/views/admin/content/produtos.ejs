@@ -83,7 +83,7 @@
             <div class="form-group col-md-6">
               <label for="fornecedor"><strong>Fornecedor</strong></label>
               <select class="mdb-select md-form form-control" id="fornecedor" multiple size="5" name="fornecedor"
-                data-item="<%= JSON.stringify(fornecedor)%>">
+                disabled>
                 <% fornecedor.forEach(function(fornec){ %>
                 <option value="<%= fornec.id%>"><%=fornec.socialName%></option>
                 <% }); %>
@@ -92,7 +92,8 @@
 
             <div class="form-group col-md-6">
               <label for="info_nutricional"><strong>Informações Nutricionais</strong></label>
-              <textarea class="form-control" id="info_nutricional" rows="5" name="info_nutricional"></textarea>
+              <textarea class="form-control" id="info_nutricional" rows="5" name="info_nutricional"
+                maxlength="200"></textarea>
             </div>
 
           </div>
@@ -105,110 +106,6 @@
       </section>
       <!--------------------------------------------------------------------------------------------------------------------->
 
-
-      <!--------------------------------------------------------------------------------------------------------------------->
-      <!--FORMULARIO EDIÇÃO DE UM PRODUTO-->
-      <section class="container formulario display-none" id="form-edit">
-        <div style="margin-bottom: 1em;">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close-edit"
-            onclick="Utils.ocultarFormulario('#form-edit', 'display-none', true)">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-
-        <form method="POST" action="/admin/editar-produto">
-          <div class="form-row">
-            <div class="form-group col-md-2" id="div-imagem-edit" onclick="Utils.uploadImg(this)">
-              <label for="imagem" class="caixaImg">
-                <input type="hidden" value="/images/images/SemImagem-300x300px.png" name="imagem" id="imagem">
-                <input type="file" hidden accept="image/png" id="imagem-edit-input">
-                <img src="./../images/images/SemImagem-300x300px.png" alt="Imagem" class="imagem rounded-circle"
-                  id="imagem-edit-img">
-                <div class="sobreposicao">
-                  <h5 class="texto">Adicionar Imagem</h5>
-                  <span class="icone"><i class="fas fa-chevron-circle-up"></i></span>
-                </div>
-              </label>
-            </div>
-
-
-            <div class="form-group col-md-4">
-              <label for="descricao"><strong>Descrição</strong></label>
-              <input type="text" class="form-control" id="descricao" name="descricao" required>
-            </div>
-
-            <div class="form-group col-md-4">
-              <label for="id_categoria_produto"><strong>Categoria</strong></label>
-              <select class="form-control" id="id_categoria_produto" name="id_categoria_produto">
-                <option selected>Selecione...</option>
-                <% categorias.forEach(function(categ){ %>
-                <option value="<%= categ.id%>"><%=categ.descricao%></option>
-                <% }); %>
-              </select>
-            </div>
-
-            <div class="form-group col-md-2">
-              <label for="preco_venda"><strong>Preço</strong></label>
-              <input type="number" class="form-control" id="preco_venda" name="preco_venda" required>
-            </div>
-
-            <div class="form-group col-md-3">
-              <label for="id_unidade_medida"><strong>Und. Medida</strong></label>
-              <select id="id_unidade_medida" class="form-control" id="id_unidade_medida" name="id_unidade_medida">
-                <option selected>Selecione...</option>
-                <% unidade.forEach(function(und){ %>
-                <option value="<%= und.id%>"><%=und.descricao%></option>
-                <% }); %>
-              </select>
-            </div>
-
-
-            <div class="form-group col-md-3">
-              <label for="produto_especial"><strong>Tipo de Produto</strong></label>
-              <select id="produto_especial" class="form-control" name="produto_especial">
-                <option selected>Selecione...</option>
-                <option value="1">Produtos Especiais</option v>
-                <option value="0">Produto Normal</option>
-              </select>
-            </div>
-
-            <div class="form-group col-md-3">
-              <label for="fator_multiplicador"><strong>Fator Multiplicador</strong></label>
-              <input type="number" class="form-control" id="fator_multiplicador" name="fator_multiplicador">
-            </div>
-
-            <div class="form-group col-md-3">
-              <label for="status"><strong>Status</strong></label>
-              <select id="status" class="form-control" name="status">
-                <option selected>Selecione...</option>
-                <option value="1">Ativo</option>
-                <option value="0">Bloqueado</option>
-              </select>
-            </div>
-
-            <div class="form-group col-md-6">
-              <label for="fornecedor"><strong>Fornecedor</strong></label>
-              <select class="mdb-select md-form form-control" id="fornecedor" multiple size="5" name="fornecedor"
-                data-item="<%= JSON.stringify(fornecedor)%>">
-                <% fornecedor.forEach(function(fornec){ %>
-                <option value="<%= fornec.id%>"><%=fornec.socialName%></option>
-                <% }); %>
-              </select>
-            </div>
-
-            <div class="form-group col-md-6">
-              <label for="info_nutricional"><strong>Informações Nutricionais</strong></label>
-              <textarea class="form-control" id="info_nutricional" rows="5" name="info_nutricional"></textarea>
-            </div>
-
-          </div>
-          <div class="botoes-a-direita">
-            <button type="reset" class="btn btn-success btn-cancelar">Cancelar</button>
-            <button type="submit" class="btn btn-primary botao-salvar">Salvar</button>
-          </div>
-          </div>
-        </form>
-      </section>
       <!--------------------------------------------------------------------------------------------------------------------->
       <script>
         //Função statica de ler a imagem e gerar um arquivo base 64 exibindo o em uma tag img
@@ -246,11 +143,11 @@
               <td><% if(produto.produto_especial){ %>Especial<% }else{ %>Normal<% }; %></td>
               <td><% if(produto.status){ %>Ativo<% }else{ %>Bloqueado<% }; %></td>
               <td>
-                <button class="btn btn-excluir"><i class="fas fa-trash-alt"></i></button>
-                </ td>
-              <td>
-                <button class="btn btn-editar" onclick="Utils.exibirFormulario('#form-edit', 'display-none')"><i
-                    class="fa fa-pencil-alt"></i></button>
+                <button class=" btn btn-excluir" onclick="excluirItem(this)"> <input type="hidden"
+                    value="<%=cesta.id%>"><i class="fas fa-trash-alt"></i></button>
+              </td>
+              <td><a href="/admin/editar-produto/<%=produto.id%>">
+                  <button class="btn btn-editar"><i class="fa fa-pencil-alt"></i></button></a>
               </td>
             </tr>
             <% }); %>
@@ -260,57 +157,14 @@
     </main>
     <!--------------------------------------------------------------------------------------------------------------------->
 
-
-
-
-
     <script>
-      let buttonsEdit = document.querySelectorAll('.btn-editar');
-      let buttonsDelete = document.querySelectorAll('.btn-excluir');
-
-      let mainForm = document.querySelector('main #form-edit');
-      for (let btn of buttonsEdit) {
-        btn.addEventListener('click', function (e) {
-          let tr = e.path.find(elemento => {
-            return (elemento.tagName.toUpperCase() == 'TR');
+      const excluirItem = (e) => {
+        let id = e.querySelector('input[type=hidden]').value
+        fetch(`/admin/cesta/${id}`, {
+            method: 'DELETE'
+          }).then(response => response.json())
+          .then(json => {
+            window.location.reload();
           });
-
-          window.scrollTo(0, 0);
-
-          let data = JSON.parse(tr.dataset.row);
-
-
-
-          for (let inputName in data) {
-            switch (inputName) {
-              case 'imagem':
-                mainForm.querySelector('img').src = data[inputName];
-                mainForm.querySelector('input[type=file]').file = data[inputName];
-                mainForm.querySelector('#imagem').value = data[inputName];
-                break;
-              default:
-                let input = mainForm.querySelector(`[name=${inputName}`);
-                if (input) input.value = data[inputName];
-            }
-          }
-
-        });
-      }
-
-      for (let btn of buttonsDelete) {
-        btn.addEventListener('click', function (e) {
-          let tr = e.path.find(elemento => {
-            return (elemento.tagName.toUpperCase() == 'TR');
-          });
-
-          let data = JSON.parse(tr.dataset.row);
-
-          fetch(`/admin/produto/${data.id}`, {
-              method: 'DELETE'
-            }).then(response => response.json())
-            .then(json => {
-              window.location.reload();
-            })
-        });
-      }
+      };
     </script>

@@ -84,7 +84,7 @@ class Utils {
   }
 
   static retornarEndereco() {
-    let cep = document.querySelector('input[name=zipCode]');
+    let cep = document.querySelector('input[name=cep]');
     cep = cep.value;
     cep = cep.replace('-', '');
     if (cep.length == 8 && !isNaN(cep)) {
@@ -99,7 +99,7 @@ class Utils {
               case 'endereco':
                 input.value = res.logradouro;
                 break;
-              case 'province':
+              case 'estado':
                 input.value = res.uf;
                 break;
               case 'bairro':

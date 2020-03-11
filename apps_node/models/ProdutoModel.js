@@ -161,7 +161,20 @@ class ProdutoModel {
     });
   }
 
-
+  listarProdutoSelecionado(produto) {
+    return new Promise((resolve, reject) => {
+      conect.query(`
+      SELECT * FROM tb_produtos AS p WHERE p.produto_excluido = ? AND p.id = ?`, [
+        produto._produto_excluido, produto._id], (err, result) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
+    });
+  }
   desabilitarProduto(produto) {
     return new Promise((resolve, reject) => {
       conect.query(`UPDATE tb_produtos SET produto_excluido = ? WHERE id = ?`, [

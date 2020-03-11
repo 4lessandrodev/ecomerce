@@ -223,22 +223,27 @@ router.delete('/loja/:id', (req, res, next) => {
 
 //PRODUTOS
 //------------------------------------------------------------------------------------------------------
-//Renderizar a pagina de admin de lojas
+//Renderizar a pagina de admin de produtos
 router.get('/produto', (req, res, next) => {
   produtoController.listarTodosProdutos(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
-//Salvar uma lojas
+//Salvar uma produtos
 router.post('/produto', (req, res, next) => {
   produtoController.salvarProduto(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
-//Editar uma lojas
+//Editar uma produtos
+router.get('/editar-produto/:id', (req, res, next) => {
+  produtoController.exibirProdutoSelecionado(req, res, next);
+});
+//------------------------------------------------------------------------------------------------------
+//Editar uma produtos
 router.post('/editar-produto', (req, res, next) => {
   produtoController.editarProduto(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
-//Deletar uma lojas
+//Deletar uma produtos
 router.delete('/produto/:id', (req, res, next) => {
   produtoController.desativarProduto(req, res, next);
 });
