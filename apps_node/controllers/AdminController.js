@@ -1,7 +1,19 @@
 const Inscricao = require('../models/InscricaoModel');
 const Mensagens = require('../models/ContatoModel');
+const DashBoard = require('../models/DashboardModel');
 
 
+
+
+//------------------------------------------------------------------------------------------------------
+//Renderizar a pagina principal de admin
+const renderizarAdmin = (req, res, next, dados) => {
+  res.render('admin/index', {
+    data: '',
+    navbar: false,
+    dados
+  });
+};
 //------------------------------------------------------------------------------------------------------
 //Metodo listar todos os emails salvos no banco de dados 
 const listarInscricoes = (req, res, next) => {
@@ -28,7 +40,15 @@ const listarMensagens = (req, res, next) => {
   });
 };
 //------------------------------------------------------------------------------------------------------
+//Listar dados do dashboard da pagina de admin
+const listarPainel = (req, res, next) => {
+  let dash = new DashBoard();
+  dash.buscarDadosDashBoardNoBD().then(dados => {
+    renderizarAdmin(req, res, next, dados[0]);
+  });
+};
+//------------------------------------------------------------------------------------------------------
 
 
 //Metodos exportados 
-module.exports = { listarInscricoes, listarMensagens };
+module.exports = { listarInscricoes, listarMensagens, listarPainel };

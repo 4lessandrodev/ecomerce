@@ -1,6 +1,6 @@
 const conect = require('./../config/CONECT_BD');
 class ClienteModel {
-  constructor (id_usuario, phone, nome, cep, cidade, estado, endereco, codigo_ibge, id_regiao, bairro, regiao_atendida = 1, cliente_excluido = 0) {
+  constructor (id_usuario, phone, nome, cep, cidade, estado, endereco, codigo_ibge, id_regiao, bairro, regiao_atendida, cliente_excluido = 0) {
     this._id = null;
     this._id_usuario = id_usuario;
     this._phone = phone;
@@ -12,7 +12,7 @@ class ClienteModel {
     this._bairro = bairro;
     this._codigo_ibge = codigo_ibge;
     this._id_regiao = id_regiao;
-    this._regiao_atendida = regiao_atendida;
+    this._regiao_atendida = (regiao_atendida == 'on') ? 0 : 1;
     this._cliente_excluido = cliente_excluido;
   }
 
@@ -83,7 +83,7 @@ class ClienteModel {
     return this._regiao_atendida;
   }
   set regiao_atendida(value) {
-    this._regiao_atendida = value;
+    this._regiao_atendida = (value == 'on') ? 0 : 1;
   }
   set bairro(value) {
     this._bairro = value;

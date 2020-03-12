@@ -19,10 +19,7 @@ const produtoParaCestaController = require('../controllers/ProdutosParaCestaCont
 //------------------------------------------------------------------------------------------------------
 //Renderizar a pagina principal de admin
 router.get('/', (req, res, next) => {
-  res.render('admin/index', {
-    data: '',
-    navbar: false
-  });
+  adminController.listarPainel(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
 //Metodo para listar os emails de usuarios inscritos 
