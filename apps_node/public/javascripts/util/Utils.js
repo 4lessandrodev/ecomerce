@@ -83,10 +83,9 @@ class Utils {
       });
   }
 
-  static retornarEndereco() {
-    let cep = document.querySelector('input[name=cep]');
-    cep = cep.value;
-    cep = cep.replace('-', '');
+  static retornarEndereco(input) {
+    input.value = input.value.replace('-', '');
+    let cep = input.value;
     if (cep.length == 8 && !isNaN(cep)) {
       this.buscarCep(cep)
         .then(res => {
@@ -94,19 +93,20 @@ class Utils {
           for (let input of inputs) {
             switch (input.name) {
               case 'codigo_ibge':
-                input.value = res.ibge;
+                (res.ibge != undefined) ? input.value = res.ibge : '';
                 break;
               case 'endereco':
-                input.value = res.logradouro;
+                (res.logradouro != undefined) ? input.value = res.logradouro : '';
                 break;
               case 'estado':
-                input.value = res.uf;
+                (res.uf != undefined) ? input.value = res.uf : '';
                 break;
+
               case 'bairro':
-                input.value = res.bairro;
+                (res.bairro != undefined) ? input.value = res.bairro : '';
                 break;
               case 'cidade':
-                input.value = res.localidade;
+                (res.localidade != undefined) ? input.value = res.localidade : '';
                 break;
               default:
                 break;
@@ -201,8 +201,28 @@ class Utils {
 
 
 
+  static obterIdUsuario(email, senha) {
+    let inputId = document.getElementById("id_usuario");
+    let usuario = { email, senha };
 
+    fetch(`/register-user`, {
+      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      body: JSON.stringify(usuario)
 
+    }).then(response => response.json())
+      .then(json => {
+        if (json.serverStatus == 2) {
+          inputId.value = json.insertId;
+          dados.classList.remove('hidden');
+          login.classList.add('hidden');
+          btnNext.style.display = 'none';
+          document.querySelector('input[name=nome]').focus();
+        } else {
+          swal("Oops!", `Ocorreu um erro ao cadastrar o usuário`, "error");
+        }
+      });
+  }
 }
 
 

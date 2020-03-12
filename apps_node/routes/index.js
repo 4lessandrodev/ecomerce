@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 const indexController = require('../controllers/IndexController');
 const contactController = require('../controllers/ContatosController');
+const usuarioController = require('../controllers/UsuarioController');
+const clienteController = require('../controllers/ClienteController');
 
 
 //------------------------------------------------------------------------------------------------------
@@ -40,9 +42,19 @@ router.get('/login', (req, res, next) => {
   res.render('login', { body: [] });
 });
 //------------------------------------------------------------------------------------------------------
-//Rota para renderizar a pagina de login
+//Rota para renderizar a pagina de cadastro de usuario/cliente 
 router.get('/register', (req, res, next) => {
-  res.render('register', { body: [], regioes: [] });
+  indexController.carregarCadastro(req, res, next);
+});
+//------------------------------------------------------------------------------------------------------
+//Rota para renderizar a pagina de login
+router.post('/register-user', (req, res, next) => {
+  usuarioController.salvarUsuario(req, res, next);
+});
+//------------------------------------------------------------------------------------------------------
+//Rota para cadastrar dados do usuário
+router.post('/register-cliente', (req, res, next) => {
+  clienteController.salvarCliente(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
 

@@ -1,6 +1,7 @@
 var Inscricao = require('../models/InscricaoModel');
 const Produto = require('./../models/ProdutoModel');
 const Cesta = require('./../models/CestaModel');
+const Regioes = require('./../models/RegiaoModel');
 
 
 
@@ -31,6 +32,13 @@ const renderizarPaginaCestas = (req, res, next, produtos, cestas) => {
       classe2: 'display-none',
       caminho: '/admin'
     }
+  });
+};
+//------------------------------------------------------------------------------------------------------
+const renderizarPaginaCadastroUsuario = (req, res, next, regioes) => {
+  res.render('register', {
+    body: req.body,
+    regioes
   });
 };
 //------------------------------------------------------------------------------------------------------
@@ -71,6 +79,16 @@ const carregarMercearia = (req, res, next) => {
   });
 };
 //------------------------------------------------------------------------------------------------------
+const carregarCadastro = (req, res, next) => {
+  let regiao = new Regioes();
+  regiao.listarRegioesAtivas(regiao).then(regioes => {
+    renderizarPaginaCadastroUsuario(req, res, next, regioes);
+  }).catch(err => {
+    console.log(err);
+    res.send(err.message);
+  });
+};
+//------------------------------------------------------------------------------------------------------
 
 
-module.exports = { inscrever, carregarIndex, carregarMercearia };
+module.exports = { inscrever, carregarIndex, carregarMercearia, carregarCadastro };

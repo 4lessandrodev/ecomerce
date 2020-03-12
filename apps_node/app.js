@@ -2,6 +2,7 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+var bodyParse = require('body-parser');
 var logger = require('morgan');
 var formidable = require('formidable');
 var hostname = 'localhost';
@@ -13,6 +14,16 @@ var adminRouter = require('./routes/admin');
 
 var app = express();
 app.listen(port, hostname, backlog);
+
+app.use(bodyParse.json({
+  inflate: true,
+  limit: '900kb',
+  reviver: null,
+  strict: true,
+  type: 'application/json',
+  verify: undefined
+}));
+app.use(bodyParse.urlencoded({ extended: true }));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

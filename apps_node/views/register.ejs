@@ -13,60 +13,82 @@
     <!-- Google Font -->
     <link rel="icon" href="../../images/images/favicon.png" type="image/x-icon" />
     <link rel="shortcut icon" href="../../images/favicon.png" type="image/x-icon" />
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   </head>
 
   <body class="background-dark">
     <!-- /.login-logo -->
+    <section id="login">
+      <div class="login">
+        <div class="login-triangle"></div>
+        <h2 class="login-header">Cadastrar</h2>
+        <%- include('./inc/content/alerts') -%>
+        <form class="login-container">
+          <p><input type="email" placeholder="Email" name="email" maxlength="40" required id="email"></p>
+          <p><input type="password" placeholder="Password" name="senha" required id="senha"></p>
+          <p><input type="button" value="Avançar" class="btn-next" onclick="avancar()"></p>
+        </form>
+      </div>
+    </section>
 
-    <div class="login">
+    <section class="hidden login" id="dados-pessoais">
       <div class="login-triangle"></div>
-
-      <h2 class="login-header">Cadastrar</h2>
+      <h2 class="login-header">Dados Pessoais</h2>
       <%- include('./inc/content/alerts') -%>
-      <form class="login-container" method="POST" action="/register">
-
-        <p><input type="email" placeholder="Email" name="email" maxlength="40"></p>
-        <p><input type="password" placeholder="Password" name="password"></p>
-
+      <form class="login-container" method="POST" action="/register-cliente">
+        <input type="hidden" name="id_usuario" id="id_usuario">
         <p><input type="text" placeholder="Nome" id="nome" name="nome" maxlength="30"></p>
-        <p><input type="tel" placeholder="Celular" id="phone" name="phone" max="99999999999" maxlength="11"></p>
+        <p><input type="tel" placeholder="Celular" id="phone" name="phone" max="99999999999" maxlength="11" required>
+        </p>
         <p><input type="number" placeholder="Cep" id="cep" name="cep" maxlength="8" max="99999999"
-            onkeyup="Utils.retornarEndereco()"></p>
+            onkeyup="Utils.retornarEndereco(this)" required></p>
 
+        <p><input type="text" placeholder="Cidade" id="cidade" name="cidade" maxlength="45" required></p>
+        <p><input type="text" placeholder="Logradouro" id="endereco" name="endereco" maxlength="30" required></p>
+        <p><input type="text" placeholder="Bairro" id="bairro" name="bairro" maxlength="50" required></p>
+        <p><input type="text" placeholder="Numero/Complemento" id="numero" name="numero" max="99999999" maxlength="20"
+            required>
+        </p>
+        <p><input type="text" placeholder="Uf" id="estado" name="estado" maxlength="2" required></p>
+        <p><input type="hidden" placeholder="ibge" id="codigo_ibge" name="codigo_ibge"></p>
+        <p><select class="form-control" id="id_regiao" name="id_regiao" required>
+            <option selected disabled>Selecione sua região</option>
+            <% regioes.forEach(function(regiao){ %>
+            <option value="<%=regiao.id%>"><%=regiao.descricao%></option>
+            <% }); %>
+          </select>
+        </p>
 
-        <p><input type="button" value="Avançar" class="btn-next" onclick="avancar()"></p>
-
-        <div class="hidden" id="address">
-          <p><input type="text" placeholder="Cidade" id="cidade" name="cidade" maxlength="45"></p>
-          <p><input type="text" placeholder="Logradouro" id="endereco" name="endereco" maxlength="45"></p>
-          <p><input type="text" placeholder="Bairro" id="bairro" name="bairro" maxlength="50"></p>
-          <p><input type="text" placeholder="Numero" id="numero" name="numero" max="99999999" maxlength="15"></p>
-          <p><input type="text" placeholder="Uf" id="estado" name="estado" maxlength="2"></p>
-          <p><input type="hidden" placeholder="ibge" id="codigo_ibge" name="codigo_ibge"></p>
-          <p><select id="destin" class="form-control" id="id_regiao" name="id_regiao">
-              <option selected>Selecione sua região</option>
-              <% regioes.forEach(function(regiao){ %>
-              <option value="<%=regiao.id%>"><%=regiao.description%></option>
-              <% }); %>
-            </select>
+        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+          <p>
+            <input type="checkbox" class="custom-control-input" id="regiao_atendida">
+            <label class="custom-control-label" for="regiao_atendida"
+              title="Marque esta opção caso queira receber em sua região" style="font-size: 0.8em;">Nenhuma
+              anterior</label>
           </p>
-
-          <div class="custom-control custom-checkbox my-1 mr-sm-2">
-            <p><input type="checkbox" class="custom-control-input" id="regiao_atendida">
-              <label class="custom-control-label" for="deliveredRegion">Nenhuma anterior</label></p>
-          </div>
-          <p><input type="submit" value="Cadastrar"></p>
+        </div>
+        <p><input type="submit" value="Cadastrar"></p>
         </div>
       </form>
-    </div>
+    </section>
     <script src="../../javascripts/util/Utils.js"></script>
     <script>
       let btnNext = document.querySelector('.btn-next');
-      let address = document.getElementById('address');
+      let dados = document.getElementById('dados-pessoais');
+      let login = document.getElementById('login');
+      let inputIdUsuario = document.getElementById('id_usuario');
+      let email = document.querySelector('#email');
+      let senha = document.querySelector('#senha');
 
       function avancar() {
-        address.classList.remove('hidden');
-        btnNext.style.display = 'none';
+        //validar dados 
+        if (email.value == '' || senha.value == '') {
+          swal("Oops!", "Os campos email e senha devem ser preenchidos", "info");
+          return false;
+        } else {
+          //-----------Comando para salvar o usuario
+          Utils.obterIdUsuario(email.value, senha.value);
+        };
       }
     </script>
   </body>

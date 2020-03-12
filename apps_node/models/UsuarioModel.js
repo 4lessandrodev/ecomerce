@@ -1,8 +1,8 @@
-const conect = require('./DB');
+const conect = require('./../config/CONECT_BD');
 class UsuarioModel {
   constructor (email, senha, data_cadastro = new Date(), usuario_excluido = 0, admin = 0) {
     this._id = null;
-    this._email = email;
+    this._email = (email != '' && email != null) ? email.toLowerCase() : '';
     this._senha = senha;
     this._data_cadastro = data_cadastro;
     this._usuario_excluido = usuario_excluido;
@@ -24,7 +24,7 @@ class UsuarioModel {
     this._id = value;
   }
   set email(value) {
-    this._email = value;
+    this._email = (value != '' && value != null) ? value.toLowerCase() : '';
   }
   set senha(value) {
     this._senha = value;
