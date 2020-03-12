@@ -57,6 +57,11 @@ router.post('/register-cliente', (req, res, next) => {
   clienteController.salvarCliente(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
+//Rota para cesta selecionada
+router.get('/cesta-selecionada/:id', (req, res, next) => {
+  indexController.listarCestaSelecionada(req, res, next);
+});
+//------------------------------------------------------------------------------------------------------
 //Rota para renderizar a pagina de login
 router.get('/teste', (req, res, next) => {
   res.render('teste', { body: [] });

@@ -2,6 +2,8 @@ var Inscricao = require('../models/InscricaoModel');
 const Produto = require('./../models/ProdutoModel');
 const Cesta = require('./../models/CestaModel');
 const Regioes = require('./../models/RegiaoModel');
+const ProdutosDeCesta = require('./../models/ProdutosParaCestaModel');
+
 
 
 
@@ -32,6 +34,18 @@ const renderizarPaginaCestas = (req, res, next, produtos, cestas) => {
       classe2: 'display-none',
       caminho: '/admin'
     }
+  });
+};
+//------------------------------------------------------------------------------------------------------
+//Rota para cesta selecionada
+const renderizarPaginaCestaSelecionada = (req, res, next, cesta, produtos, produtos_da_cesta) => {
+  //res.send(produtos_da_cesta);
+  //res.send(cesta);
+  res.render('cesta-selecionada', {
+    rotulo: 'Cesta Selecionada',
+    cesta,
+    produtos,
+    produtos_da_cesta
   });
 };
 //------------------------------------------------------------------------------------------------------
@@ -89,6 +103,25 @@ const carregarCadastro = (req, res, next) => {
   });
 };
 //------------------------------------------------------------------------------------------------------
+const listarCestaSelecionada = (req, res, next) => {
+  let cesta = new Cesta();
+  cesta.id = req.params.id;
+  let produto = new Produto();
+  let produtosDeCesta = new ProdutosDeCesta(null, cesta.id);
+  cesta.listarCestaEspecifica(cesta).then(cesta => {
+    produto.listarTodosProdutos(produto).then(produtos => {
+      produtosDeCesta.listarDescricaoProdutosDeUmaCestaEspecifica(produtosDeCesta).then(produtos_da_cesta => {
+        renderizarPaginaCestaSelecionada(req, res, next, cesta[0], produtos, produtos_da_cesta);
+      }).catch(err => {
+        res.send(err.message);
+      });
+    }).catch(err => {
+      res.send(err.message);
+    });
+  }).catch(err => {
+    res.send(err.message);
+  });
+};
+//------------------------------------------------------------------------------------------------------
 
-
-module.exports = { inscrever, carregarIndex, carregarMercearia, carregarCadastro };
+module.exports = { inscrever, carregarIndex, carregarMercearia, carregarCadastro, listarCestaSelecionada };

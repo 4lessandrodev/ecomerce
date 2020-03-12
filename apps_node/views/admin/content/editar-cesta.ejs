@@ -74,7 +74,7 @@
                   <option disabled>Selecione...</option>
                   <% categorias.forEach(function(categ){ %>
                   <option value="<%=categ.id%>" <%if(categ.id == cesta.id_categoria_cesta){%>Selected<%}%>>
-                    <%=categ.descricao%></option><% }); %> </select> </div> <div class="form-group col-md-4">
+                    <%=categ.descricao%> </option><% }); %> </select> </div> <div class="form-group col-md-4">
                     <label for="preco"><strong>Preço de Venda</strong></label>
                     <input type="text" class="form-control" id="preco" name="preco" value="<%=cesta.preco%> ">
               </div>

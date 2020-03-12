@@ -131,7 +131,9 @@ WHERE c.cesta_excluida = ? AND c.id = pc.id_cesta AND p.id = pc.id_produto AND c
 
   listarCestaEspecifica(cesta) {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT * FROM tb_cestas AS cesta WHERE cesta.id = ? AND cesta.cesta_excluida = ?`, [
+      conect.query(`SELECT cesta.id, cesta.imagem, cesta.descricao, cesta.id_categoria_cesta, cesta.status, cesta.preco, cesta.alteracoes_permitidas,
+cesta.informacoes_nutricionais, cesta.data_cadastro, cesta.cesta_excluida, categoria_da_cesta.descricao AS descricao_categoria
+FROM tb_cestas AS cesta, tb_categoria_cestas AS categoria_da_cesta WHERE cesta.id = ? AND cesta.cesta_excluida = ? AND categoria_da_cesta.id = cesta.id_categoria_cesta`, [
         cesta._id, cesta._cesta_excluida], (err, results) => {
           if (err) {
             console.log(err.message);
