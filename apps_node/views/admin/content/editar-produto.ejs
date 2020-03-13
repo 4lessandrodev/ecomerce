@@ -15,7 +15,7 @@
             <div class="form-group col-md-2" id="div-imagem-edit" onclick="Utils.uploadImg(this)">
               <label for="imagem" class="caixaImg">
                 <input type="hidden" value="<%=produto.imagem%>" name="imagem" id="imagem">
-                <input type="file" hidden accept="image/png" id="imagem-edit-input">
+                <input type="file" hidden accept="image/png, image/jpeg, image/jpg" id="imagem-edit-input">
                 <img src="<%=produto.imagem%>" alt="Imagem" class="imagem rounded-circle" id="imagem-edit-img">
                 <div class="sobreposicao">
                   <h5 class="texto">Adicionar Imagem</h5>
@@ -101,7 +101,8 @@
 
           </div>
           <div class="botoes-a-direita">
-            <button type="reset" class="btn btn-success btn-cancelar">Cancelar</button>
+            <a href="/admin/produto">
+              <button type="button" class="btn btn-success btn-cancelar">Cancelar</button></a>
             <button type="submit" class="btn btn-primary botao-salvar">Salvar</button>
           </div>
           </div>

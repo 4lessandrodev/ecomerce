@@ -26,6 +26,7 @@ const renderizar = (req, res, next, cestas, categorias, produtos, produtos_de_ce
 };
 //---------------------------------------------------------------------------------------------
 const renderizarPaginaEditar = (req, res, next, cesta, categorias, produtos, produtos_da_cesta) => {
+
   res.render('admin/editar-cesta', {
     data: '',
     navbar: true,

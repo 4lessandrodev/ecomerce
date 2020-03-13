@@ -100,7 +100,7 @@ WHERE produto.id = pc.id_produto AND pc.id_cesta = cesta.id AND cesta.id = ?`, [
     return new Promise((resolve, reject) => {
       conect.query(`SELECT produto.id, produto.imagem, produto.descricao, produto.fator_multiplicador, categoria_produto.descricao AS categoria, und.descricao AS unidade_medida
 FROM tb_produtos_para_cesta AS pc, tb_produtos AS produto, tb_cestas AS cesta, tb_categoria_produtos AS categoria_produto, tb_und_medidas AS und
-WHERE produto.id = pc.id_produto AND pc.id_cesta = cesta.id AND cesta.id = 13 AND categoria_produto.id = produto.id_categoria_produto AND produto.id_unidade_medida = und.id`, [produto._id_cesta], (err, result) => {
+WHERE produto.id = pc.id_produto AND pc.id_cesta = cesta.id AND cesta.id = ? AND categoria_produto.id = produto.id_categoria_produto AND produto.id_unidade_medida = und.id`, [produto._id_cesta], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);

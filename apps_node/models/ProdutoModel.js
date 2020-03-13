@@ -111,7 +111,7 @@ class ProdutoModel {
   listarTodosProdutos(produto) {
     return new Promise((resolve, reject) => {
       conect.query(`
-      SELECT p.id, p.imagem, p.descricao, p.info_nutricional, c.descricao AS categoria, p.status, p.produto_especial, p.fator_multiplicador, p.preco_venda, p.data_cadastro, p.id_unidade_medida, p.id_categoria_produto
+      SELECT p.id, p.imagem, p.descricao, p.info_nutricional, c.descricao AS categoria, p.status, p.produto_especial, p.fator_multiplicador, p.preco_venda, p.data_cadastro, p.id_unidade_medida, p.id_categoria_produto, u.descricao AS descricao_und
       FROM tb_produtos AS p, tb_categoria_produtos AS c, tb_und_medidas AS u
       WHERE p.produto_excluido = ? AND c.id = p.id_categoria_produto AND u.id = p.id_unidade_medida AND p.status = ?`, [
         produto._produto_excluido, produto._status], (err, result) => {
@@ -175,6 +175,7 @@ class ProdutoModel {
         });
     });
   }
+
   desabilitarProduto(produto) {
     return new Promise((resolve, reject) => {
       conect.query(`UPDATE tb_produtos SET produto_excluido = ? WHERE id = ?`, [
@@ -188,6 +189,39 @@ class ProdutoModel {
         });
     });
   }
+
+
+  abrirProdutoSelecionadoNaHome(produto) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT * FROM tb_produtos  WHERE produto_excluido = ? AND id = ? AND status = ?`, [
+        produto._produto_excluido, produto._id, produto._status], (err, result) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
+    });
+  }
+
+
+
+  abrirProdutosIndicados(produto) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT p.id, p.descricao, p.imagem, p.info_nutricional, u.descricao AS und_descricao, p.preco_venda FROM tb_produtos AS p, tb_und_medidas AS u WHERE p.produto_excluido = ? AND p.status = ? AND u.id = p.id_unidade_medida  LIMIT 7`, [
+        produto._produto_excluido, produto._status], (err, result) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
+    });
+  }
+
+
 
 }
 

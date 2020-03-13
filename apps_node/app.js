@@ -14,16 +14,17 @@ var adminRouter = require('./routes/admin');
 
 var app = express();
 app.listen(port, hostname, backlog);
+app.use(express.json({ limit: '10mb' }));
 
 app.use(bodyParse.json({
   inflate: true,
-  limit: '900kb',
+  limit: '10mb',
   reviver: null,
   strict: true,
   type: 'application/json',
-  verify: undefined
+  verify: undefined,
 }));
-app.use(bodyParse.urlencoded({ extended: true }));
+app.use(bodyParse.urlencoded({ limit: '10mb', extended: true }));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -31,7 +32,7 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ limit: '10mb', extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 

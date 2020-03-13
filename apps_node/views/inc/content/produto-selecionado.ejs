@@ -3,7 +3,7 @@
     <!-- Stack the columns on mobile by making one full-width and the other half-width -->
     <div class="row">
       <div class="col-md-8 div-imagem">
-        <img src="<%=cesta.imagem%>" class="img-fluid" alt="Responsive image" alt="Imagem da cesta"
+        <img src="<%=produto.imagem%>" class="img-fluid" alt="Responsive image" alt="Imagem da cesta"
           id="imagem-principal-cesta">
       </div>
       <div class="col-6 col-md-4">
@@ -12,26 +12,26 @@
         <div class="col-4" id="nav-lateral">
           <div class="list-group" role="tablist">
             <a class="list-group-item list-group-item-success" data-toggle="list" role="tab" aria-controls="home">
-              <h2><%=cesta.descricao%></h2>
+              <h2><%=produto.descricao%></h2>
             </a>
             <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="profile"
-              id="categoria"><%=cesta.descricao_categoria%> </a>
+              id="categoria"><%=produto.descricao_categoria%> </a>
             <a class="list-group-item list-group-item-action descricao-item" data-toggle="list" role="tab"
-              aria-controls="profile"><%=cesta.informacoes_nutricionais%></a>
+              aria-controls="profile"><%=produto.info_nutricional%></a>
             <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="messages">
-              <h3>R$ <%=cesta.preco%> </h3>
+              <h3>R$ <%=produto.preco_venda%> </h3>
             </a>
             <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="settings">
               <div class="form-group">
                 <label for="exampleFormControlSelect1">Quantidade</label>
                 <select class="form-control">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                  <option>6</option>
-                  <option>7</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
                 </select>
               </div>
             </a>
@@ -45,7 +45,7 @@
     </div>
   </section>
   <hr>
-  <h3>Produtos desta cesta</h3>
+  <h3>Você poderia gostar também</h3>
   <section class="tabela-produtos">
     <table class="table table-striped">
       <thead>
@@ -53,27 +53,27 @@
           <th scope="col" class="tr-id">Cod.</th>
           <th scope="col" class="tr-imagem-produto">Imagem</th>
           <th scope="col" class="tr-texto-centralizado">Descrição</th>
-          <th scope="col" id="tr1">Categoria</th>
+          <th scope="col" id="tr1">Preco</th>
           <th scope="col" id="tr2">Unidade Medida</th>
-          <th scope="col" id="tr-opcao-titulo">Excluir</th>
+          <th scope="col" id="tr-opcao-titulo">Detalhes</th>
         </tr>
       </thead>
       <tbody>
-        <%produtos_da_cesta.forEach(function(produto){ %>
+        <%indicacoes.forEach(function(indicacao){ %>
         <tr>
-          <td scope="row" class="tr-id"><%=produto.id%><input type="hidden" class="id_produto_cesta"
-              value="<%=produto.id%>"></th>
-          <td class="tr-imagem-produto"><img src="<%=produto.imagem%>" alt="imagem" class="imagem-produto"></td>
-          <td class="tr-texto-centralizado"><%=produto.descricao%></td>
-          <td id="tr3"><%=produto.categoria%></td>
-          <td id="tr4"><%=produto.unidade_medida%></td>
-          <td class="opcoes"><i class="far fa-times-circle"></i></td>
+          <td scope="row" class="tr-id"><%=indicacao.id%></th>
+          <td class="tr-imagem-produto"><img src="<%=indicacao.imagem%>" alt="imagem" class="imagem-produto"></td>
+          <td class="tr-texto-centralizado"><%=indicacao.descricao%></td>
+          <td id="tr3">R$ <%=indicacao.preco_venda%></td>
+          <td id="tr4"><%=indicacao.und_descricao%></td>
+          <td class="opcoes"><a href="/produto-selecionado/<%=indicacao.id%>"><i class="fas fa-eye"></i></a></td>
         </tr>
         <% }); %>
       </tbody>
     </table>
   </section>
   <div class="botoes-a-direita">
-    <button type="button" class="btn btn-outline-success" id="adicionar-produto">Adicionar produto</button>
+    <a href="/">
+      <button type="button" class="btn btn-outline-success" id="adicionar-produto">Continuar Comprando</button></a>
   </div>
 </div>

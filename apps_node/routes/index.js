@@ -62,6 +62,25 @@ router.get('/cesta-selecionada/:id', (req, res, next) => {
   indexController.listarCestaSelecionada(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
+//Rota para renderizar a pagina de produto selecionado
+router.get('/produto-selecionado/:id', (req, res, next) => {
+  indexController.exibirProdutoSelecionadoNaHome(req, res, next);
+});
+//------------------------------------------------------------------------------------------------------
+
+
+
+
+//Rota para renderizar a pagina de login
+router.get('/teste1', (req, res, next) => {
+  usuarioController.teste1(req, res, next);
+});
+//------------------------------------------------------------------------------------------------------
+//Rota para renderizar a pagina de login
+router.get('/teste2', (req, res, next) => {
+  usuarioController.teste2(req, res, next);
+});
+//------------------------------------------------------------------------------------------------------
 //Rota para renderizar a pagina de login
 router.get('/teste', (req, res, next) => {
   res.render('teste', { body: [] });

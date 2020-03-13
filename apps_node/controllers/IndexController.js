@@ -65,6 +65,13 @@ const inscrever = (req, res, next) => {
   });
 };
 //------------------------------------------------------------------------------------------------------
+const renderizarPaginaProdutoSelecionado = (req, res, next, produto, indicacoes) => {
+  res.render('produto-selecionado', {
+    rotulo: 'Produto Selecionado',
+    produto, indicacoes
+  });
+};
+//------------------------------------------------------------------------------------------------------
 const carregarIndex = (req, res, next) => {
   let produto = new Produto();
   let cesta = new Cesta();
@@ -123,5 +130,18 @@ const listarCestaSelecionada = (req, res, next) => {
   });
 };
 //------------------------------------------------------------------------------------------------------
+const exibirProdutoSelecionadoNaHome = (req, res, next) => {
+  let produto = new Produto();
+  produto.id = req.params.id;
+  produto.listarProdutoSelecionado(produto).then(produtoSelecionado => {
+    produto.abrirProdutosIndicados(produto).then(indicacoes => {
+      renderizarPaginaProdutoSelecionado(req, res, next, produtoSelecionado[0], indicacoes);
+      //res.send(produto);
+    });
+  }).catch(err => {
+    res.send(err.message);
+  });
+};
+//------------------------------------------------------------------------------------------------------
 
-module.exports = { inscrever, carregarIndex, carregarMercearia, carregarCadastro, listarCestaSelecionada };
+module.exports = { inscrever, carregarIndex, carregarMercearia, carregarCadastro, listarCestaSelecionada, exibirProdutoSelecionadoNaHome };

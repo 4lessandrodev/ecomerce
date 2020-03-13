@@ -2,7 +2,7 @@
 
       <!-- MODAL COM A LISTA DE PRODUTOS DISPONÍVEIS  -->
       <!----------------------------------------------------------------------->
-      <section style="position:fixed; left:40%; z-index: 5;">
+      <section id="sessao-lista-produtos">
         <div class="display-none fade show" id="lista-produtos" tabindex="10" role="dialog"
           aria-labelledby="lista-produtos" aria-hidden="true">
           <div class="modal-dialog modal-dialog-scrollable" role="document">
@@ -18,12 +18,12 @@
                 <!--LISTAR PRODUTOS ADICIONAIS AQUI-->
                 <!----------------------------------------------------------------------->
                 <div class="list-group">
-                  <%produtos.forEach(function(produto){ %>
+                  <%produtos.forEach(function(item){ %>
                   <button type="button" class="list-group-item list-group-item-action"
                     onclick="Utils.adicionarProdutoNaCesta(this)">
-                    <img src="<%=produto.imagem%>" style="width: 1.8em; margin: 0 0.5em;" alt="imagem">
-                    <%=produto.id%> - <%=produto.descricao%>
-                    <input type="hidden" value="<%=produto.id%>">
+                    <img src="<%=item.imagem%>" style="width: 1.8em; margin: 0 0.5em;" alt="imagem">
+                    <%=item.id%> - <%=item.descricao%> - <%=item.categoria%> - <%=item.descricao_und%>
+                    <input type="hidden" value="<%=item.id%>">
                   </button><% }); %>
                 </div>
                 <!----------------------------------------------------------------------->
@@ -52,7 +52,8 @@
               <div class="form-group col-md-2" id="div-imagem-editar" onclick="Utils.uploadImg(this)">
                 <label for="imagem" class="caixaImg">
                   <input type="hidden" value="<%=cesta.imagem%>" name="imagem">
-                  <input type="file" hidden id="imagem-editar-input" accept="image/png" value="<%=cesta.imagem%>">
+                  <input type="file" hidden id="imagem-editar-input" accept="image/png, image/jpeg, image/jpg"
+                    value="<%=cesta.imagem%>">
                   <img src="<%=cesta.imagem%>" alt="Imagem" class="imagem rounded-circle" id="imagem-editar-img">
                   <div class="sobreposicao">
                     <h5 class="texto">Adicionar Imagem</h5>
@@ -110,7 +111,8 @@
               <label for="produtos"><strong>Produtos da Cesta</strong></label>
               <select class="mdb-select md-form form-control" size="5" name="produtos" id="produtos">
                 <%produtos_da_cesta.forEach(function(produto){ %>
-                <option value="<%= produto.id%>"><%=produto.id%> - <%=produto.descricao%>
+                <option value="<%= produto.id%>"><%= produto.id%> - <%=produto.descricao%> - <%=produto.categoria%> -
+                  <%=produto.unidade_medida%>
                   <% }); %></option>
               </select>
               <div class="botoes-a-direita" style="margin: 0;">

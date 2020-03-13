@@ -87,6 +87,45 @@ class UsuarioModel {
     });
   }
 
+
+  //USANDO O NOT IN PARA SELECIONAR UM INTERVALO DE DADOS NO BANCO 
+  selecionarIntervaloInverso(array) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT * FROM tb_usuarios WHERE id NOT IN(${array})`, (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  /**
+   SELECT código_empregado, nome, data_nascimento, cidade
+  FROM empregados
+  WHERE codigo_empregado in(3,7,9,11,14);
+  --------------------
+  SELECT código_empregado, nome, data_nascimento, cidade
+  FROM empregados
+  WHERE codigo_empregado not in(3,7,9,11,14)
+   */
+
+  //USANDO O IN PARA SELECIONAR UM INTERVALO DE DADOS NO BANCO 
+  selecionarIntervalo(array) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT * FROM tb_usuarios WHERE id IN(${array})`, (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+
+  }
 }
 
 module.exports = UsuarioModel;

@@ -10,8 +10,8 @@
     <div class="row item">
 
       <% cestas.forEach(function(cesta){ %>
-      <div class="col-lg-4 col-md-4 col-sm-6" data-row="<%= JSON.stringify(cesta)%>">
-        <a href="<%=cesta.imagem%>" class="fh5co-card-item image-popup" onclick="Utils.getItemById(this)">
+      <div class="col-lg-4 col-md-4 col-sm-6">
+        <a href="/cesta-selecionada/<%=cesta.id%>" class="fh5co-card-item">
           <input type="hidden" value="<%=cesta.id%>" class="item-id">
           <figure>
             <div class="overlay">

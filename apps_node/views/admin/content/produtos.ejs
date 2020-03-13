@@ -15,7 +15,7 @@
             <div class="form-group col-md-2" id="div-imagem-nova" onclick="Utils.uploadImg(this)">
               <label for=" imagem" class="caixaImg">
                 <input type="hidden" value="/images/images/SemImagem-300x300px.png" name="imagem">
-                <input type="file" hidden id="imagem-nova-input" accept="image/png">
+                <input type="file" hidden id="imagem-nova-input" accept="image/png, image/jpeg, image/jpg">
                 <img src="./../images/images/SemImagem-300x300px.png" alt="Imagem" class="imagem rounded-circle"
                   id="imagem-nova-img">
                 <div class="sobreposicao">
@@ -144,7 +144,7 @@
               <td><% if(produto.status){ %>Ativo<% }else{ %>Bloqueado<% }; %></td>
               <td>
                 <button class=" btn btn-excluir" onclick="excluirItem(this)"> <input type="hidden"
-                    value="<%=cesta.id%>"><i class="fas fa-trash-alt"></i></button>
+                    value="<%=produto.id%>"><i class="fas fa-trash-alt"></i></button>
               </td>
               <td><a href="/admin/editar-produto/<%=produto.id%>">
                   <button class="btn btn-editar"><i class="fa fa-pencil-alt"></i></button></a>

@@ -141,3 +141,26 @@ table ol li:hover {
   color: darkgreen;
   background-color: white;
 }
+
+
+#sessao-lista-produtos {
+  position: fixed;
+  left: 1%;
+  z-index: 200;
+  top: 1%;
+}
+
+tbody tr:hover {
+  background-color: rgb(221, 235, 198) !important;
+  cursor: pointer;
+}
+
+@media only screen and (min-width: 800px) {
+
+  #sessao-lista-produtos {
+    position: fixed;
+    left: 35%;
+    z-index: 200;
+    top: 1%;
+  }
+}

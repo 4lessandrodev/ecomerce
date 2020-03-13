@@ -45,5 +45,22 @@ const entrar = (req, res, next) => {
   });
 };
 
+//----------------------------------------------------------
+//TESTE DE SELEÇÃO DE INTERVALO PASSANDO UM ARRAY COMO PARAMETRO
+const teste1 = (req, res, next) => {
+  let usuario = new Usuario();
+  usuario.selecionarIntervalo('26,44,46').then(result => {
+    res.send(result);
+  });
+};
+//----------------------------------------------------------
+//TESTE DE SELEÇÃO DE INTERVALO PASSANDO UM ARRAY COMO PARAMETRO
+const teste2 = (req, res, next) => {
+  let usuario = new Usuario();
+  usuario.selecionarIntervaloInverso('26,44,46,49,60').then(result => {
+    res.send(result);
+  });
+};
 
-module.exports = { salvarUsuario, editarUsuario, entrar };
+
+module.exports = { salvarUsuario, editarUsuario, entrar, teste1, teste2 };
