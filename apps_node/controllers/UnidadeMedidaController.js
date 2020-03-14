@@ -25,7 +25,8 @@ const salvarUndMed = (req, res, next) => {
   und.salvarUnidadeMedida(und).then(und => {
     res.redirect('unidade-medida');
   }).catch(err => {
-    res.send(und);
+    console.log(err.message);
+    res.send(err.message);
   });
 };
 //------------------------------------------------------------------
@@ -38,7 +39,7 @@ const editarUndMed = (req, res, next) => {
     });
   }).catch(err => {
     console.log(err.message);
-    res.send(und);
+    res.send(err.message);
   });
 };
 //------------------------------------------------------------------
@@ -48,7 +49,7 @@ const listarTodasUndMed = (req, res, next) => {
     renderizar(req, res, next, unds);
   }).catch(err => {
     console.log(err.message);
-    res.send(und);
+    res.send(err.message);
   });
 };
 //------------------------------------------------------------------
@@ -57,7 +58,8 @@ const listarUndMedAtivas = (req, res, next) => {
   und.listarUnidadesMedidaAtivas(und).then(und => {
     res.send(und);
   }).catch(err => {
-    res.send(und);
+    console.log(err.message);
+    res.send(err.message);
   });
 };
 //------------------------------------------------------------------
@@ -68,7 +70,8 @@ const desativarUndMed = (req, res, next) => {
   und.desabilitarUnidadeMedida(und).then(result => {
     res.send(result);
   }).catch(err => {
-    res.send(und);
+    console.log(err.message);
+    res.send(err.message);
   });
 };
 

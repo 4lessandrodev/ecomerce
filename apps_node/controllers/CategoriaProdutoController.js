@@ -23,6 +23,7 @@ const salvarCategoria = (req, res, next) => {
   categoria.salvarCategoria(categoria).then(categoria => {
     res.redirect('categoria-produtos');
   }).catch(err => {
+    console.log(err.message);
     res.send(err);
   });
 };
@@ -32,6 +33,7 @@ const listarTodasCategorias = (req, res, next) => {
   categoria.listarTodasCategorias(categoria).then(categorias => {
     renderizarPaginaCategoria(req, res, next, categorias);
   }).catch(err => {
+    console.log(err.message);
     return err;
   });
 };
@@ -41,6 +43,7 @@ const listarCategoriasAtivas = (req, res, next) => {
   categoria.listarCategoriasAtivas(categoria).then(categorias => {
     renderizarPaginaCategoria(req, res, next, categorias);
   }).catch(err => {
+    console.log(err.message);
     return err;
   });
 };
@@ -55,6 +58,7 @@ const editarCategoria = (req, res, next) => {
       return err;
     });
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -66,6 +70,7 @@ const desabilitarCategoria = (req, res, next) => {
   categoria.desabilitarCategoria(categoria).then(result => {
     res.send(result);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };

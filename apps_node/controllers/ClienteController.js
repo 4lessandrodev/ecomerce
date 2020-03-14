@@ -25,6 +25,7 @@ const salvarCliente = (req, res, next) => {
   cliente.salvarCliente(cliente).then(result => {
     res.redirect('/');
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -35,6 +36,7 @@ const editarCliente = (req, res, next) => {
   cliente.atualizarCliente(cliente).then(cliente => {
     res.send(cliente);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -46,6 +48,7 @@ const desabilitarCliente = (req, res, next) => {
   cliente.desabilitarCliente(cliente).then(cliente => {
     res.send(cliente);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -55,6 +58,7 @@ const listarClientes = (req, res, next) => {
   cliente.listarClientes(cliente).then(clientes => {
     res.send(clientes);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };

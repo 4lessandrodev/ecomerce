@@ -52,6 +52,7 @@ const salvarCesta = (req, res, next) => {
   cesta.salvarCesta(cesta).then(cesta => {
     res.redirect('cesta');
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -69,11 +70,24 @@ const editarCesta = (req, res, next) => {
         produto.listarTodosProdutos(produto).then(produtos => {
           produtosDeCesta.listarProdutosDeCestas(produtosDeCesta).then(produtos_de_cestas => {
             renderizar(req, res, next, cestas, categorias, produtos, produtos_de_cestas);
+          }).catch(err => {
+            console.log(err.message);
+            res.send(err.message);
           });
+        }).catch(err => {
+          console.log(err.message);
+          res.send(err.message);
         });
+      }).catch(err => {
+        console.log(err.message);
+        res.send(err.message);
       });
+    }).catch(err => {
+      console.log(err.message);
+      res.send(err.message);
     });
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -86,6 +100,7 @@ const desabilitarCesta = (req, res, next) => {
   cesta.desabilitarCesta(cesta).then(result => {
     res.send(result);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -95,6 +110,7 @@ const listarCestasAtivas = (req, res, next) => {
   cesta.listarCestasAtivas(cesta).then(cestas => {
     renderizar(req, res, next, cestas);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -109,10 +125,20 @@ const listarTodasCestas = (req, res, next) => {
         let produtosDeCesta = new ProdutosDeCesta();
         produtosDeCesta.listarProdutosDeCestas(produtosDeCesta).then(produtos_de_cestas => {
           renderizar(req, res, next, cestas, categorias, produtos, produtos_de_cestas);
+        }).catch(err => {
+          console.log(err.message);
+          res.send(err.message);
         });
+      }).catch(err => {
+        console.log(err.message);
+        res.send(err.message);
       });
+    }).catch(err => {
+      console.log(err.message);
+      res.send(err.message);
     });
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -128,14 +154,21 @@ const listarCestaSelecionada = (req, res, next) => {
       produto.listarTodosProdutos(produto).then(produtos => {
         produtosDeCesta.listarDescricaoProdutosDeUmaCestaEspecifica(produtosDeCesta).then(produtos_da_cesta => {
           renderizarPaginaEditar(req, res, next, cesta[0], categorias, produtos, produtos_da_cesta);
+        }).catch(err => {
+          console.log(err.message);
+          res.send(err.message);
         });
+      }).catch(err => {
+        console.log(err.message);
+        res.send(err.message);
       });
+    }).catch(err => {
+      console.log(err.message);
+      res.send(err.message);
     });
   }).catch(err => {
     res.send(err.message);
   });
-
-
 };
 //---------------------------------------------------------------------------------------------
 

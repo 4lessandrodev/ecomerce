@@ -27,6 +27,7 @@ const salvarLoja = (req, res, next) => {
   loja.salvarLoja(loja).then(loja => {
     res.redirect('loja');
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -39,9 +40,16 @@ const editarLoja = (req, res, next) => {
     loja.listarTodasLojas(loja).then(lojas => {
       regiao.listarRegioesAtivas(regiao).then(regioes => {
         renderizar(req, res, next, lojas, regioes);
+      }).catch(err => {
+        console.log(err.message);
+        res.send(err.message);
       });
+    }).catch(err => {
+      console.log(err.message);
+      res.send(err.message);
     });
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -53,6 +61,7 @@ const desabilitarLoja = (req, res, next) => {
   loja.desabilitarLoja(loja).then(loja => {
     res.send(loja);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -62,6 +71,7 @@ const listarLojasAtivas = (req, res, next) => {
   loja.listarLojasAtivas(loja).then(result => {
     res.send(result);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -74,6 +84,7 @@ const listarTodasLojas = (req, res, next) => {
       renderizar(req, res, next, lojas, regioes);
     });
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };

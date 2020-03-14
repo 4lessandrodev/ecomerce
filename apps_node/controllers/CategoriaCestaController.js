@@ -7,16 +7,24 @@ const renderizarPaginaCategoria = (req, res, next, categorias) => {
     data: '',
     navbar: true,
     pagina: 'Categoria cestas',
-    btnLabel: 'Nova categoria'
+    btnLabel: 'Nova categoria',
+
+
+    btn: {
+      label: 'Voltar',
+      classe: 'display-none',
+      classe2: '',
+      caminho: '/admin'
+    }
   });
 };
 //--------------------------------------------------------------------------------
 const salvarCategoria = (req, res, next) => {
   let categoria = new CategoriaCestaModel(req.body.descricao, req.body.status);
-  console.log(categoria);
   categoria.salvarCategoriaCesta(categoria).then(categoria => {
     res.redirect('categoria-cestas');
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -38,10 +46,10 @@ const desabilitarCategoria = (req, res, next) => {
   let categoria = new CategoriaCestaModel();
   categoria.id = req.params.id;
   categoria.categoria_c_excluida = 1;
-  console.log(categoria);
   categoria.desabilitarCategoriaCesta(categoria).then(result => {
     res.send(result);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -53,6 +61,7 @@ const listarTodasCategorias = (req, res, next) => {
       renderizarPaginaCategoria(req, res, next, categorias);
     });
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -62,6 +71,7 @@ const listarCategoriasAtivas = (req, res, next) => {
   categoria.listarCategoriaCestasAtivas(categoria).then(categoria => {
     res.send(categoria);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };

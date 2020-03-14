@@ -6,6 +6,7 @@ const salvarPedido = (req, res, next) => {
   pedido.salvarPedido(pedido).then(pedido => {
     res.send(pedido);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -16,6 +17,7 @@ const editarPedido = (req, res, next) => {
   pedido.atualizarPedido(pedido).then(pedido => {
     res.send(pedido);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -26,6 +28,7 @@ const excluirPedido = (req, res, next) => {
   pedido.excluirPedido(pedido).then(pedido => {
     res.send(pedido);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -35,6 +38,7 @@ const listarPedidos = (req, res, next) => {
   pedido.listarPedidos(pedido).then(pedidos => {
     res.send(pedidos);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };

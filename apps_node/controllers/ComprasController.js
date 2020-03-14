@@ -6,6 +6,7 @@ const salvarCompra = (req, res, next) => {
   compra.salvarCompra(compra).then(compra => {
     res.send(compra);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -16,6 +17,7 @@ const editarCompra = (req, res, next) => {
   compra.atualizarCompra(compra).then(compra => {
     res.send(compra);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -26,6 +28,7 @@ const excluirCompra = (req, res, next) => {
   compra.excluirCompra(compra).then(compra => {
     res.send(compra);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -35,6 +38,7 @@ const listarCompras = (req, res, next) => {
   compra.listarCompra(compra).then(compras => {
     res.send(compras);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };

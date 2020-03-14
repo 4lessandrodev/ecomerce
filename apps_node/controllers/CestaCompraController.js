@@ -6,6 +6,7 @@ const salvarCestaCompra = (req, res, next) => {
   cestaCompra.salvarCestaCompra(cestaCompra).then(cestaCompra => {
     res.send(cestaCompra);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -16,6 +17,7 @@ const editarCestaCompra = (req, res, next) => {
   cestaCompra.atualizarCestaCompra(cestaCompra).then(cestaCompra => {
     res.send(cestaCompra);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -26,6 +28,7 @@ const excluirCestaCompra = (req, res, next) => {
   cestaCompra.excluirCestaCompra(cestaCompra).then(cestaCompra => {
     res.send(cestaCompra);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -35,6 +38,7 @@ const listarCestaCompra = (req, res, next) => {
   cestaCompra.listarCestaCompra(cestaCompra).then(cestasCompra => {
     res.send(cestasCompra);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };

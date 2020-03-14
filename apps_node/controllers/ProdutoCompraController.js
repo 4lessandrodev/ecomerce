@@ -7,6 +7,7 @@ const salvarProdutoCompra = (req, res, next) => {
   produtoCompra.salvarProdutoCompra(produtoCompra).then(produtoCompra => {
     res.send(produtoCompra);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -17,6 +18,7 @@ const editarProdutoCompra = (req, res, next) => {
   produtoCompra.atualizarProdutoCompra(produtoCompra).then(produtoCompra => {
     res.send(produtoCompra);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -27,6 +29,7 @@ const excluirProdutoCompra = (req, res, next) => {
   produtoCompra.excluirProdutoCompra(produtoCompra).then(produtoCompra => {
     res.send(produtoCompra);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -36,6 +39,7 @@ const listarProdutoCompra = (req, res, next) => {
   produtoCompra.listarProdutoCompra(produtoCompra).then(produtoCompra => {
     res.send(produtoCompra);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };

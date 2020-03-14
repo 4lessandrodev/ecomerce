@@ -16,6 +16,7 @@ const editarPlanoCompra = (req, res, next) => {
   plano.atualizarPlanoCompra(plano).then(plano => {
     res.send(plano);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -25,6 +26,7 @@ const listarPlanoCompra = (req, res, next) => {
   plano.listarPlanoCompra(plano).then(plano => {
     res.send(plano);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -35,6 +37,7 @@ const excluirPlanoCompra = (req, res, next) => {
   plano.excluirPlanoCompra(plano).then(plano => {
     res.send(plano);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };

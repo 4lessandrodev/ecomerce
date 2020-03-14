@@ -20,7 +20,6 @@ export class ProdutoController {
 
   comprarProduto(compra, produto) {
     produto._id_compra = compra;
-    console.log('Chegou na função comprar produto da classe: Produto Model');
     fetch(`/comprar-produto`, {
       headers: { "Content-Type": "application/json" },
       method: 'POST',

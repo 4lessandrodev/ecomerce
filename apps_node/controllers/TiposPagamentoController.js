@@ -6,6 +6,7 @@ const salvarTipoPg = (req, res, next) => {
   tipoPg.salvarFormaPagamento(tipoPg).then(tipoPg => {
     res.send(tipoPg);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -16,6 +17,7 @@ const editarTipoPg = (req, res, next) => {
   tipoPg.atualizarFormaPagamento(tipoPg).then(tipoPg => {
     res.send(tipoPg);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -25,6 +27,7 @@ const listarTodosTipoPg = (req, res, next) => {
   tipoPg.listarTodasFormasPagamento(tipoPg).then(tipoPg => {
     res.send(tipoPg);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -34,6 +37,7 @@ const listarTipoPgAtivo = (req, res, next) => {
   tipoPg.listarFormasPagamentoAtivas(tipoPg).then(tipoPg => {
     res.send(tipoPg);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -45,6 +49,7 @@ const desativarTipoPg = (req, res, next) => {
   tipoPg.desabilitarFormaPagamento(tipoPg).then(tipoPg => {
     res.send(tipoPg);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };

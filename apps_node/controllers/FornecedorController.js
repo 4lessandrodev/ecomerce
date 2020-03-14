@@ -24,6 +24,7 @@ const salvarFornecedor = (req, res, next) => {
   fornecedor.salvarFornecedor(fornecedor).then(fornecedor => {
     res.redirect('fornecedor');
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -36,6 +37,7 @@ const editarFornecedor = (req, res, next) => {
       renderizar(req, res, next, fornecedores);
     });
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -45,6 +47,7 @@ const listarFornecedores = (req, res, next) => {
   fornecedor.listarTodosFornecedores(fornecedor).then(fornecedores => {
     renderizar(req, res, next, fornecedores);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -56,6 +59,7 @@ const desabilitarFornecedor = (req, res, next) => {
   fornecedor.desabilitarFornecedor(fornecedor).then(result => {
     res.send(result);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };

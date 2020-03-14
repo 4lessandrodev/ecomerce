@@ -53,6 +53,7 @@ const salvarProduto = (req, res, next) => {
   produto.salvarProduto(produto).then(produto => {
     res.redirect('produto');
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -71,12 +72,20 @@ const editarProduto = (req, res, next) => {
       categoria.listarCategoriasAtivas(categoria).then(categorias => {
         unidade.listarUnidadesMedidaAtivas(unidade).then(unidades => {
           renderizar(req, res, next, produtos, categorias, unidades);
+        }).catch(err => {
+          console.log(err.message);
+          res.send(err.message);
         });
+      }).catch(err => {
+        console.log(err.message);
+        res.send(err.message);
       });
     }).catch(err => {
+      console.log(err.message);
       res.send(err.message);
     });
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -87,6 +96,7 @@ const listarProdutoEspeciaisAtivos = (req, res, next) => {
   produto.listarProdutosEspeciaisAtivos(produto).then(produto => {
     res.send(produto);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -99,9 +109,16 @@ const listarTodosProdutos = (req, res, next) => {
     categoria.listarCategoriasAtivas(categoria).then(categorias => {
       unidade.listarUnidadesMedidaAtivas(unidade).then(unidades => {
         renderizar(req, res, next, produtos, categorias, unidades);
+      }).catch(err => {
+        console.log(err.message);
+        res.send(err.message);
       });
+    }).catch(err => {
+      console.log(err.message);
+      res.send(err.message);
     });
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -116,9 +133,16 @@ const exibirProdutoSelecionado = (req, res, next) => {
       unidade.listarUnidadesMedidaAtivas(unidade).then(unidades => {
         renderizarEdicao(req, res, next, produto[0], categorias, unidades);
         //res.send(produto);
+      }).catch(err => {
+        console.log(err.message);
+        res.send(err.message);
       });
+    }).catch(err => {
+      console.log(err.message);
+      res.send(err.message);
     });
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -130,6 +154,7 @@ const desativarProduto = (req, res, next) => {
   produto.desabilitarProduto(produto).then(produto => {
     res.send(produto);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };

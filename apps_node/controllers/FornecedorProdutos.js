@@ -6,6 +6,7 @@ const salvarFornecedorParaProduto = (req, res, next) => {
   fpp.salvarFornecedorParaProduto(fpp).then(forn => {
     res.send(forn);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -16,6 +17,7 @@ const editarFornecedorParaProduto = (req, res, next) => {
   fpp.atualizarFornecedoresParaProduto(fpp).then(forn => {
     res.send(forn);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -26,6 +28,7 @@ const excluirFornecedorParaProduto = (req, res, next) => {
   fpp.excluirFornecedoresParaProduto(fpp).then(forn => {
     res.send(forn);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -35,6 +38,7 @@ const listarFornecedoresParaProduto = (req, res, next) => {
   fpp.listarFornecedoresParaProduto(fpp).then(fornecedores => {
     res.send(fornecedores);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };

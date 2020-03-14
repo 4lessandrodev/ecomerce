@@ -25,6 +25,7 @@ const salvarRegiao = (req, res, next) => {
   regiao.salvarRegiao(regiao).then(result => {
     res.redirect('regiao');
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -37,6 +38,7 @@ const editarRegiao = (req, res, next) => {
       renderizar(req, res, next, regioes);
     });
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -46,6 +48,7 @@ const listarTodasRegioes = (req, res, next) => {
   regiao.listarTodasRegioes(regiao).then(regioes => {
     renderizar(req, res, next, regioes);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -55,6 +58,7 @@ const listarRegioesAtivas = (req, res, next) => {
   regiao.listarRegioesAtivas(regiao).then(regioes => {
     res.send(regioes);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -66,6 +70,7 @@ const desativarRegiao = (req, res, next) => {
   regiao.desabilitarRegiao(regiao).then(result => {
     res.send(result);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };

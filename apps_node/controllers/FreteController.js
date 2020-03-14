@@ -27,6 +27,7 @@ const salvarFrete = (req, res, next) => {
   frete.salvarFrete(frete).then(result => {
     res.redirect('frete');
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -42,10 +43,20 @@ const editarFrete = (req, res, next) => {
       loja.listarLojasAtivasParaFrete(loja).then(lojas => {
         regiao.listarRegioesAtivas(regiao).then(regioes => {
           renderizar(req, res, next, fretes, lojas, regioes);
+        }).catch(err => {
+          console.log(err.message);
+          res.send(err.message);
         });
+      }).catch(err => {
+        console.log(err.message);
+        res.send(err.message);
       });
+    }).catch(err => {
+      console.log(err.message);
+      res.send(err.message);
     });
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -57,6 +68,7 @@ const desabilitarFrete = (req, res, next) => {
   frete.desabilitarFrete(frete).then(result => {
     res.send(result);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -69,7 +81,11 @@ const listarFretes = (req, res, next) => {
     loja.listarLojasAtivasParaFrete(loja).then(lojas => {
       regiao.listarRegioesAtivas(regiao).then(regioes => {
         renderizar(req, res, next, fretes, lojas, regioes);
+      }).catch(err => {
+        res.send(err.message);
       });
+    }).catch(err => {
+      res.send(err.message);
     });
   }).catch(err => {
     res.send(err.message);

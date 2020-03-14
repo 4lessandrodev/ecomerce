@@ -11,7 +11,7 @@ const CestaCompra = require('./../models/CestaCompraModel');
 
 
 //------------------------------------------------------------------------------------------------------
-const renderizar = (req, res, next, produtos, cestas) => {
+const renderizar = (req, res, next, produtos = [], cestas = []) => {
   res.render('index', {
     produtos,
     cestas,
@@ -25,7 +25,7 @@ const renderizar = (req, res, next, produtos, cestas) => {
   });
 };
 //------------------------------------------------------------------------------------------------------
-const renderizarPaginaCestas = (req, res, next, produtos, cestas) => {
+const renderizarPaginaCestas = (req, res, next, produtos = [], cestas = []) => {
   res.render('cestas', {
     produtos,
     cestas,
@@ -40,7 +40,7 @@ const renderizarPaginaCestas = (req, res, next, produtos, cestas) => {
 };
 //------------------------------------------------------------------------------------------------------
 //Rota para cesta selecionada
-const renderizarPaginaCestaSelecionada = (req, res, next, cesta, produtos, produtos_da_cesta) => {
+const renderizarPaginaCestaSelecionada = (req, res, next, cesta = [], produtos = [], produtos_da_cesta = []) => {
   //res.send(produtos_da_cesta);
   //res.send(cesta);
   res.render('cesta-selecionada', {
@@ -51,7 +51,7 @@ const renderizarPaginaCestaSelecionada = (req, res, next, cesta, produtos, produ
   });
 };
 //------------------------------------------------------------------------------------------------------
-const renderizarPaginaCadastroUsuario = (req, res, next, regioes) => {
+const renderizarPaginaCadastroUsuario = (req, res, next, regioes = []) => {
   res.render('register', {
     body: req.body,
     regioes
@@ -67,7 +67,7 @@ const inscrever = (req, res, next) => {
   });
 };
 //------------------------------------------------------------------------------------------------------
-const renderizarPaginaProdutoSelecionado = (req, res, next, produto, indicacoes) => {
+const renderizarPaginaProdutoSelecionado = (req, res, next, produto = [], indicacoes = []) => {
   res.render('produto-selecionado', {
     rotulo: 'Produto Selecionado',
     produto, indicacoes
@@ -147,7 +147,7 @@ const exibirProdutoSelecionadoNaHome = (req, res, next) => {
 //------------------------------------------------------------------------------------------------------
 const iniciarCompra = (req, res, next) => {
   //let compra = new Compra(req.body.id_cliente);
-  let compra = new Compra('3');
+  let compra = new Compra('1');
   compra.salvarCompra(compra).then(id_compra => {
     res.send(id_compra);
   }).catch(err => {

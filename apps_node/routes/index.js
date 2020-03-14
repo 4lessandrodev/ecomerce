@@ -22,11 +22,6 @@ router.get('/cestas', (req, res, next) => {
   indexController.carregarMercearia(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
-//Rota para renderizar a pagina de carrinho com os itens adicionados
-router.get('/carrinho', (req, res, next) => {
-  res.render('carrinho', { clientLoged: { name: 'Usuario', street: 'Rua sem nome casa sem numero' } });
-});
-//------------------------------------------------------------------------------------------------------
 //Metodo de postagem do email 
 router.post('/inscrever', (req, res, next) => {
   indexController.inscrever(req, res, next);
@@ -83,6 +78,16 @@ router.post('/comprar-cesta', (req, res, next) => {
   indexController.addCestaNoCarrinho(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
+//Rota para carrinho de compras
+router.get('/carrinho', (req, res, next) => {
+  res.render('carrinho', {
+    rotulo: 'Carrinho', produto: [], indicacoes: []
+  });
+});
+//------------------------------------------------------------------------------------------------------
+
+
+
 
 
 

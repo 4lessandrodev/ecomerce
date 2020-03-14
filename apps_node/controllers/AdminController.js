@@ -25,6 +25,7 @@ const listarInscricoes = (req, res, next) => {
     res.send({ inscricoes, mensagem: null });
   }).catch(err => {
     //Enviar um array vazio para o cliente, pois ocorreu algum erro, tambem enviar a mensagem com o erro
+    console.log(err.message);
     res.send({ inscricoes: [], mensagem: err.message });
   });
 };
@@ -36,6 +37,7 @@ const listarMensagens = (req, res, next) => {
   mensagens.listarMensagens().then(mensagens => {
     res.send({ mensagens, mensagem: null });
   }).catch(err => {
+    console.log(err.message);
     res.send({ mensagens: [], mensagem: err.message });
   });
 };

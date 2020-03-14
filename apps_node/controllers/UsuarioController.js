@@ -31,6 +31,7 @@ const editarUsuario = (req, res, next) => {
   usuario.alterarSenha(usuario).then(usuario => {
     res.send(usuario);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
@@ -41,6 +42,7 @@ const entrar = (req, res, next) => {
   usuario.entrar(usuario).then(usuario => {
     res.send(usuario);
   }).catch(err => {
+    console.log(err.message);
     res.send(err.message);
   });
 };
