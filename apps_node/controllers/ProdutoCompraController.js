@@ -41,4 +41,9 @@ const listarProdutoCompra = (req, res, next) => {
 };
 
 
-module.exports = { salvarProdutoCompra, editarProdutoCompra, excluirProdutoCompra, listarProdutoCompra };
+module.exports = {
+  salvarProdutoCompra,
+  editarProdutoCompra,
+  excluirProdutoCompra,
+  listarProdutoCompra
+};

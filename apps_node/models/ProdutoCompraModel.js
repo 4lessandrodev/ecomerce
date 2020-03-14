@@ -1,9 +1,11 @@
 const conect = require('./../config/CONECT_BD');
 class ProdutoCompraModel {
-  constructor (id_produto, id_compra) {
+  constructor (id_produto, id_compra, quantidade, preco_unitario) {
     this._id = null;
     this._id_produto = id_produto;
     this._id_compra = id_compra;
+    this._quantidade = quantidade;
+    this._preco_unitario = preco_unitario;
   }
   get id_produto() {
     return this._id_produto;
@@ -25,11 +27,23 @@ class ProdutoCompraModel {
   set id_compra(value) {
     this._id_compra = value;
   }
+  get preco_unitario() {
+    return this._preco_unitario;
+  }
+  set preco_unitario(value) {
+    this._preco_unitario = value;
+  }
+  get quantidade() {
+    return this._quantidade;
+  }
+  set quantidade(value) {
+    this._quantidade = value;
+  }
 
   salvarProdutoCompra(produtoCompra) {
     return new Promise((resolve, reject) => {
-      conect.query(`INSERT INTO tb_produtos_compra(id_produto, id_compra) VALUES(?,?)`, [
-        produtoCompra._id_cesta, produtoCompra._id_compra
+      conect.query(`INSERT INTO tb_produtos_compra(id_produto, id_compra, quantidade, preco_unitario) VALUES(?,?,?,?)`, [
+        produtoCompra._id_produto, produtoCompra._id_compra, produtoCompra._quantidade, produtoCompra._preco_unitario
       ], (err, result) => {
         if (err) {
           console.log(err.message);
@@ -60,8 +74,8 @@ WHERE produto.id = cc.id_produto AND pedido.id_compras = cc.id_compra AND client
 
   atualizarProdutoCompra(produtoCompra) {
     return new Promise((resolve, reject) => {
-      conect.query(`UPDATE tb_produtos_compra SET id_cesta = ?, id_compra = ? WHERER id = ?`, [
-        cestaCompra._id_cesta, cestaCompra._id_compra, cestaCompra._id
+      conect.query(`UPDATE tb_produtos_compra SET id_produto = ?, id_compra = ?, quantidade = ?, preco_unitario = ?, WHERER id = ?`, [
+        produtoCompra._id_produto, produtoCompra._id_compra, produtoCompra._quantidade, produtoCompra._preco_unitario, produtoCompra._id
       ], (err, result) => {
         if (err) {
           console.log(err.message);

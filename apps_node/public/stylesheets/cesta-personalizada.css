@@ -110,7 +110,7 @@ table .opcoes i {
 
 #imagem-principal-cesta:hover {
   cursor: pointer;
-  filter: sepia(50%);
+  filter: sepia(15%);
 }
 
 tbody tr:hover {
@@ -190,14 +190,15 @@ tbody tr:hover {
     width: 100%;
     height: 28em;
     padding: 1em 3em;
+
+    transition: 0.5s;
+    /* The default, as in, you get this without defining anything */
+    transition-timing-function: ease;
+    /* Also the same as */
+    transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    object-fit: fill;
   }
 
-  #imagem-principal-cesta:hover {
-    cursor: pointer;
-    box-shadow: 2px 4px 10px #ccc;
-    border-radius: 15px;
-    filter: sepia(50%);
-  }
 
   #adicionar-produto {
     margin: 2em 0;
@@ -211,6 +212,15 @@ tbody tr:hover {
 
   #categoria {
     font-size: 1.1em;
+  }
+
+
+  #imagem-principal-cesta:hover {
+    cursor: pointer;
+    filter: sepia(15%);
+    filter: brightness(110%);
+    -webkit-filter: brightness(110%);
+    object-fit: cover;
   }
 
 

@@ -6,6 +6,7 @@ export class CarrinhoModel {
     this._priceTotal = priceTotal;
     this._itensDescription = itensDescription;
     this._mainImage = image;
+    this._id_compra = localStorage.getItem('id_compra');
   }
 
   get mainCode() {
@@ -54,5 +55,55 @@ export class CarrinhoModel {
 
   set image(value) {
     this._mainImage = value;
+  }
+
+  get idCompra() {
+    return localStorage.getItem('id_compra');
+  }
+
+  set idCompra(value) {
+    localStorage.setItem('id_compra', value);
+    this._id_compra = value;
+  }
+
+  obterIdCompra() {
+    let id_compra = this.idCompra();
+    if (id_compra == null || id_compra == undefined || id_compra == '') {
+      //Criar um id de compra
+      this.iniciarCompra();
+    } else {
+      //Adicionar o item ao carrinho
+
+    }
+
+  }
+
+
+  iniciarCompra() {
+
+  }
+
+  criarItem() {
+
+  }
+
+  addItemAoCarrinho(item) {
+    fetch(`/register-user`, {
+      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      body: JSON.stringify(item)
+
+    }).then(response => response.json())
+      .then(json => {
+        if (json.serverStatus == 2) {
+          inputId.value = json.insertId;
+          dados.classList.remove('hidden');
+          login.classList.add('hidden');
+          btnNext.style.display = 'none';
+          document.querySelector('input[name=nome]').focus();
+        } else {
+          swal("Oops!", `Ocorreu um erro ao cadastrar o usuário`, "error");
+        }
+      });
   }
 }

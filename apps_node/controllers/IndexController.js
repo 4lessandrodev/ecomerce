@@ -3,7 +3,9 @@ const Produto = require('./../models/ProdutoModel');
 const Cesta = require('./../models/CestaModel');
 const Regioes = require('./../models/RegiaoModel');
 const ProdutosDeCesta = require('./../models/ProdutosParaCestaModel');
-
+const Compra = require('./../models/CompraModel');
+const ProdutoCompra = require('./../models/ProdutoCompraModel');
+const CestaCompra = require('./../models/CestaCompraModel');
 
 
 
@@ -143,5 +145,45 @@ const exibirProdutoSelecionadoNaHome = (req, res, next) => {
   });
 };
 //------------------------------------------------------------------------------------------------------
+const iniciarCompra = (req, res, next) => {
+  //let compra = new Compra(req.body.id_cliente);
+  let compra = new Compra('3');
+  compra.salvarCompra(compra).then(id_compra => {
+    res.send(id_compra);
+  }).catch(err => {
+    res.send(err.message);
+  });
+};
+//------------------------------------------------------------------------------------------------------
+//Adicionar produto no carrinho 
+const addProdutoNoCarrinho = (req, res, next) => {
+  let produtoCompra = new ProdutoCompra(req.body._id_produto, req.body._id_compra, req.body._quantidade, req.body._preco_unitario);
+  produtoCompra.salvarProdutoCompra(produtoCompra).then(resposta => {
+    res.send(resposta);
+  }).catch(err => {
+    res.send(err.message);
+  });
+};
+//------------------------------------------------------------------------------------------------------
+const addCestaNoCarrinho = (req, res, next) => {
+  //id_cesta, id_compra, quantidade, preco_unitario, produtos
+  let cestaCompra = new CestaCompra(req.body._id_cesta, req.body._id_compra, req.body._quantidade, req.body._preco_unitario, req.body._produtos);
+  cestaCompra.salvarCestaCompra(cestaCompra).then(resposta => {
+    res.send(resposta);
+  }).catch(err => {
+    res.send(err.message);
+  });
+};
 
-module.exports = { inscrever, carregarIndex, carregarMercearia, carregarCadastro, listarCestaSelecionada, exibirProdutoSelecionadoNaHome };
+
+module.exports = {
+  inscrever,
+  carregarIndex,
+  carregarMercearia,
+  carregarCadastro,
+  listarCestaSelecionada,
+  exibirProdutoSelecionadoNaHome,
+  iniciarCompra,
+  addProdutoNoCarrinho,
+  addCestaNoCarrinho
+};

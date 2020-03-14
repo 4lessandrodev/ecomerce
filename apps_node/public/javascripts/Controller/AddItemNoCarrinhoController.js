@@ -74,3 +74,6 @@ function adicionarItemEmLocalStorage(item) {
   location.href = '/';
 }
 
+
+
+

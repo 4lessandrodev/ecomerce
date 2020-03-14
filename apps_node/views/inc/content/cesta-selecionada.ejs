@@ -23,8 +23,8 @@
             </a>
             <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="settings">
               <div class="form-group">
-                <label for="exampleFormControlSelect1">Quantidade</label>
-                <select class="form-control">
+                <label for="quantidade">Quantidade</label>
+                <select class="form-control" id="quantidade" name="quantidade">
                   <option>1</option>
                   <option>2</option>
                   <option>3</option>
@@ -38,8 +38,9 @@
           </div>
         </div>
         <div class="adicionar-produto">
-          <button type="button" class="btn btn-success botao-comprar">Comprar agora</button>
-          <button type="button" class="btn btn-outline-success botao-adicionar-carrinho">Adicionar ao carrinho</button>
+          <button type="button" class="btn btn-success botao-comprar" id="btn-comprar-cesta">Comprar agora</button>
+          <button type="button" class="btn btn-outline-success botao-adicionar-carrinho" id="btn-add-cesta">Adicionar ao
+            carrinho</button>
         </div>
       </div>
     </div>
@@ -60,7 +61,7 @@
       </thead>
       <tbody>
         <%produtos_da_cesta.forEach(function(produto){ %>
-        <tr>
+        <tr class="itens-da-cesta">
           <td scope="row" class="tr-id"><%=produto.id%><input type="hidden" class="id_produto_cesta"
               value="<%=produto.id%>"></th>
           <td class="tr-imagem-produto"><img src="<%=produto.imagem%>" alt="imagem" class="imagem-produto"></td>
@@ -77,3 +78,11 @@
     <button type="button" class="btn btn-outline-success" id="adicionar-produto">Adicionar produto</button>
   </div>
 </div>
+
+<section hidden style="display: none;">
+  <form id="produto-compra" hidden style="display: none;">
+    <input type="hidden" value="<%=cesta.id%>" name="id_cesta" id="id_cesta">
+    <input type="hidden" value="<%=cesta.preco%>" name="preco_unitario" id="preco_unitario">
+  </form>
+</section>
+<script src="./../../javascripts/app.js" type="module"></script>

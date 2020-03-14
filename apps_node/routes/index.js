@@ -67,7 +67,22 @@ router.get('/produto-selecionado/:id', (req, res, next) => {
   indexController.exibirProdutoSelecionadoNaHome(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
-
+//Rota para criar chave de compra inserindo o id do usuario... a qual irá em cada item adicionado no carrinho e no pedido.
+//Amarrando assim item e pedido ao usuário
+router.post('/iniciar-compra', (req, res, next) => {
+  indexController.iniciarCompra(req, res, next);
+});
+//------------------------------------------------------------------------------------------------------
+//Rota para adicionar produto comprado no banco de dados 
+router.post('/comprar-produto', (req, res, next) => {
+  indexController.addProdutoNoCarrinho(req, res, next);
+});
+//------------------------------------------------------------------------------------------------------
+//Rota para adicionar produto comprado no banco de dados 
+router.post('/comprar-cesta', (req, res, next) => {
+  indexController.addCestaNoCarrinho(req, res, next);
+});
+//------------------------------------------------------------------------------------------------------
 
 
 

@@ -1,9 +1,12 @@
 const conect = require('./../config/CONECT_BD');
 class CestaCompraModel {
-  constructor (id_cesta, id_compra) {
+  constructor (id_cesta, id_compra, quantidade, preco_unitario, produtos) {
     this._id = null;
     this._id_cesta = id_cesta;
     this._id_compra = id_compra;
+    this._quantidade = quantidade;
+    this._preco_unitario = preco_unitario;
+    this._produtos = produtos;
   }
   get id_cesta() {
     return this._id_cesta;
@@ -26,11 +29,30 @@ class CestaCompraModel {
     this._id_compra = value;
   }
 
+  get quantidade() {
+    return this._quantidade;
+  }
+  get preco_unitario() {
+    return this._preco_unitario;
+  }
+  get produtos() {
+    return this._produtos;
+  }
+  set quantidade(value) {
+    this._quantidade = value;
+  }
+  set preco_unitario(value) {
+    this._preco_unitario = value;
+  }
+  set produtos(value) {
+    this._produtos = value;
+  }
+
 
   salvarCestaCompra(cestaCompra) {
     return new Promise((resolve, reject) => {
-      conect.query(`INSERT INTO tb_cestas_compra(id_cesta, id_compra) VALUES(?,?)`, [
-        cestaCompra._id_cesta, cestaCompra._id_compra
+      conect.query(`INSERT INTO tb_cestas_compra(id_cesta, id_compra, quantidade, preco_unitario, produtos) VALUES(?,?,?,?,?)`, [
+        cestaCompra._id_cesta, cestaCompra._id_compra, cestaCompra._quantidade, cestaCompra._preco_unitario, cestaCompra._produtos
       ], (err, result) => {
         if (err) {
           console.log(err.message);
@@ -61,8 +83,8 @@ WHERE cesta.id = cc.id_cesta AND pedido.id_compras = cc.id_compra AND cliente.id
 
   atualizarCestaCompra(cestaCompra) {
     return new Promise((resolve, reject) => {
-      conect.query(`UPDATE tb_cestas_compra SET id_cesta = ?, id_compra = ? WHERER id = ?`, [
-        cestaCompra._id_cesta, cestaCompra._id_compra, cestaCompra._id
+      conect.query(`UPDATE tb_cestas_compra SET id_cesta = ?, id_compra = ?, quantidade = ?, preco_unitario = ?, produtos = ? WHERER id = ?`, [
+        cestaCompra._id_cesta, cestaCompra._id_compra, cestaCompra._quantidade, cestaCompra._preco_unitario, cestaCompra._produtos, cestaCompra._id
       ], (err, result) => {
         if (err) {
           console.log(err.message);
