@@ -291,28 +291,20 @@ const carregarCarrinhoDeCompras = (req, res, next) => {
     console.log(err.message);
     res.send(err.message);
   });
-  
-  /*
-  produtos: [], //OK
-  cestas: [], //OK
-  enderecos:
-  [
-    { descricao: 'Entregar em meu endereço', valor: '0', frete: '10.00' }, //OK
-    { descricao: 'Quero retirar em: Loja I - Centro', valor: '1', frete: '0.00' }, //OK
-    { descricao: 'Quero retirar em: Loja II - Zona Oeste', valor: '2', frete: '0.00' } //OK
-  ],
-  frete: '10.00', //OK FILTER(FRETES.DESTINO)
-  total: '52.90', // OK
-  formaPagamento: //CADASTRAR 
-  [
-    'Dinheiro - Na entrega',
-    'Cartão Marter - Na entrega',
-    'Cartão Visa - Na entrega'
-  ], //OK
-  cliente: { nome: 'Alessandro', endereco: 'Avenida Afonso Pena, 50 Centro Itumbiara-GO' } //OK
-  */
 };
 //------------------------------------------------------------------------------------------------------
+//id_compras, ecobag_adicional, id_tipo_pagamento, anotacoes, retirar_na_loja = 0, status = 1
+const salvarPedido = (req, res, next) => {
+  if (verificarUsuarioLogado()) {
+    let pedido = new Pedido(req.body._id_compras, req.body._ecobag_adicional, req.body.id_tipo_pagamento, req.body._anotacoes, req.body._retirar_na_loja, req.body._status);
+    pedido.salvarPedido(pedido).then(result => {
+      res.send(result);
+    }).catch(err => {
+      console.log(err.message);
+      res.send(err.message);
+    });
+  }
+};
 
 module.exports = {
   inscrever,
@@ -326,5 +318,6 @@ module.exports = {
   addCestaNoCarrinho,
   sair,
   verificarUsuarioLogado,
-  carregarCarrinhoDeCompras
+  carregarCarrinhoDeCompras,
+  salvarPedido
 };

@@ -109,19 +109,21 @@
                   </div>
                 </a>
                 
-                <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="settings">
+                <a class="list-group-item list-group-item-action" data-toggle="list" role="tab"
+                  aria-controls="anotacoes">
                   <div class="form-group">
                     <label for="anotacoes">Observações</label>
-                    <textarea class="form-control" id="anotacoes" rows="3" style="resize: vertical;"></textarea>
+                    <textarea class="form-control" id="anotacoes" rows="3" style="resize: vertical;" maxlength="250"></textarea>
                   </div>
                 </a>
                 <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="confirmacao">
                   <div class="adicionar-produto">
                     <button type="button" class="btn btn-success botao-comprar" id="btn-confirmar-pedido">Confirmar
                       pedido</button>
+                      <a href="/">
                       <button type="button" class="btn btn-outline-success botao-adicionar-carrinho"
                       id="btn-continuar-comprando">Continuar
-                      comprando</button>
+                      comprando</button></a>
                     </div>
                   </a>
                 </div>
@@ -143,3 +145,4 @@
             </form>
           </section>
           <script src="./../../javascripts/js/carrinho_compras.js"></script>
+          <script src="./../../javascripts/app.js" type="module"></script>

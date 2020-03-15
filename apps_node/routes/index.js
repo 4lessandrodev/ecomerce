@@ -8,7 +8,6 @@ const clienteController = require('../controllers/ClienteController');
 const produtoCompraController = require('../controllers/ProdutoCompraController');
 
 
-//------------------------------------------------------------------------------------------------------
 //Rota para renderizar a pagina principal  
 router.get('/', (req, res, next) => {
   indexController.carregarIndex(req, res, next);
@@ -88,32 +87,7 @@ router.post('/comprar-cesta', (req, res, next) => {
 //------------------------------------------------------------------------------------------------------
 //Rota para carrinho de compras
 router.get('/carrinho', (req, res, next) => {
-
   indexController.carregarCarrinhoDeCompras(req, res, next);
-/*
-  let logado = (req.session.user != undefined);
-  res.render('carrinho', {
-    logado, //OK
-    rotulo: 'Carrinho', //OK
-    produtos: [], //OK
-    cestas: [], //OK
-    enderecos:
-    [
-      { descricao: 'Entregar em meu endereço', valor: '0', frete: '10.00' }, //OK
-      { descricao: 'Quero retirar em: Loja I - Centro', valor: '1', frete: '0.00' }, //OK
-      { descricao: 'Quero retirar em: Loja II - Zona Oeste', valor: '2', frete: '0.00' } //OK
-    ],
-    frete:'10.00', //OK FILTER(FRETES.DESTINO)
-    total:'52.90', // OK
-    formaPagamento: //CADASTRAR 
-    [
-      'Dinheiro - Na entrega',
-      'Cartão Marter - Na entrega',
-      'Cartão Visa - Na entrega'
-    ], //OK
-    cliente:{nome:'Alessandro', endereco:'Avenida Afonso Pena, 50 Centro Itumbiara-GO'} //OK
-  });
-  */
 });
 //------------------------------------------------------------------------------------------------------
 //Rota para realizar login
@@ -121,7 +95,11 @@ router.post('/login', (req, res, next) => {
   usuarioController.entrar(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
-
+//Rota para realizar login
+router.post('/salvar-pedido', (req, res, next) => {
+  usuarioController.entrar(req, res, next);
+});
+//------------------------------------------------------------------------------------------------------
 
 
 
@@ -136,12 +114,7 @@ router.get('/teste', (req, res, next) => {
 router.get('/teste2', (req, res, next) => {
   res.send(req.session.user);
 });
-//------------------------------------------------------------------------------------------------------
-//Rota para renderizar a pagina de login
-router.get('/teste', (req, res, next) => {
-  res.render('teste', { body: [] });
-});
-//------------------------------------------------------------------------------------------------------
+
 
 
 module.exports = router;
