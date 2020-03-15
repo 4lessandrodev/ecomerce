@@ -116,7 +116,7 @@ WHERE cesta.id = cc.id_cesta AND pedido.id_compras = cc.id_compra AND cliente.id
     return new Promise((resolve, reject) => {
       conect.query(`SELECT ces.id, ces.imagem, ces.descricao, cescom.preco_unitario, cescom.quantidade, (cescom.preco_unitario * cescom.quantidade) AS subtotal
 FROM tb_compras AS com, tb_cestas_compra AS cescom, tb_cestas AS ces
-WHERE ces.id = cescom.id_cesta AND com.id = ? AND com.id_usuario = ? GROUP BY ces.id`, [cestaCompra._id_compra, id_usuario], (err, result) => {
+WHERE ces.id = cescom.id_cesta AND cescom.id_compra = ? AND com.id_usuario = ? GROUP BY ces.id`, [cestaCompra._id_compra, id_usuario], (err, result) => {
           if (err) {
             console.log(err.message);
             reject(err.message);

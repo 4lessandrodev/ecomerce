@@ -107,7 +107,7 @@ class ProdutoCompraModel {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT p.id, p.imagem, p.descricao, pc.preco_unitario, pc.quantidade, (pc.quantidade * pc.preco_unitario) AS subtotal 
 FROM tb_produtos AS p, tb_produtos_compra AS pc, tb_compras AS c 
-WHERE p.id = pc.id_produto AND pc.id_compra = 1 AND c.id_usuario = ? GROUP BY p.id`, [produtoCompra._id_compra, id_usuario], (err, result) => {
+WHERE p.id = pc.id_produto AND pc.id_compra = ? AND c.id_usuario = ? GROUP BY p.id`, [produtoCompra._id_compra, id_usuario], (err, result) => {
           if (err) {
             console.log(err.message);
             reject(err.message);

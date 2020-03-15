@@ -1,5 +1,5 @@
 <div class="container">
-  <section class="carrinho display-non">
+<section class="carrinho <%if(carrinhoVazio){%>display-none<%}%>">
     <!-- Stack the columns on mobile by making one full-width and the other half-width -->
     <div class="row">
       <div class="col-md-8 div-itens">
@@ -134,9 +134,9 @@
           <div class="botoes-a-direita">
           </div>
         </div>
-        <div id="imagem-carrinho-vazio" class="display-none">
+        <div id="imagem-carrinho-vazio" class="<%if(!carrinhoVazio){%>display-none<%}%>">
+          <figure><i class=" far fa-sad-cry"></i></figure>
           <h2>Ah, Não! Vazio...</h3>
-            <figure><i class=" far fa-sad-cry"></i></figure>
           </div>
           
           <section hidden style="display: none;">

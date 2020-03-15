@@ -97,7 +97,7 @@ router.post('/login', (req, res, next) => {
 //------------------------------------------------------------------------------------------------------
 //Rota para realizar login
 router.post('/salvar-pedido', (req, res, next) => {
-  usuarioController.entrar(req, res, next);
+  indexController.salvarPedido(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
 

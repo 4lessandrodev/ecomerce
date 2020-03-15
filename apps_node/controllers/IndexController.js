@@ -11,6 +11,7 @@ const Cliente = require('./../models/ClienteModel');
 const Loja = require('./../models/LojaModel');
 const Frete = require('./../models/FreteModel');
 const FormasPagamento = require('./../models/FormaDePagamentoModel');
+const Pedido = require('./../models/PedidoModel');
 
 
 
@@ -91,10 +92,11 @@ const renderizarPaginaProdutoSelecionado = (req, res, next, produto = [], indica
   });
 };
 //------------------------------------------------------------------------------------------------------
+//RENDERIZAR CARRINHO COM OS ITENS 
 const renderizarPaginaCarrinho = (req, res, next, frete, total = 0, cliente = {}, formaPagamento = [], produtos = [], cestas = [], enderecos = []) => {
   //res.send(enderecos);
   let logado = (req.session.user != undefined);
-
+  
   res.render('carrinho', {
     logado,
     rotulo: 'Carrinho',
@@ -104,7 +106,27 @@ const renderizarPaginaCarrinho = (req, res, next, frete, total = 0, cliente = {}
     formaPagamento,
     produtos,
     cestas,
-    enderecos
+    enderecos,
+    carrinhoVazio:false
+  });
+};
+//------------------------------------------------------------------------------------------------------
+// RENDERIZAR CARRINHO VAZIO 
+const renderizarPaginaCarrinhoVazio = (req, res, next, frete=0, total = 0, cliente = {}, formaPagamento = [], produtos = [], cestas = [], enderecos = []) => {
+  //res.send(enderecos);
+  let logado = (req.session.user != undefined);
+  
+  res.render('carrinho', {
+    logado,
+    rotulo: 'Carrinho',
+    frete,
+    total,
+    cliente,
+    formaPagamento,
+    produtos,
+    cestas,
+    enderecos,
+    carrinhoVazio:true
   });
 };
 //------------------------------------------------------------------------------------------------------
@@ -181,7 +203,7 @@ const exibirProdutoSelecionadoNaHome = (req, res, next) => {
 //------------------------------------------------------------------------------------------------------
 const iniciarCompra = (req, res, next) => {
   //let compra = new Compra(req.body.id_cliente);
-  if (verificarUsuarioLogado(req, res, next)) {
+  if (req.session.user != undefined) {
     let compra = new Compra(req.session.user.id);
     compra.salvarCompra(compra).then(id_compra => {
       res.send(id_compra);
@@ -237,36 +259,42 @@ const verificarUsuarioLogado = (req, res, next) => {
 const carregarCarrinhoDeCompras = (req, res, next) => {
   let id_usuario = req.session.user.id;
   let id_compra = req.session.id_compra;
-  
-  let formaPagamento = new FormasPagamento();
-  let cliente = new Cliente();
-  let loja = new Loja();
-  let frete = new Frete();
-  let cestaCompra = new CestaCompra();
-  let produtoCompra = new ProdutoCompra();
-  
-  produtoCompra.id_compra = id_compra;
-  cestaCompra.id_compra = id_compra;
-  cliente.id_usuario = id_usuario;
-  
-  produtoCompra.listarProdutosDoCarrinho(produtoCompra, id_usuario).then(produtos => {
-    cestaCompra.listarCestasDoCarrinho(cestaCompra, id_usuario).then(cestas => {
-      formaPagamento.listarTiposPagamentoParaCarrinho(formaPagamento).then(formasPagamento => {
-        cliente.selecionarClienteParaCarrinho(cliente).then(clientes => {
-          frete.id_destino = clientes[0].id_regiao;
-          loja.listarEnderecosDeLojasParaCarrinho(loja).then(enderecos => {
-            frete.listarFretesParaCarrinho(frete).then(fretes => {
-
-              const totalizar = (total, valor) => {
-                return total + parseFloat(valor.subtotal);
-              };
-              let total_produto = produtos.reduce(totalizar, 0);
-              let total_cesta = cestas.reduce(totalizar, 0);
-              //5.00 adicional cobrado por cada ecobag
-              let total = total_produto + total_cesta + parseFloat(fretes[0].preco) + 5;
-              total = total.toFixed(2);
-              
-              renderizarPaginaCarrinho(req, res, next, fretes[0], total, clientes[0], formasPagamento, produtos, cestas, enderecos, vazio=false);
+  if (req.session.id_compra == undefined) {
+    renderizarPaginaCarrinhoVazio(req, res, next);
+  } else {
+    let formaPagamento = new FormasPagamento();
+    let cliente = new Cliente();
+    let loja = new Loja();
+    let frete = new Frete();
+    let cestaCompra = new CestaCompra();
+    let produtoCompra = new ProdutoCompra();
+    
+    produtoCompra.id_compra = id_compra;
+    cestaCompra.id_compra = id_compra;
+    cliente.id_usuario = id_usuario;
+    
+    produtoCompra.listarProdutosDoCarrinho(produtoCompra, id_usuario).then(produtos => {
+      cestaCompra.listarCestasDoCarrinho(cestaCompra, id_usuario).then(cestas => {
+        formaPagamento.listarTiposPagamentoParaCarrinho(formaPagamento).then(formasPagamento => {
+          cliente.selecionarClienteParaCarrinho(cliente).then(clientes => {
+            frete.id_destino = clientes[0].id_regiao;
+            loja.listarEnderecosDeLojasParaCarrinho(loja).then(enderecos => {
+              frete.listarFretesParaCarrinho(frete).then(fretes => {
+                
+                const totalizar = (total, valor) => {
+                  return total + parseFloat(valor.subtotal);
+                };
+                let total_produto = produtos.reduce(totalizar, 0);
+                let total_cesta = cestas.reduce(totalizar, 0);
+                //5.00 adicional cobrado por cada ecobag
+                let total = total_produto + total_cesta + parseFloat(fretes[0].preco) + 5;
+                total = total.toFixed(2);
+                
+                renderizarPaginaCarrinho(req, res, next, fretes[0], total, clientes[0], formasPagamento, produtos, cestas, enderecos, vazio = false);
+              }).catch(err => {
+                console.log(err.message);
+                res.send(err.message);
+              });
             }).catch(err => {
               console.log(err.message);
               res.send(err.message);
@@ -287,22 +315,22 @@ const carregarCarrinhoDeCompras = (req, res, next) => {
       console.log(err.message);
       res.send(err.message);
     });
-  }).catch(err => {
-    console.log(err.message);
-    res.send(err.message);
-  });
+  }
 };
 //------------------------------------------------------------------------------------------------------
 //id_compras, ecobag_adicional, id_tipo_pagamento, anotacoes, retirar_na_loja = 0, status = 1
 const salvarPedido = (req, res, next) => {
-  if (verificarUsuarioLogado()) {
-    let pedido = new Pedido(req.body._id_compras, req.body._ecobag_adicional, req.body.id_tipo_pagamento, req.body._anotacoes, req.body._retirar_na_loja, req.body._status);
+  if (req.session.user !== undefined) {
+    let pedido = new Pedido(req.body._id_compras, req.body._ecobag_adicional, req.body._id_tipo_de_pagamento, req.body._anotacoes, req.body._retirar_na_loja, req.body._status);
     pedido.salvarPedido(pedido).then(result => {
+      req.session.id_compra = undefined;
       res.send(result);
     }).catch(err => {
       console.log(err.message);
       res.send(err.message);
     });
+  } else {
+    res.redirect('/login');
   }
 };
 
