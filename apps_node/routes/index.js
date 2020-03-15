@@ -12,9 +12,15 @@ router.get('/', (req, res, next) => {
   indexController.carregarIndex(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
+//Rota para renderizar a pagina principal  
+router.get('/logout', (req, res, next) => {
+  indexController.sair(req, res, next);
+});
+//------------------------------------------------------------------------------------------------------
 //Rota para renderizar a pagina de contato
 router.get('/contact', (req, res, next) => {
-  res.render('contact', { body: {} });
+  let logado = (req.session.user != undefined);
+  res.render('contact', { body: {}, logado});
 });
 //------------------------------------------------------------------------------------------------------
 //Rota para renderizar a pagina de cestas da semana
@@ -34,7 +40,7 @@ router.post('/contact', (req, res, next) => {
 //------------------------------------------------------------------------------------------------------
 //Rota para renderizar a pagina de login
 router.get('/login', (req, res, next) => {
-  res.render('login', { body: [] });
+  usuarioController.renderizarPaginaLogin(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
 //Rota para renderizar a pagina de cadastro de usuario/cliente 
@@ -80,9 +86,33 @@ router.post('/comprar-cesta', (req, res, next) => {
 //------------------------------------------------------------------------------------------------------
 //Rota para carrinho de compras
 router.get('/carrinho', (req, res, next) => {
+  let logado = (req.session.user != undefined);
   res.render('carrinho', {
-    rotulo: 'Carrinho', produto: [], indicacoes: []
+    logado,
+    rotulo: 'Carrinho',
+    produtos: [],
+    cestas: [],
+    enderecos:
+    [
+      { descricao: 'Entregar em meu endereço', valor: '0', frete: '10.00' },
+      { descricao: 'Quero retirar em: Loja I - Centro', valor: '1', frete: '0.00' },
+      { descricao: 'Quero retirar em: Loja II - Zona Oeste', valor: '2', frete: '0.00' }
+    ],
+    frete:'10.00',
+    total:'52.90',
+    formaPagamento:
+    [
+      'Dinheiro - Na entrega',
+      'Cartão Marter - Na entrega',
+      'Cartão Visa - Na entrega'
+    ],
+    cliente:{nome:'Alessandro', endereco:'Avenida Afonso Pena, 50 Centro Itumbiara-GO'}
   });
+});
+//------------------------------------------------------------------------------------------------------
+//Rota para realizar login
+router.post('/login', (req, res, next) => {
+  usuarioController.entrar(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
 
@@ -90,15 +120,15 @@ router.get('/carrinho', (req, res, next) => {
 
 
 
-
 //Rota para renderizar a pagina de login
-router.get('/teste1', (req, res, next) => {
-  usuarioController.teste1(req, res, next);
+router.get('/teste', (req, res, next) => {
+  //req.session.user = `Usuario logado: ${req.params.id}`;
+  res.send(req.session.user);
 });
 //------------------------------------------------------------------------------------------------------
 //Rota para renderizar a pagina de login
 router.get('/teste2', (req, res, next) => {
-  usuarioController.teste2(req, res, next);
+  res.send(req.session.user);
 });
 //------------------------------------------------------------------------------------------------------
 //Rota para renderizar a pagina de login

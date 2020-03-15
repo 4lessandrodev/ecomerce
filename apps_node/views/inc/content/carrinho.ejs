@@ -1,86 +1,133 @@
 <div class="container">
-  <section class="carrinho">
+  <section class="carrinho display-non">
     <!-- Stack the columns on mobile by making one full-width and the other half-width -->
     <div class="row">
-      <div class="col-md-8 div-imagem">
+      <div class="col-md-8 div-itens">
         <section class="tabela-produtos">
           <table class="table table-striped">
             <thead>
               <tr>
-                <th scope="col" class="tr-id">Cod.</th>
                 <th scope="col" class="tr-imagem-produto">Imagem</th>
                 <th scope="col" class="tr-texto-centralizado">Descrição</th>
-                <th scope="col" id="tr1">Preco</th>
-                <th scope="col" id="tr2">Unidade Medida</th>
-                <th scope="col" id="tr-opcao-titulo">Detalhes</th>
+                <th scope="col" class="tr-texto-centralizado">Quantidade</th>
+                <th scope="col" class="tr-texto-centralizado">Preço</th>
+                <th scope="col" class=tr-texto-centralizado">Subtotal</th>
               </tr>
             </thead>
             <tbody>
-              <%indicacoes.forEach(function(indicacao){ %>
-              <tr>
-                <td scope="row" class="tr-id"><%=indicacao.id%></th>
-                <td class="tr-imagem-produto"><img src="<%=indicacao.imagem%>" alt="imagem" class="imagem-produto">
-                </td>
-                <td class="tr-texto-centralizado"><%=indicacao.descricao%></td>
-                <td id="tr3">R$ <%=indicacao.preco_venda%></td>
-                <td id="tr4"><%=indicacao.und_descricao%></td>
-                <td class="opcoes"><a href="/produto-selecionado/<%=indicacao.id%>"><i class="fas fa-eye"></i></a>
-                </td>
-              </tr>
-              <% }); %>
-            </tbody>
-          </table>
-        </section>
-
-
-      </div>
-      <div class="col-6 col-md-4">
-        <div class="col-4" id="nav-lateral">
-          <div class="list-group" role="tablist">
-            <a class="list-group-item list-group-item-success" data-toggle="list" role="tab" aria-controls="home">
-              <h2><%=produto.descricao%></h2>
-            </a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="profile"
-              id="categoria"><%=produto.descricao_categoria%> </a>
-            <a class="list-group-item list-group-item-action descricao-item" data-toggle="list" role="tab"
-              aria-controls="profile"><%=produto.info_nutricional%></a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="messages">
-              <h3>R$ <%=produto.preco_venda%> </h3>
-            </a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="settings">
-              <div class="form-group">
-                <label for="quantidade">Quantidade</label>
-                <select class="form-control" id="quantidade" name="quantidade">
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="7">7</option>
-                </select>
-              </div>
-            </a>
+              <%produtos.forEach(function(produto){ %>
+                <tr>
+                  <td scope="row" class="tr-imagem-produto"><%=produto.id%></th>
+                    <td class=""><img src="<%=produto.imagem%>" alt="imagem" class="imagem-produto">
+                    </td>
+                    <td class="tr-texto-centralizado"><%=produto.descricao%></td>
+                    <td class="tr-texto-centralizado">R$ <%=produto.preco_venda%></td>
+                    <td class="tr-texto-centralizado"><%=produto.subtotal%></td>
+                  </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </section>
+            
           </div>
-        </div>
-        <div class="adicionar-produto">
-          <button type="button" class="btn btn-success botao-comprar" id="btn-comprar-produto">Confirmar pedido</button>
-          <button type="button" class="btn btn-outline-success botao-adicionar-carrinho" id="btn-add-produto">Continuar
-            comprando</button>
+          <div class="col-6 col-md-4">
+            <div class="col-4" id="nav-lateral">
+              <div class="list-group" role="tablist">
+                <a class="list-group-item list-group-item-success saudacao" data-toggle="list" role="tab" aria-controls="pedido">
+                  <h2>Olá, <%=cliente.nome %></h2> 
+                  <p>Veja os detalhes de seu Pedido:</p>
+                </a>
+                
+                <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="entrega">
+                  <div class="form-group">
+                    <label for="retirar_na_loja">Tipo de entrega</label>
+                    <select class="form-control" id="retirar_na_loja" name="retirar_na_loja"
+                    data-enderecos="<%= JSON.stringify(enderecos)%>">
+                    <%enderecos.forEach(function(endereco){ %> 
+                      <option value="<%=endereco.valor%> "><%=endereco.descricao%></option>
+                      <% }); %> 
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <textarea class="form-control" id="endereco_cliente" rows="2" disabled draggable="false" style="resize: none;"><%=cliente.endereco%> </textarea>
+                  </div>
+                </a>
+                <a class="list-group-item list-group-item-action" data-toggle="list" role="tab"
+                aria-controls="frete" data-frete="<%=frete %>">
+                <div class="form-group"></div>
+                <label for="id_tipo_de_pagamento">Frete</label>
+                <p>R$ <input type="text" name="frete" id="frete" value="<%=frete %>" readonly></p>
+              </div></a>
+              
+              <a class="list-group-item list-group-item-action" data-toggle="list"
+              role="tab" aria-controls="ecobag">
+              <div class="col-auto my-1">
+                <div class="custom-control custom-checkbox mr-sm-2">
+                  <input type="checkbox" class="custom-control-input"
+                  id="ecobag_adicional" checked>
+                  <label class="custom-control-label" for="ecobag_adicional">Ecobag
+                    adicional</label>
+                  </div>
+                  <p>Nosso serviço inclui uma ecobag retornável para entrega dos produtos e
+                    é cobrado R$ R$ 5.00, caso já tenha uma disponível
+                    para devolução desmarque esta opção</p>
+                  </div>
+                </a>
+                
+                <a class="list-group-item list-group-item-action" data-toggle="list" role="tab"
+                aria-controls="messages">
+                <h3>R$<input type="text" name="total" id="total" value="<%=total%>" readonly></h3>
+              </a>
+              
+              <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="settings">
+                <div class="form-group">
+                  <label for="id_tipo_de_pagamento">Forma de Pagamento</label>
+                  <select class="form-control" id="id_tipo_de_pagamento" name="id_tipo_de_pagamento">
+                    <% formaPagamento.forEach(function(forma){ %>
+                      <option value="1"><%=forma%></option>
+                      <% }); %>
+                    </select>
+                  </div>
+                </a>
+                
+                <a class="list-group-item list-group-item-action" data-toggle="list" role="tab"
+                aria-controls="settings">
+                <p>Os pedidos enviado até sexta-feira às 18h são
+                  entregues na próxima terça-feira</p>
+                </div>
+              </a>
+              
+              <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="settings">
+                <div class="form-group">
+                  <label for="anotacoes">Observações</label>
+                  <textarea class="form-control" id="anotacoes" rows="3" style="resize: vertical;"></textarea>
+                </div>
+              </a>
+              <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="confirmacao">
+                <div class="adicionar-produto">
+                  <button type="button" class="btn btn-success botao-comprar" id="btn-confirmar-pedido">Confirmar
+                    pedido</button>
+                    <button type="button" class="btn btn-outline-success botao-adicionar-carrinho"
+                    id="btn-continuar-comprando">Continuar
+                    comprando</button>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        <div class="botoes-a-direita">
         </div>
       </div>
-    </div>
-  </section>
+      <div id="imagem-carrinho-vazio" class="display-none">
+        <h2>Ah, Não! Vazio...</h3>
+          <figure><i class=" far fa-sad-cry"></i></figure>
+        </div>
+        
+        <section hidden style="display: none;">
+          <form id="produto-compra" hidden style="display: none;">
 
-  <div class="botoes-a-direita">
-
-  </div>
-</div>
-
-<section hidden style="display: none;">
-  <form id="produto-compra" hidden style="display: none;">
-    <input type="hidden" value="<%=produto.id%>" name="id_produto" id="id_produto">
-    <input type="hidden" value="<%=produto.preco_venda%>" name="preco_unitario" id="preco_unitario">
-  </form>
-</section>
-<script src="./../../javascripts/app.js" type="module"></script>
+          </form>
+        </section>
+        <script src="./../../javascripts/app.js" type="module"></script>

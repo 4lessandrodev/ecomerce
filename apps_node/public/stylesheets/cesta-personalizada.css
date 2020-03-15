@@ -220,7 +220,6 @@ tbody tr:hover {
     filter: sepia(15%);
     filter: brightness(110%);
     -webkit-filter: brightness(110%);
-    object-fit: cover;
   }
 
 

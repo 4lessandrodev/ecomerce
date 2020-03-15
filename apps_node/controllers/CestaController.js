@@ -5,7 +5,9 @@ const ProdutosDeCesta = require('./../models/ProdutosParaCestaModel');
 
 //--------------------------------------------------------------------------------
 const renderizar = (req, res, next, cestas, categorias, produtos, produtos_de_cestas) => {
+  let logado = (req.session.user != undefined);
   res.render('admin/cestas', {
+    logado,
     data: '',
     navbar: true,
     pagina: 'Cestas',
@@ -26,8 +28,9 @@ const renderizar = (req, res, next, cestas, categorias, produtos, produtos_de_ce
 };
 //---------------------------------------------------------------------------------------------
 const renderizarPaginaEditar = (req, res, next, cesta, categorias, produtos, produtos_da_cesta) => {
-
+  let logado = (req.session.user != undefined);
   res.render('admin/editar-cesta', {
+    logado,
     data: '',
     navbar: true,
     pagina: 'Editar Cesta',

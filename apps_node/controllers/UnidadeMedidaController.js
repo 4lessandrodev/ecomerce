@@ -4,7 +4,9 @@ const UndMed = require('./../models/UnidadeMedidaModel');
 
 //--------------------------------------------------------------------------------
 const renderizar = (req, res, next, unidades) => {
+  let logado = (req.session.user != undefined);
   res.render('admin/unidades-medida', {
+    logado,
     unidades,
     data: '',
     navbar: true,

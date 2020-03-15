@@ -2,7 +2,9 @@ const CategoriaCestaModel = require('./../models/CategoriaCestasModel');
 
 //--------------------------------------------------------------------------------
 const renderizarPaginaCategoria = (req, res, next, categorias) => {
+  let logado = (req.session.user != undefined);
   res.render('admin/categoria-cestas', {
+    logado,
     categorias,
     data: '',
     navbar: true,

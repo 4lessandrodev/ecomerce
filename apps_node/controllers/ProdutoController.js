@@ -4,7 +4,9 @@ const UndMedida = require('./../models/UnidadeMedidaModel');
 
 //--------------------------------------------------------------------------------
 const renderizar = (req, res, next, produtos, categorias, unidade) => {
+  let logado = (req.session.user != undefined);
   res.render('admin/produtos', {
+    logado,
     produtos,
     data: '',
     navbar: true,
@@ -25,7 +27,9 @@ const renderizar = (req, res, next, produtos, categorias, unidade) => {
 };
 //--------------------------------------------------------------------------------
 const renderizarEdicao = (req, res, next, produto, categorias, unidade) => {
+  let logado = (req.session.user != undefined);
   res.render('admin/editar-produto', {
+    logado,
     produto,
     data: '',
     navbar: true,

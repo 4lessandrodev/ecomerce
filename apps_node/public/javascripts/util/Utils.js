@@ -223,6 +223,26 @@ class Utils {
         }
       });
   }
+
+
+  static login(e) {
+    e.preventDefault();
+    let email = document.getElementById('email').value;
+    let senha = document.getElementById('senha').value;
+    let usuario = { email, senha };
+
+    fetch(`/login`, {
+      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      body: JSON.stringify(usuario)
+
+    }).then(response =>{ 
+      
+      //Não fazer nada 
+     
+      });
+  }
+
 }
 
 

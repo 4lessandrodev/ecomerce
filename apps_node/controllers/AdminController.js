@@ -3,20 +3,39 @@ const Mensagens = require('../models/ContatoModel');
 const DashBoard = require('../models/DashboardModel');
 
 
-
-
+//AUTENTICAÇÃO DO USUÁRIO COMO ADMINISTRADOR 
+//------------------------------------------------------------------------------------------------------
+const autenticar = (req, res, next) => {
+  let logado = (req.session.user != undefined);
+  if (logado) {
+    if (req.session.user.admin == 0) {
+      res.redirect('/');
+    } else {
+      return true;
+    }
+  } else {
+    res.redirect('/login');
+  }
+};
 //------------------------------------------------------------------------------------------------------
 //Renderizar a pagina principal de admin
 const renderizarAdmin = (req, res, next, dados) => {
-  res.render('admin/index', {
-    data: '',
-    navbar: false,
-    dados
-  });
+  let logado = (req.session.user != undefined);
+  if (logado) {
+    res.render('admin/index', {
+      data: '',
+      navbar: false,
+      dados,
+      logado
+    });
+  } else {
+    res.redirect('/login');
+  }
 };
 //------------------------------------------------------------------------------------------------------
 //Metodo listar todos os emails salvos no banco de dados 
 const listarInscricoes = (req, res, next) => {
+  let logado = (req.session.user != undefined);
   //Criar um novo objeto inscricao de acordo com a classe
   let inscricao = new Inscricao();
   //chamar o metodo listar da classe inscricao
@@ -53,4 +72,4 @@ const listarPainel = (req, res, next) => {
 
 
 //Metodos exportados 
-module.exports = { listarInscricoes, listarMensagens, listarPainel };
+module.exports = { listarInscricoes, listarMensagens, listarPainel, autenticar};

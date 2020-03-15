@@ -1,6 +1,6 @@
 const conect = require('./../config/CONECT_BD');
 class UsuarioModel {
-  constructor (email, senha, data_cadastro = new Date(), usuario_excluido = 0, admin = 0) {
+  constructor (email = null, senha = null, data_cadastro = new Date(), usuario_excluido = 0, admin = 0) {
     this._id = null;
     this._email = (email != '' && email != null) ? email.toLowerCase() : '';
     this._senha = senha;
@@ -63,7 +63,7 @@ class UsuarioModel {
 
   entrar(usuario) {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT * FROM tb_usuarios AS user WHERE user.email = ? AND user.senha = ?`, [usuario._email, usuario._senha], (err, results) => {
+      conect.query(`SELECT id, email, admin FROM tb_usuarios AS user WHERE user.email = ? AND user.senha = ?`, [usuario._email, usuario._senha], (err, results) => {
         if (err) {
           console.log(err.message);
           reject(err.message);

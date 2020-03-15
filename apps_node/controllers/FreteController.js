@@ -4,7 +4,9 @@ const Regiao = require('./../models/RegiaoModel');
 
 //------------------------------------------------------------------------
 const renderizar = (req, res, next, fretes, lojas, regioes) => {
+  let logado = (req.session.user != undefined);
   res.render('admin/tabela-frete', {
+    logado,
     fretes,
     regioes,
     lojas,

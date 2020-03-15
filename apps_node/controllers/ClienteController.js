@@ -2,7 +2,9 @@ const Cliente = require('./../models/ClienteModel');
 
 //--------------------------------------------------------------------------------
 const renderizar = (req, res, next, unidades) => {
+  let logado = (req.session.user != undefined);
   res.render('admin/clientes', {
+    logado,
     unidades,
     data: '',
     navbar: true,

@@ -3,7 +3,9 @@ const Regiao = require('./../models/RegiaoModel');
 
 //-------------------------------------------------------------------------------------------
 const renderizar = (req, res, next, lojas, regioes) => {
+  let logado = (req.session.user != undefined);
   res.render('admin/lojas', {
+    logado,
     lojas,
     regioes,
     data: '',

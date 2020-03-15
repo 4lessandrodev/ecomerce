@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var bodyParse = require('body-parser');
 var logger = require('morgan');
 var formidable = require('formidable');
+var cookieSession = require('cookie-session');
 var hostname = 'localhost';
 var port = 3000;
 var backlog = () => console.log(`Aplicação rodando... acesse em: ${hostname}:${port}`);
@@ -35,6 +36,16 @@ app.use(express.json());
 app.use(express.urlencoded({ limit: '10mb', extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+//--------------------------------------------------
+app.use(cookieSession({
+  name: 'session',
+  keys: ['HelloWorldFarmviell98sdf21654'],
+  resave: false,
+  saveUninitialized: false,
+  // Cookie Options
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}));
 
 // ROTAS
 //--------------------------------------------------

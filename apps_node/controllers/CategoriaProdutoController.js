@@ -1,7 +1,9 @@
 const CategoriaProdutoModel = require('./../models/CategoriaProdutoModel');
 
 const renderizarPaginaCategoria = (req, res, next, categorias) => {
+  let logado = (req.session.user != undefined);
   res.render('admin/categoria-produtos', {
+    logado,
     categorias,
     data: '',
     navbar: true,

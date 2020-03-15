@@ -2,7 +2,9 @@ const Fornecedor = require('./../models/FornecedorModel');
 
 //--------------------------------------------------------------------------------
 const renderizar = (req, res, next, fornecedores) => {
+  let logado = (req.session.user != undefined);
   res.render('admin/fornecedores', {
+    logado,
     fornecedores,
     data: '',
     navbar: true,

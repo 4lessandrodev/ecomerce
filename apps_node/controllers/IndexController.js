@@ -6,13 +6,16 @@ const ProdutosDeCesta = require('./../models/ProdutosParaCestaModel');
 const Compra = require('./../models/CompraModel');
 const ProdutoCompra = require('./../models/ProdutoCompraModel');
 const CestaCompra = require('./../models/CestaCompraModel');
+const usuarioController = require('./../controllers/UsuarioController');
 
 
 
 
 //------------------------------------------------------------------------------------------------------
 const renderizar = (req, res, next, produtos = [], cestas = []) => {
+  let logado = (req.session.user != undefined);
   res.render('index', {
+    logado,
     produtos,
     cestas,
 
@@ -26,7 +29,9 @@ const renderizar = (req, res, next, produtos = [], cestas = []) => {
 };
 //------------------------------------------------------------------------------------------------------
 const renderizarPaginaCestas = (req, res, next, produtos = [], cestas = []) => {
+  let logado = (req.session.user != undefined);
   res.render('cestas', {
+    logado,
     produtos,
     cestas,
 
@@ -43,7 +48,9 @@ const renderizarPaginaCestas = (req, res, next, produtos = [], cestas = []) => {
 const renderizarPaginaCestaSelecionada = (req, res, next, cesta = [], produtos = [], produtos_da_cesta = []) => {
   //res.send(produtos_da_cesta);
   //res.send(cesta);
+  let logado = (req.session.user != undefined);
   res.render('cesta-selecionada', {
+    logado,
     rotulo: 'Cesta Selecionada',
     cesta,
     produtos,
@@ -52,7 +59,9 @@ const renderizarPaginaCestaSelecionada = (req, res, next, cesta = [], produtos =
 };
 //------------------------------------------------------------------------------------------------------
 const renderizarPaginaCadastroUsuario = (req, res, next, regioes = []) => {
+  let logado = (req.session.user != undefined);
   res.render('register', {
+    logado,
     body: req.body,
     regioes
   });
@@ -68,7 +77,9 @@ const inscrever = (req, res, next) => {
 };
 //------------------------------------------------------------------------------------------------------
 const renderizarPaginaProdutoSelecionado = (req, res, next, produto = [], indicacoes = []) => {
+  let logado = (req.session.user != undefined);
   res.render('produto-selecionado', {
+    logado,
     rotulo: 'Produto Selecionado',
     produto, indicacoes
   });
@@ -174,6 +185,14 @@ const addCestaNoCarrinho = (req, res, next) => {
     res.send(err.message);
   });
 };
+//------------------------------------------------------------------------------------------------------
+const sair = (req, res, next) => {
+  //Realizar o logout do site
+  req.session.user = undefined;
+  req.body = {};
+  res.redirect('/login');
+};
+//------------------------------------------------------------------------------------------------------
 
 
 module.exports = {
@@ -185,5 +204,6 @@ module.exports = {
   exibirProdutoSelecionadoNaHome,
   iniciarCompra,
   addProdutoNoCarrinho,
-  addCestaNoCarrinho
+  addCestaNoCarrinho,
+  sair
 };

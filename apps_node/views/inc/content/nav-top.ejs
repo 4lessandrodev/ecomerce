@@ -21,7 +21,7 @@
 							<a href="/contact">Contato</a>
 						</li>
 						<li>
-							<a href="/login">Login</a>
+						<% if(!logado){ %> <a href="/login">Login</a> <% }else{ %> <a href="/logout">Sair</a> <% } %> 
 						</li>
 						<li class="btn-cta">
 							<a href="/carrinho">

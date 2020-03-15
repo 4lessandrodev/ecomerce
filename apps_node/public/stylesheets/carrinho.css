@@ -1,3 +1,4 @@
+
 #nav-lateral {
   padding-top: 3em;
 }
@@ -117,11 +118,45 @@ tbody tr:hover {
 }
 
 
+#imagem-carrinho-vazio {
+  /*background-image: url('../images/images/emty_cart.svg');*/
+  border: 1px solid red;
+  width: 100%;
+  font-size: 20em;
+  text-align: center;
+  
+}
 
+#imagem-carrinho-vazio h2,
+#imagem-carrinho-vazio i {
+text-align: center;
+color: darkgreen;
+}
 
+#imagem-carrinho-vazio h2{
+font-family: "Kaushan Script",
+cursive !important;
+margin: 2em 0 0 0;
+font-size: 40px;
+}
 
+.display-none{
+display: none;
+height: 0px;
+overflow: hidden;
+width: 0px;
+}
 
+#frete,
+#total {
+  border: none;
+  padding: 0 0.2em;
+  background-color: transparent;
+}
 
+a:hover{
+  cursor: pointer;
+}
 
 
 
