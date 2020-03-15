@@ -18,7 +18,7 @@ const renderizar = (req, res, next, produtos = [], cestas = []) => {
     logado,
     produtos,
     cestas,
-
+    
     btn: {
       label: 'Voltar',
       classe: 'display-none',
@@ -34,7 +34,7 @@ const renderizarPaginaCestas = (req, res, next, produtos = [], cestas = []) => {
     logado,
     produtos,
     cestas,
-
+    
     btn: {
       label: 'Voltar',
       classe: 'display-none',
@@ -81,7 +81,8 @@ const renderizarPaginaProdutoSelecionado = (req, res, next, produto = [], indica
   res.render('produto-selecionado', {
     logado,
     rotulo: 'Produto Selecionado',
-    produto, indicacoes
+    produto,
+    indicacoes
   });
 };
 //------------------------------------------------------------------------------------------------------
@@ -158,12 +159,14 @@ const exibirProdutoSelecionadoNaHome = (req, res, next) => {
 //------------------------------------------------------------------------------------------------------
 const iniciarCompra = (req, res, next) => {
   //let compra = new Compra(req.body.id_cliente);
-  let compra = new Compra('1');
-  compra.salvarCompra(compra).then(id_compra => {
-    res.send(id_compra);
-  }).catch(err => {
-    res.send(err.message);
-  });
+  if (verificarUsuarioLogado(req, res, next)) {
+    let compra = new Compra(req.session.user.id);
+    compra.salvarCompra(compra).then(id_compra => {
+      res.send(id_compra);
+    }).catch(err => {
+      res.send(err.message);
+    });
+  }
 };
 //------------------------------------------------------------------------------------------------------
 //Adicionar produto no carrinho 
@@ -193,6 +196,18 @@ const sair = (req, res, next) => {
   res.redirect('/login');
 };
 //------------------------------------------------------------------------------------------------------
+const verificarUsuarioLogado = (req, res, next) => {
+  let usuarioLogado = (req.session.user != undefined);
+  if (usuarioLogado) {
+    if (isNaN(req.session.id)) {
+      res.redirect('/login');  
+    } else {
+      return usuarioLogado;
+    }
+  } else {
+    res.redirect('/login');
+  }
+};
 
 
 module.exports = {
@@ -205,5 +220,6 @@ module.exports = {
   iniciarCompra,
   addProdutoNoCarrinho,
   addCestaNoCarrinho,
-  sair
+  sair,
+  verificarUsuarioLogado
 };
