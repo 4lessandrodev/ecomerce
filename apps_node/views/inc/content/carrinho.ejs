@@ -9,19 +9,27 @@
               <tr>
                 <th scope="col" class="tr-imagem-produto">Imagem</th>
                 <th scope="col" class="tr-texto-centralizado">Descrição</th>
-                <th scope="col" class="tr-texto-centralizado">Quantidade</th>
+                <th scope="col" class="tr-texto-centralizado">Qtd</th>
                 <th scope="col" class="tr-texto-centralizado">Preço</th>
                 <th scope="col" class=tr-texto-centralizado">Subtotal</th>
               </tr>
             </thead>
             <tbody>
-              <%produtos.forEach(function(produto){ %>
+              <%cestas.forEach(function(cesta){ %>
                 <tr>
-                  <td scope="row" class="tr-imagem-produto"><%=produto.id%></th>
-                    <td class=""><img src="<%=produto.imagem%>" alt="imagem" class="imagem-produto">
-                    </td>
+                  <td class="tr-imagem-produto"><img src="<%=cesta.imagem%>" alt="imagem" class="imagem-produto"></td>
+                  <td class="tr-texto-centralizado"><%=cesta.descricao%></td>
+                  <td class="tr-texto-centralizado"><%=cesta.quantidade%></td>
+                  <td class="tr-texto-centralizado">R$ <%=cesta.preco_unitario%></td>
+                  <td class="tr-texto-centralizado"><%=cesta.subtotal%></td>
+                </tr>
+                <% }); %>
+                <%produtos.forEach(function(produto){ %>
+                  <tr>
+                    <td class="tr-imagem-produto"><img src="<%=produto.imagem%>" alt="imagem" class="imagem-produto"></td>
                     <td class="tr-texto-centralizado"><%=produto.descricao%></td>
-                    <td class="tr-texto-centralizado">R$ <%=produto.preco_venda%></td>
+                    <td class="tr-texto-centralizado"><%=produto.quantidade%></td>
+                    <td class="tr-texto-centralizado">R$ <%=produto.preco_unitario%></td>
                     <td class="tr-texto-centralizado"><%=produto.subtotal%></td>
                   </tr>
                   <% }); %>
@@ -42,92 +50,96 @@
                   <div class="form-group">
                     <label for="retirar_na_loja">Tipo de entrega</label>
                     <select class="form-control" id="retirar_na_loja" name="retirar_na_loja"
-                    data-enderecos="<%= JSON.stringify(enderecos)%>">
+                    data-enderecos="<%= JSON.stringify(enderecos)%>" onchange="endereco()">
+                    <option value="0" selected>Entregar em meu endereço</option>
                     <%enderecos.forEach(function(endereco){ %> 
-                      <option value="<%=endereco.valor%> "><%=endereco.descricao%></option>
+                      <option value="<%=endereco.id%>">Retirar <%=endereco.razao_social%></option>
                       <% }); %> 
                     </select>
                   </div>
                   <div class="form-group">
-                    <textarea class="form-control" id="endereco_cliente" rows="2" disabled draggable="false" style="resize: none;"><%=cliente.endereco%> </textarea>
+                    <textarea class="form-control" id="endereco_cliente" rows="3" disabled draggable="false"
+                    style="resize: none;"><%=cliente.endereco%>, <%=cliente.bairro%>, <%=cliente.cidade%>,<%=cliente.estado%></textarea>
                   </div>
                 </a>
                 <a class="list-group-item list-group-item-action" data-toggle="list" role="tab"
-                aria-controls="frete" data-frete="<%=frete %>">
+                aria-controls="frete">
                 <div class="form-group"></div>
                 <label for="id_tipo_de_pagamento">Frete</label>
-                <p>R$ <input type="text" name="frete" id="frete" value="<%=frete %>" readonly></p>
-              </div></a>
-              
-              <a class="list-group-item list-group-item-action" data-toggle="list"
-              role="tab" aria-controls="ecobag">
-              <div class="col-auto my-1">
-                <div class="custom-control custom-checkbox mr-sm-2">
-                  <input type="checkbox" class="custom-control-input"
-                  id="ecobag_adicional" checked>
-                  <label class="custom-control-label" for="ecobag_adicional">Ecobag
-                    adicional</label>
-                  </div>
-                  <p>Nosso serviço inclui uma ecobag retornável para entrega dos produtos e
-                    é cobrado R$ R$ 5.00, caso já tenha uma disponível
-                    para devolução desmarque esta opção</p>
+                <p>R$ <input type="text" name="frete" id="frete" value="<%=frete.preco %>" data-frete="<%=frete.preco%>"
+                  readonly></p>
+                </div></a>
+                
+                <a class="list-group-item list-group-item-action" data-toggle="list"
+                role="tab" aria-controls="ecobag">
+                <div class="col-auto my-1">
+                  <div class="custom-control custom-checkbox mr-sm-2">
+                    <input type="checkbox" class="custom-control-input"
+                    id="ecobag_adicional" checked onchange="ecobag()">
+                    <label class="custom-control-label" for="ecobag_adicional">Ecobag
+                      adicional</label>
+                    </div>
+                    <p>Nosso serviço inclui uma ecobag retornável para entrega dos produtos e
+                      é cobrado R$ R$ 5.00, caso já tenha uma disponível
+                      para devolução desmarque esta opção</p>
+                    </div>
+                  </a>
+                  
+                  <a class="list-group-item list-group-item-action" data-toggle="list" role="tab"
+                  aria-controls="messages">
+                  <h3>R$<input type="text" name="total" id="total" value="<%=total%>" data-total="<%=total%>" readonly>
+                  </h3>
+                </a>
+                
+                <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="settings">
+                  <div class="form-group">
+                    <label for="id_tipo_de_pagamento">Forma de Pagamento</label>
+                    <select class="form-control" id="id_tipo_de_pagamento" name="id_tipo_de_pagamento">
+                      <% formaPagamento.forEach(function(forma){ %>
+                        <option value="<%=forma.id%>"><%=forma.descricao%> - <%=forma.descricao_regras%></option>
+                        <% }); %>
+                      </select>
+                    </div>
+                  </a>
+                  
+                  <a class="list-group-item list-group-item-action" data-toggle="list" role="tab"
+                  aria-controls="settings">
+                  <p>Os pedidos enviado até sexta-feira às 18h são
+                    entregues na próxima terça-feira</p>
                   </div>
                 </a>
                 
-                <a class="list-group-item list-group-item-action" data-toggle="list" role="tab"
-                aria-controls="messages">
-                <h3>R$<input type="text" name="total" id="total" value="<%=total%>" readonly></h3>
-              </a>
-              
-              <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="settings">
-                <div class="form-group">
-                  <label for="id_tipo_de_pagamento">Forma de Pagamento</label>
-                  <select class="form-control" id="id_tipo_de_pagamento" name="id_tipo_de_pagamento">
-                    <% formaPagamento.forEach(function(forma){ %>
-                      <option value="1"><%=forma%></option>
-                      <% }); %>
-                    </select>
+                <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="settings">
+                  <div class="form-group">
+                    <label for="anotacoes">Observações</label>
+                    <textarea class="form-control" id="anotacoes" rows="3" style="resize: vertical;"></textarea>
                   </div>
                 </a>
-                
-                <a class="list-group-item list-group-item-action" data-toggle="list" role="tab"
-                aria-controls="settings">
-                <p>Os pedidos enviado até sexta-feira às 18h são
-                  entregues na próxima terça-feira</p>
+                <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="confirmacao">
+                  <div class="adicionar-produto">
+                    <button type="button" class="btn btn-success botao-comprar" id="btn-confirmar-pedido">Confirmar
+                      pedido</button>
+                      <button type="button" class="btn btn-outline-success botao-adicionar-carrinho"
+                      id="btn-continuar-comprando">Continuar
+                      comprando</button>
+                    </div>
+                  </a>
                 </div>
-              </a>
-              
-              <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="settings">
-                <div class="form-group">
-                  <label for="anotacoes">Observações</label>
-                  <textarea class="form-control" id="anotacoes" rows="3" style="resize: vertical;"></textarea>
-                </div>
-              </a>
-              <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="confirmacao">
-                <div class="adicionar-produto">
-                  <button type="button" class="btn btn-success botao-comprar" id="btn-confirmar-pedido">Confirmar
-                    pedido</button>
-                    <button type="button" class="btn btn-outline-success botao-adicionar-carrinho"
-                    id="btn-continuar-comprando">Continuar
-                    comprando</button>
-                  </div>
-                </a>
               </div>
             </div>
+          </section>
+          
+          <div class="botoes-a-direita">
           </div>
-        </section>
-        
-        <div class="botoes-a-direita">
         </div>
-      </div>
-      <div id="imagem-carrinho-vazio" class="display-none">
-        <h2>Ah, Não! Vazio...</h3>
-          <figure><i class=" far fa-sad-cry"></i></figure>
-        </div>
-        
-        <section hidden style="display: none;">
-          <form id="produto-compra" hidden style="display: none;">
-
-          </form>
-        </section>
-        <script src="./../../javascripts/app.js" type="module"></script>
+        <div id="imagem-carrinho-vazio" class="display-none">
+          <h2>Ah, Não! Vazio...</h3>
+            <figure><i class=" far fa-sad-cry"></i></figure>
+          </div>
+          
+          <section hidden style="display: none;">
+            <form id="produto-compra" hidden style="display: none;">
+              
+            </form>
+          </section>
+          <script src="./../../javascripts/js/carrinho_compras.js"></script>

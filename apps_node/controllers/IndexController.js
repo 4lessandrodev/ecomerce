@@ -91,8 +91,10 @@ const renderizarPaginaProdutoSelecionado = (req, res, next, produto = [], indica
   });
 };
 //------------------------------------------------------------------------------------------------------
-const renderizarPaginaCarrinho = (req, res, next, frete, total, cliente= {}, formaPagamento = [], produtos = [], cestas = [], enderecos = []) => {
+const renderizarPaginaCarrinho = (req, res, next, frete, total = 0, cliente = {}, formaPagamento = [], produtos = [], cestas = [], enderecos = []) => {
+  //res.send(enderecos);
   let logado = (req.session.user != undefined);
+
   res.render('carrinho', {
     logado,
     rotulo: 'Carrinho',
@@ -254,7 +256,17 @@ const carregarCarrinhoDeCompras = (req, res, next) => {
           frete.id_destino = clientes[0].id_regiao;
           loja.listarEnderecosDeLojasParaCarrinho(loja).then(enderecos => {
             frete.listarFretesParaCarrinho(frete).then(fretes => {
-              renderizarPaginaCarrinho(req, res, next, fretes[0], total=0, clientes[0], formasPagamento, produtos, cestas, enderecos, vazio=false);
+
+              const totalizar = (total, valor) => {
+                return total + parseFloat(valor.subtotal);
+              };
+              let total_produto = produtos.reduce(totalizar, 0);
+              let total_cesta = cestas.reduce(totalizar, 0);
+              //5.00 adicional cobrado por cada ecobag
+              let total = total_produto + total_cesta + parseFloat(fretes[0].preco) + 5;
+              total = total.toFixed(2);
+              
+              renderizarPaginaCarrinho(req, res, next, fretes[0], total, clientes[0], formasPagamento, produtos, cestas, enderecos, vazio=false);
             }).catch(err => {
               console.log(err.message);
               res.send(err.message);
