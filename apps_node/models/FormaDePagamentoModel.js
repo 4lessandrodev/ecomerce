@@ -44,8 +44,8 @@ class FormaDePagamentoModel {
   set descricao(value) {
     this._descricao = value;
   }
-
-
+  
+  
   salvarFormaPagamento(formaPagamento) {
     return new Promise((resolve, reject) => {
       conect.query(`INSERT INTO tb_tipos_pagamento(desconto, descricao_regras, status, descricao) VALUES(?,?,?,?)`, [
@@ -60,8 +60,8 @@ class FormaDePagamentoModel {
       });
     });
   }
-
-
+  
+  
   listarTodasFormasPagamento(formaPagamento) {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT * FROM tb_tipos_pagamento WHERE tipo_pagamento_excluido = ?`, [formaPagamento._tipo_pagamento_excluido], (err, result) => {
@@ -74,7 +74,7 @@ class FormaDePagamentoModel {
       });
     });
   }
-
+  
   listarFormasPagamentoAtivas(formaPagamento) {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT * FROM tb_tipos_pagamento WHERE tipo_pagamento_excluido = ? AND status = ?`, [formaPagamento._tipo_pagamento_excluido, formaPagamento._status], (err, result) => {
@@ -87,7 +87,7 @@ class FormaDePagamentoModel {
       });
     });
   }
-
+  
   atualizarFormaPagamento(formaPagamento) {
     return new Promise((resolve, reject) => {
       conect.query(`UPDATE tb_tipos_pagamento SET desconto = ?, descricao_regras = ?, status = ?, descricao = ? WHERE id = ?`, [
@@ -102,8 +102,8 @@ class FormaDePagamentoModel {
       });
     });
   }
-
-
+  
+  
   desabilitarFormaPagamento(formaPagamento) {
     return new Promise((resolve, reject) => {
       conect.query(`UPDATE tb_tipos_pagamento SET tipo_pagamento_excluido = ?, WHERE id = ?`, [
@@ -118,8 +118,23 @@ class FormaDePagamentoModel {
       });
     });
   }
-
-
+  
+  listarTiposPagamentoParaCarrinho(formaPagamento) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT pg.id, pg.desconto, pg.descricao, pg.descricao_regras
+      FROM tb_tipos_pagamento AS pg
+      WHERE pg.status = ? AND pg.tipo_pagamento_excluido = ?`, [formaPagamento._status, formaPagamento._tipo_pagamento_excluido], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+  
+  
 }
 
 module.exports = FormaDePagamentoModel;

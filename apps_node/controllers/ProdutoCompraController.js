@@ -43,11 +43,26 @@ const listarProdutoCompra = (req, res, next) => {
     res.send(err.message);
   });
 };
+//------------------------------------------------------------------
+//LISTAR OS PRODUTOS QUE O USUARIO ADICIONOU AO CARRINHO -> A ROTA GET RECEBE O ID DA COMPRA ARMAZENADA NO LOCAL STORAGE
+//TAMBEM CAPTURA O ID DO USUÁRIO LOGADO NA SESSÃO
+const listarProdutosDoCarrinho = (req, res, next) => {
+  let produtoCompra = new ProdutoCompra();
+  produtoCompra.id_compra = req.params.id;
+  let id_usuario = req.session.user.id;
+  produtoCompra.listarProdutosDoCarrinho(produtoCompra, id_usuario).then(produtos => {
+    return produtos;
+  }).catch(err => {
+    console.log(err.message);
+    res.send(err.message);
+  });
+};
 
 
 module.exports = {
   salvarProdutoCompra,
   editarProdutoCompra,
   excluirProdutoCompra,
-  listarProdutoCompra
+  listarProdutoCompra,
+  listarProdutosDoCarrinho
 };

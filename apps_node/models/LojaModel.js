@@ -46,7 +46,7 @@ class LojaModel {
   get status() {
     return this._status;
   }
-
+  
   set razao_social(value) {
     this._razao_social = value;
   }
@@ -95,100 +95,115 @@ class LojaModel {
   set id_regiao(value) {
     this._id_regiao = value;
   }
-
+  
   salvarLoja(loja) {
     return new Promise((resolve, reject) => {
       conect.query(`INSERT INTO tb_lojas(razao_social, nome_fantasia, cnpj_cpf, cep, cidade, estado, endereco,
         phone, email, status, bairro, id_regiao) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)`, [
-        loja._razao_social, loja._nome_fantasia, loja._cnpj_cpf, loja._cep, loja._cidade, loja._estado,
-        loja._endereco, loja._phone, loja._email, loja._status, loja._bairro, loja._id_regiao
-      ], (err, result) => {
-        if (err) {
-          console.log(err.message);
-          reject(err.message);
-        } else {
-          resolve(result);
-        }
+          loja._razao_social, loja._nome_fantasia, loja._cnpj_cpf, loja._cep, loja._cidade, loja._estado,
+          loja._endereco, loja._phone, loja._email, loja._status, loja._bairro, loja._id_regiao
+        ], (err, result) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
       });
-    });
-  }
-
-
-  listarTodasLojas(loja) {
-    return new Promise((resolve, reject) => {
-      conect.query(`SELECT * FROM tb_lojas WHERE loja_excluida = ?`, [loja._loja_excluida], (err, result) => {
-        if (err) {
-          console.log(err.message);
-          reject(err.message);
-        } else {
-          resolve(result);
-        }
+    }
+    
+    
+    listarTodasLojas(loja) {
+      return new Promise((resolve, reject) => {
+        conect.query(`SELECT * FROM tb_lojas WHERE loja_excluida = ?`, [loja._loja_excluida], (err, result) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
       });
-    });
-  }
-
-  listarLojasAtivas(loja) {
-    return new Promise((resolve, reject) => {
-      conect.query(`SELECT * FROM tb_lojas WHERE loja_excluida = ? AND status = ?`, [loja._loja_excluida, loja._status], (err, result) => {
-        if (err) {
-          console.log(err.message);
-          reject(err.message);
-        } else {
-          resolve(result);
-        }
+    }
+    
+    listarLojasAtivas(loja) {
+      return new Promise((resolve, reject) => {
+        conect.query(`SELECT * FROM tb_lojas WHERE loja_excluida = ? AND status = ?`, [loja._loja_excluida, loja._status], (err, result) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
       });
-    });
-  }
-
-
-  listarLojasAtivasParaFrete(loja) {
-    return new Promise((resolve, reject) => {
-      conect.query(`SELECT l.id, l.razao_social, l.endereco FROM tb_lojas AS l WHERE loja_excluida = ? AND status = ?`, [loja._loja_excluida, loja._status], (err, result) => {
-        if (err) {
-          console.log(err.message);
-          reject(err.message);
-        } else {
-          resolve(result);
-        }
+    }
+    
+    
+    listarLojasAtivasParaFrete(loja) {
+      return new Promise((resolve, reject) => {
+        conect.query(`SELECT l.id, l.razao_social, l.endereco FROM tb_lojas AS l WHERE loja_excluida = ? AND status = ?`, [loja._loja_excluida, loja._status], (err, result) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
       });
-    });
-  }
-
-
-  atualizarLoja(loja) {
-    return new Promise((resolve, reject) => {
-      conect.query(`UPDATE tb_lojas SET razao_social = ?, nome_fantasia = ?, cnpj_cpf = ?, cep = ?, cidade = ?, estado = ?, endereco = ?,
+    }
+    
+    
+    atualizarLoja(loja) {
+      return new Promise((resolve, reject) => {
+        conect.query(`UPDATE tb_lojas SET razao_social = ?, nome_fantasia = ?, cnpj_cpf = ?, cep = ?, cidade = ?, estado = ?, endereco = ?,
         phone = ?, email = ?, status = ?, bairro = ?, id_regiao = ? WHERE id = ?`, [
-        loja._razao_social, loja._nome_fantasia, loja._cnpj_cpf, loja._cep, loja._cidade, loja._estado,
-        loja._endereco, loja._phone, loja._email, loja._status, loja._bairro, loja._id_regiao, loja._id
-      ], (err, result) => {
-        if (err) {
-          console.log(err.message);
-          reject(err.message);
-        } else {
-          resolve(result);
-        }
+          loja._razao_social, loja._nome_fantasia, loja._cnpj_cpf, loja._cep, loja._cidade, loja._estado,
+          loja._endereco, loja._phone, loja._email, loja._status, loja._bairro, loja._id_regiao, loja._id
+        ], (err, result) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
       });
-    });
-  }
-
-
-  desabilitarLoja(loja) {
-    return new Promise((resolve, reject) => {
-      conect.query(`UPDATE tb_lojas SET loja_excluida = ? WHERE id = ?`, [
-        loja._loja_excluida, loja._id
-      ], (err, result) => {
-        if (err) {
-          console.log(err.message);
-          reject(err.message);
-        } else {
-          resolve(result);
-        }
+    }
+    
+    
+    desabilitarLoja(loja) {
+      return new Promise((resolve, reject) => {
+        conect.query(`UPDATE tb_lojas SET loja_excluida = ? WHERE id = ?`, [
+          loja._loja_excluida, loja._id
+        ], (err, result) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
       });
-    });
+    }
+    
+    listarEnderecosDeLojasParaCarrinho(loja) {
+      return new Promise((resolve, reject) => {
+        conect.query(`SELECT l.id, l.razao_social, l.endereco, l.bairro, l.cidade, l.estado, l.id_regiao
+        FROM tb_lojas AS l
+        WHERE l.loja_excluida = 0 AND l.status = 1 GROUP BY l.id`, [loja._loja_excluida, loja._status], (err, result) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    }
+    
+    
   }
-
-
-}
-
-module.exports = LojaModel;
+  
+  module.exports = LojaModel;

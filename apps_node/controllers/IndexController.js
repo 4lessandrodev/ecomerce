@@ -7,6 +7,11 @@ const Compra = require('./../models/CompraModel');
 const ProdutoCompra = require('./../models/ProdutoCompraModel');
 const CestaCompra = require('./../models/CestaCompraModel');
 const usuarioController = require('./../controllers/UsuarioController');
+const Cliente = require('./../models/ClienteModel');
+const Loja = require('./../models/LojaModel');
+const Frete = require('./../models/FreteModel');
+const FormasPagamento = require('./../models/FormaDePagamentoModel');
+
 
 
 
@@ -83,6 +88,21 @@ const renderizarPaginaProdutoSelecionado = (req, res, next, produto = [], indica
     rotulo: 'Produto Selecionado',
     produto,
     indicacoes
+  });
+};
+//------------------------------------------------------------------------------------------------------
+const renderizarPaginaCarrinho = (req, res, next, frete, total, cliente= {}, formaPagamento = [], produtos = [], cestas = [], enderecos = []) => {
+  let logado = (req.session.user != undefined);
+  res.render('carrinho', {
+    logado,
+    rotulo: 'Carrinho',
+    frete,
+    total,
+    cliente,
+    formaPagamento,
+    produtos,
+    cestas,
+    enderecos
   });
 };
 //------------------------------------------------------------------------------------------------------
@@ -172,6 +192,7 @@ const iniciarCompra = (req, res, next) => {
 //Adicionar produto no carrinho 
 const addProdutoNoCarrinho = (req, res, next) => {
   let produtoCompra = new ProdutoCompra(req.body._id_produto, req.body._id_compra, req.body._quantidade, req.body._preco_unitario);
+  req.session.id_compra = req.body._id_compra;
   produtoCompra.salvarProdutoCompra(produtoCompra).then(resposta => {
     res.send(resposta);
   }).catch(err => {
@@ -182,6 +203,7 @@ const addProdutoNoCarrinho = (req, res, next) => {
 const addCestaNoCarrinho = (req, res, next) => {
   //id_cesta, id_compra, quantidade, preco_unitario, produtos
   let cestaCompra = new CestaCompra(req.body._id_cesta, req.body._id_compra, req.body._quantidade, req.body._preco_unitario, req.body._produtos);
+  req.session.id_compra = req.body._id_compra;
   cestaCompra.salvarCestaCompra(cestaCompra).then(resposta => {
     res.send(resposta);
   }).catch(err => {
@@ -208,7 +230,77 @@ const verificarUsuarioLogado = (req, res, next) => {
     res.redirect('/login');
   }
 };
-
+//------------------------------------------------------------------------------------------------------
+//CARREGAR CARRINHO 
+const carregarCarrinhoDeCompras = (req, res, next) => {
+  let id_usuario = req.session.user.id;
+  let id_compra = req.session.id_compra;
+  
+  let formaPagamento = new FormasPagamento();
+  let cliente = new Cliente();
+  let loja = new Loja();
+  let frete = new Frete();
+  let cestaCompra = new CestaCompra();
+  let produtoCompra = new ProdutoCompra();
+  
+  produtoCompra.id_compra = id_compra;
+  cestaCompra.id_compra = id_compra;
+  cliente.id_usuario = id_usuario;
+  
+  produtoCompra.listarProdutosDoCarrinho(produtoCompra, id_usuario).then(produtos => {
+    cestaCompra.listarCestasDoCarrinho(cestaCompra, id_usuario).then(cestas => {
+      formaPagamento.listarTiposPagamentoParaCarrinho(formaPagamento).then(formasPagamento => {
+        cliente.selecionarClienteParaCarrinho(cliente).then(clientes => {
+          frete.id_destino = clientes[0].id_regiao;
+          loja.listarEnderecosDeLojasParaCarrinho(loja).then(enderecos => {
+            frete.listarFretesParaCarrinho(frete).then(fretes => {
+              renderizarPaginaCarrinho(req, res, next, fretes[0], total=0, clientes[0], formasPagamento, produtos, cestas, enderecos, vazio=false);
+            }).catch(err => {
+              console.log(err.message);
+              res.send(err.message);
+            });
+          }).catch(err => {
+            console.log(err.message);
+            res.send(err.message);
+          });
+        }).catch(err => {
+          console.log(err.message);
+          res.send(err.message);
+        });
+      }).catch(err => {
+        console.log(err.message);
+        res.send(err.message);
+      });
+    }).catch(err => {
+      console.log(err.message);
+      res.send(err.message);
+    });
+  }).catch(err => {
+    console.log(err.message);
+    res.send(err.message);
+  });
+  
+  /*
+  produtos: [], //OK
+  cestas: [], //OK
+  enderecos:
+  [
+    { descricao: 'Entregar em meu endereço', valor: '0', frete: '10.00' }, //OK
+    { descricao: 'Quero retirar em: Loja I - Centro', valor: '1', frete: '0.00' }, //OK
+    { descricao: 'Quero retirar em: Loja II - Zona Oeste', valor: '2', frete: '0.00' } //OK
+  ],
+  frete: '10.00', //OK FILTER(FRETES.DESTINO)
+  total: '52.90', // OK
+  formaPagamento: //CADASTRAR 
+  [
+    'Dinheiro - Na entrega',
+    'Cartão Marter - Na entrega',
+    'Cartão Visa - Na entrega'
+  ], //OK
+  cliente: { nome: 'Alessandro', endereco: 'Avenida Afonso Pena, 50 Centro Itumbiara-GO' } //OK
+  */
+};
+//------------------------------------------------------------------------------------------------------
 
 module.exports = {
   inscrever,
@@ -221,5 +313,6 @@ module.exports = {
   addProdutoNoCarrinho,
   addCestaNoCarrinho,
   sair,
-  verificarUsuarioLogado
+  verificarUsuarioLogado,
+  carregarCarrinhoDeCompras
 };

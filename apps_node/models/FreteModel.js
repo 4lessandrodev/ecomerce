@@ -38,14 +38,14 @@ class FreteModel {
   set data_cadastro(value) {
     this._data_cadastro = value;
   }
-
+  
   get tabela_excluida() {
     return this._tabela_excluida;
   }
   set tabela_excluida(value) {
     this._tabela_excluida = value;
   }
-
+  
   salvarFrete(frete) {
     return new Promise((resolve, reject) => {
       conect.query(`INSERT INTO tb_fretes(id_origem, id_destino, preco) VALUES(?,?,?)`, [
@@ -60,8 +60,8 @@ class FreteModel {
       });
     });
   }
-
-
+  
+  
   listarFretes(frete) {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT frete.id, loja.id AS 'id_origem', CONCAT(loja.razao_social,' | ', loja.endereco) AS 'origem', loja.id_regiao AS 'id_regiao_loja', regiao.id AS 'id_destino', regiao.descricao AS 'destino', frete.preco FROM tb_fretes AS frete, tb_regioes AS regiao, tb_lojas AS loja WHERE frete.tabela_excluida = ? AND frete.id_origem = loja.id AND frete.id_destino = regiao.id AND loja.loja_excluida = 0 AND regiao.regiao_excluida = 0`, [
@@ -76,7 +76,7 @@ class FreteModel {
       });
     });
   }
-
+  
   atualizarFrete(frete) {
     return new Promise((resolve, reject) => {
       conect.query(`UPDATE tb_fretes SET id_origem = ?, id_destino = ?, preco = ? WHERE id = ?`, [
@@ -88,25 +88,40 @@ class FreteModel {
             resolve(result);
           }
         });
-    });
-  }
-
-
-  desabilitarFrete(frete) {
-    return new Promise((resolve, reject) => {
-      conect.query(`UPDATE tb_fretes SET tabela_excluida = ? WHERE id = ?`, [
-        frete._tabela_excluida, frete._id], (err, result) => {
-          if (err) {
-            console.log(err.message);
-            reject(err.message);
-          } else {
-            resolve(result);
-          }
+      });
+    }
+    
+    
+    desabilitarFrete(frete) {
+      return new Promise((resolve, reject) => {
+        conect.query(`UPDATE tb_fretes SET tabela_excluida = ? WHERE id = ?`, [
+          frete._tabela_excluida, frete._id], (err, result) => {
+            if (err) {
+              console.log(err.message);
+              reject(err.message);
+            } else {
+              resolve(result);
+            }
+          });
         });
-    });
-  }
-
-
-}
-
-module.exports = FreteModel;
+      }
+      
+      listarFretesParaCarrinho(frete) {
+        return new Promise((resolve, reject)=> {
+          conect.query(`SELECT f.id, f.id_origem, f.id_destino, f.preco
+          FROM tb_fretes AS f
+          WHERE f.tabela_excluida = ? AND f.id_destino = ?`,[frete._tabela_excluida, frete._id_destino], (err, result) => {
+              if (err) {
+                console.log(err.message);
+                reject(err.message);
+              } else {
+                resolve(result);
+            }
+          });
+        });
+      }
+      
+      
+    }
+    
+    module.exports = FreteModel;

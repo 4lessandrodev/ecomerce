@@ -4,6 +4,8 @@ const indexController = require('../controllers/IndexController');
 const contactController = require('../controllers/ContatosController');
 const usuarioController = require('../controllers/UsuarioController');
 const clienteController = require('../controllers/ClienteController');
+//-------------------------------------------------------------------------
+const produtoCompraController = require('../controllers/ProdutoCompraController');
 
 
 //------------------------------------------------------------------------------------------------------
@@ -86,28 +88,32 @@ router.post('/comprar-cesta', (req, res, next) => {
 //------------------------------------------------------------------------------------------------------
 //Rota para carrinho de compras
 router.get('/carrinho', (req, res, next) => {
+
+  indexController.carregarCarrinhoDeCompras(req, res, next);
+/*
   let logado = (req.session.user != undefined);
   res.render('carrinho', {
-    logado,
-    rotulo: 'Carrinho',
-    produtos: [],
-    cestas: [],
+    logado, //OK
+    rotulo: 'Carrinho', //OK
+    produtos: [], //OK
+    cestas: [], //OK
     enderecos:
     [
-      { descricao: 'Entregar em meu endereço', valor: '0', frete: '10.00' },
-      { descricao: 'Quero retirar em: Loja I - Centro', valor: '1', frete: '0.00' },
-      { descricao: 'Quero retirar em: Loja II - Zona Oeste', valor: '2', frete: '0.00' }
+      { descricao: 'Entregar em meu endereço', valor: '0', frete: '10.00' }, //OK
+      { descricao: 'Quero retirar em: Loja I - Centro', valor: '1', frete: '0.00' }, //OK
+      { descricao: 'Quero retirar em: Loja II - Zona Oeste', valor: '2', frete: '0.00' } //OK
     ],
-    frete:'10.00',
-    total:'52.90',
-    formaPagamento:
+    frete:'10.00', //OK FILTER(FRETES.DESTINO)
+    total:'52.90', // OK
+    formaPagamento: //CADASTRAR 
     [
       'Dinheiro - Na entrega',
       'Cartão Marter - Na entrega',
       'Cartão Visa - Na entrega'
-    ],
-    cliente:{nome:'Alessandro', endereco:'Avenida Afonso Pena, 50 Centro Itumbiara-GO'}
+    ], //OK
+    cliente:{nome:'Alessandro', endereco:'Avenida Afonso Pena, 50 Centro Itumbiara-GO'} //OK
   });
+  */
 });
 //------------------------------------------------------------------------------------------------------
 //Rota para realizar login

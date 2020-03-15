@@ -44,8 +44,8 @@ class UsuarioModel {
   set admin(value) {
     this._admin = value;
   }
-
-
+  
+  
   cadastrarNovoUsuario(usuario) {
     return new Promise((resolve, reject) => {
       conect.query(`INSERT INTO tb_usuarios(email, senha, usuario_excluido) VALUES(?,?,?)`, [
@@ -60,7 +60,7 @@ class UsuarioModel {
       });
     });
   }
-
+  
   entrar(usuario) {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT id, email, admin FROM tb_usuarios AS user WHERE user.email = ? AND user.senha = ?`, [usuario._email, usuario._senha], (err, results) => {
@@ -73,7 +73,7 @@ class UsuarioModel {
       });
     });
   }
-
+  
   alterarSenha(usuario) {
     return new Promise((resolve, reject) => {
       conect.query(`UPDATE tb_usuario SET senha = ? WHERE email = ?`, [usuario._senha, usuario._email], (err, results) => {
@@ -86,8 +86,9 @@ class UsuarioModel {
       });
     });
   }
-
-
+  
+ 
+  /*
   //USANDO O NOT IN PARA SELECIONAR UM INTERVALO DE DADOS NO BANCO 
   selecionarIntervaloInverso(array) {
     return new Promise((resolve, reject) => {
@@ -101,18 +102,19 @@ class UsuarioModel {
       });
     });
   }
-
+  
   /**
-   SELECT código_empregado, nome, data_nascimento, cidade
+  SELECT código_empregado, nome, data_nascimento, cidade
   FROM empregados
   WHERE codigo_empregado in(3,7,9,11,14);
   --------------------
   SELECT código_empregado, nome, data_nascimento, cidade
   FROM empregados
   WHERE codigo_empregado not in(3,7,9,11,14)
-   */
-
+  */
+  
   //USANDO O IN PARA SELECIONAR UM INTERVALO DE DADOS NO BANCO 
+  /*
   selecionarIntervalo(array) {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT * FROM tb_usuarios WHERE id IN(${array})`, (err, result) => {
@@ -124,8 +126,8 @@ class UsuarioModel {
         }
       });
     });
-
   }
+  */
 }
 
 module.exports = UsuarioModel;

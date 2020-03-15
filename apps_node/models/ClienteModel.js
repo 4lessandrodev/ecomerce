@@ -147,6 +147,23 @@ WHERE u.id = c.id_usuario AND r.id = c.id_regiao AND c.cliente_excluido = ?;`, [
   }
 
 
+
+  selecionarClienteParaCarrinho(cliente) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT c.id, c.nome, c.endereco, c.bairro, c.cidade, c.estado, c.id_regiao
+      FROM tb_clientes AS c
+      WHERE c.id_usuario = ?`, [cliente._id_usuario], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  
   desabilitarCliente(cliente) {
     return new Promise((resolve, reject) => {
       conect.query(`UPDATE tb_clientes SET cliente_excluido = ? WHERE id = ?`, [
