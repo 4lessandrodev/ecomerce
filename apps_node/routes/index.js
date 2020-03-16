@@ -8,6 +8,7 @@ const clienteController = require('../controllers/ClienteController');
 const produtoCompraController = require('../controllers/ProdutoCompraController');
 
 
+
 //Rota para renderizar a pagina principal  
 router.get('/', (req, res, next) => {
   indexController.carregarIndex(req, res, next);

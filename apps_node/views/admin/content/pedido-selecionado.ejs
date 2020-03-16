@@ -1,0 +1,61 @@
+    <main>
+      <div class="background">
+
+        <!------------------------------------------------------------------------------------------------------------>
+        <!--LISTAR CESTAS CADASTRADAS-->
+        <section class="container list-itens-container table-responsive-md">
+          <div class="navbar navbar-light">
+            <h6 class="navbar-brand">
+              Lista de Pedidos
+            </h6>
+          </div>
+
+          <table class="table table-hover table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">Pedido</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">Categoria</th>
+                <th scope="col">Qtd. Vendida</th>
+                <th scope="col">Preço und.</th>
+                <th scope="col">Subtotal</th>
+                <th scope="col" class="col-small">Tipo</th>
+                <th scope="col" class="col-small">Detalhes</th>
+              </tr>
+            </thead>
+
+            <tbody id="listagem-cestas">
+
+              <% cestas.forEach(function(cesta){ %>
+              <tr>
+                <td scope="row"><strong>000<%=cesta.id%></strong></td>
+                <td><%=cesta.descricao%></td>
+                <td><%=cesta.categoria%></td>
+                <td><%=cesta.qtd_venda%></td>
+                <td>R$ <%=cesta.preco_unitario%></td>
+                <td>R$ <%=cesta.subtotal%></td>
+                <td>Cesta</td>
+                <td><button class=" btn btn-excluir" onclick="excluirItem(this)"> <input type="hidden"
+                      value="<%=cesta.id%>"><i class="fas fa-eye"></i></button></td>
+              </tr>
+              <% }); %>
+
+              <% produtos.forEach(function(produto){ %>
+              <tr>
+                <td scope="row"><strong>000<%=produto.id%></strong></td>
+                <td><%=produto.descricao%></td>
+                <td><%=produto.categoria%></td>
+                <td><%=produto.qtd_venda%></td>
+                <td>R$ <%=produto.preco_unitario%></td>
+                <td>R$ <%=produto.subtotal%></td>
+                <td>Adicional</td>
+                <td><button class=" btn btn-excluir" onclick="excluirItem(this)"> <input type="hidden"
+                      value="<%=produto.id%>"><i class="fas fa-eye"></i></button></td>
+              </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </section>
+        <!------------------------------------------------------------------------------------------------------------>
+      </div>
+    </main>

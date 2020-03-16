@@ -16,6 +16,7 @@ const pedidoController = require('../controllers/PedidosController');
 const produtoParaCestaController = require('../controllers/ProdutosParaCestaController');
 
 
+
 //------------------------------------------------------------------------------------------------------
 //Renderizar a pagina principal de admin
 router.get('/', (req, res, next) => {
@@ -341,6 +342,19 @@ router.delete('/produto-para-cesta/:id_produto/:id_cesta', (req, res, next) => {
 });
 //------------------------------------------------------------------------------------------------------
 
+
+
+//------------------------------------------------------------------------------------------------------
+//Listar relatorio de pedidos
+router.get('/pedido', (req, res, next) => {
+  (adminController.autenticar(req, res, next)) ? pedidoController.listarPedidos(req, res, next) : '';
+});
+//------------------------------------------------------------------------------------------------------
+//Listar pedido selecionado
+router.get('/pedido/:id', (req, res, next) => {
+  (adminController.autenticar(req, res, next)) ? pedidoController.listarPedidoEspecifico(req, res, next) : '';
+});
+//------------------------------------------------------------------------------------------------------
 
 
 module.exports = router;
