@@ -1,23 +1,74 @@
 <div class="container">
+  
+ 
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-limite="<%=cesta.alteracoes_permitidas%>">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="exampleModalLabel">Selecione os produtos desejados</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col" class="tr-id">Cod.</th>
+                <th scope="col" class="tr-imagem-produto">Imagem</th>
+                <th scope="col" class="tr-texto-centralizado">Descrição</th>
+                <th scope="col" id="tr1">Categoria</th>
+                <th scope="col" id="tr2">Medida</th>
+                <th scope="col" id="tr-opcao-titulo">Adicionar</th>
+              </tr>
+            </thead>
+            <tbody id="produtos-adicionais">
+              <%produtos.forEach(function(produto){ %>
+              <tr class="itens-da-cesta">
+                <td scope="row" class="tr-id"><%=produto.id%><input type="hidden" class="id_produto_cesta"
+                    value="<%=produto.id%>"></th>
+                <td class="tr-imagem-produto"><img src="<%=produto.imagem%>" alt="imagem" class="imagem-produto"></td>
+                <td class="tr-texto-centralizado"><%=produto.descricao%></td>
+                <td id="tr3"><%=produto.categoria%></td>
+                <td id="tr4"><%=produto.unidade_medida%></td>
+                <td class="opcoes" data-item="<%=produto.id%>"><i class="fas fa-plus-circle"
+                    style="color: darkgreen;"></i></td>
+              </tr>
+              <% }); %>
+            </tbody>
+          </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fecgar</button>
+        <button type="button" class="btn btn-primary">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
   <section class="cesta-selecionada">
     <!-- Stack the columns on mobile by making one full-width and the other half-width -->
     <div class="row">
       <div class="col-md-8 div-imagem">
         <img src="<%=cesta.imagem%>" class="img-fluid" alt="Responsive image" alt="Imagem da cesta"
-          id="imagem-principal-cesta">
+        id="imagem-principal-cesta">
       </div>
       <div class="col-6 col-md-4">
-
-
+        
+        
         <div class="col-4" id="nav-lateral">
           <div class="list-group" role="tablist">
             <a class="list-group-item list-group-item-success" data-toggle="list" role="tab" aria-controls="home">
               <h2><%=cesta.descricao%></h2>
             </a>
             <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="profile"
-              id="categoria"><%=cesta.descricao_categoria%> </a>
+            id="categoria"><%=cesta.descricao_categoria%> </a>
             <a class="list-group-item list-group-item-action descricao-item" data-toggle="list" role="tab"
-              aria-controls="profile"><%=cesta.informacoes_nutricionais%></a>
+            aria-controls="profile"><%=cesta.informacoes_nutricionais%></a>
             <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="messages">
               <h3>R$ <%=cesta.preco%> </h3>
             </a>
@@ -41,48 +92,51 @@
           <button type="button" class="btn btn-success botao-comprar" id="btn-comprar-cesta">Comprar agora</button>
           <button type="button" class="btn btn-outline-success botao-adicionar-carrinho" id="btn-add-cesta">Adicionar ao
             carrinho</button>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
-  <hr>
-  <h3>Produtos desta cesta</h3>
-  <section class="tabela-produtos">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th scope="col" class="tr-id">Cod.</th>
-          <th scope="col" class="tr-imagem-produto">Imagem</th>
-          <th scope="col" class="tr-texto-centralizado">Descrição</th>
-          <th scope="col" id="tr1">Categoria</th>
-          <th scope="col" id="tr2">Unidade Medida</th>
-          <th scope="col" id="tr-opcao-titulo">Excluir</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%produtos_da_cesta.forEach(function(produto){ %>
-        <tr class="itens-da-cesta">
-          <td scope="row" class="tr-id"><%=produto.id%><input type="hidden" class="id_produto_cesta"
-              value="<%=produto.id%>"></th>
-          <td class="tr-imagem-produto"><img src="<%=produto.imagem%>" alt="imagem" class="imagem-produto"></td>
-          <td class="tr-texto-centralizado"><%=produto.descricao%></td>
-          <td id="tr3"><%=produto.categoria%></td>
-          <td id="tr4"><%=produto.unidade_medida%></td>
-          <td class="opcoes"><i class="far fa-times-circle"></i></td>
-        </tr>
-        <% }); %>
-      </tbody>
-    </table>
-  </section>
-  <div class="botoes-a-direita">
-    <button type="button" class="btn btn-outline-success" id="adicionar-produto">Adicionar produto</button>
-  </div>
-</div>
-
-<section hidden style="display: none;">
-  <form id="produto-compra" hidden style="display: none;">
-    <input type="hidden" value="<%=cesta.id%>" name="id_cesta" id="id_cesta">
-    <input type="hidden" value="<%=cesta.preco%>" name="preco_unitario" id="preco_unitario">
-  </form>
-</section>
-<script src="./../../javascripts/app.js" type="module"></script>
+    </section>
+    <hr>
+    <h3>Produtos desta cesta</h3>
+    <section class="tabela-produtos">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col" class="tr-id">Cod.</th>
+            <th scope="col" class="tr-imagem-produto">Imagem</th>
+            <th scope="col" class="tr-texto-centralizado">Descrição</th>
+            <th scope="col" id="tr1">Categoria</th>
+            <th scope="col" id="tr2">Unidade Medida</th>
+            <th scope="col" id="tr-opcao-titulo">Excluir</th>
+          </tr>
+        </thead>
+        <tbody id="produtos-cesta">
+          <%produtos_da_cesta.forEach(function(produto){ %>
+            <tr class="itens-da-cesta" data-fator="<%=produto.fator_multiplicador%>">
+              <td scope="row" class="tr-id"><%=produto.id%><input type="hidden" class="id_produto_cesta"
+                value="<%=produto.id%>"></th>
+                <td class="tr-imagem-produto"><img src="<%=produto.imagem%>" alt="imagem" class="imagem-produto"></td>
+                <td class="tr-texto-centralizado"><%=produto.descricao%></td>
+                <td id="tr3"><%=produto.categoria%></td>
+                <td id="tr4"><%=produto.unidade_medida%></td>
+                <td class="opcoes" data-item="<%=produto.id%>" onclick="retirarItem(this)"><i
+                    class="far fa-times-circle"></i></td>
+              </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </section>
+        <div class="botoes-a-direita">
+          <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#exampleModal"
+            id="adicionar-produto">Adicionar produto</button>
+        </div>
+      </div>
+      
+      <section hidden style="display: none;">
+        <form id="produto-compra" hidden style="display: none;">
+          <input type="hidden" value="<%=cesta.id%>" name="id_cesta" id="id_cesta">
+          <input type="hidden" value="<%=cesta.preco%>" name="preco_unitario" id="preco_unitario">
+        </form>
+      </section>
+      <script src="./../../javascripts/app.js" type="module"></script>
+      <script src="./../../javascripts/chrome.js"></script>
