@@ -56,7 +56,7 @@ class PedidoModel {
   salvarPedido(pedido) {
     return new Promise((resolve, reject) => {
       conect.query(`INSERT INTO tb_pedidos(ecobag_adicional, id_tipo_de_pagamento, retirar_na_loja, anotacoes, status, id_compras) 
-      VALUES(?,?,?,?,?,?)`,[pedido._ecobag_adicional, pedido._id_tipo_pagamento, pedido._retirar_na_loja, pedido._anotacoes, pedido.status, pedido._id_compras], (err, result) => {
+      VALUES(?,?,?,?,?,?)`,[pedido._ecobag_adicional, pedido._id_tipo_pagamento, pedido._retirar_na_loja, pedido._anotacoes, pedido._status, pedido._id_compras], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -86,7 +86,7 @@ class PedidoModel {
       conect.query(`
       UPDATE tb_pedidos SET ecobag_adicional = ?, id_tipo_de_pagamento = ?, retirar_na_loja = ?, anotacoes = ?, status = ?, id_compras = ? WHERE id = ?`,
       [
-        pedido._ecobag_adicional, pedido._id_tipo_pagamento, pedido._retirar_na_loja, pedido._anotacoes, pedido._anotacoes, pedido.status, pedido._id_compras, pedido._id
+        pedido._ecobag_adicional, pedido._id_tipo_pagamento, pedido._retirar_na_loja, pedido._anotacoes, pedido._anotacoes, pedido._status, pedido._id_compras, pedido._id
       ], (err, result) => {
         if (err) {
           console.log(err.message);
@@ -98,6 +98,26 @@ class PedidoModel {
     });
   }
   
+
+
+
+  alterarStatusDoPedido(pedido) {
+    return new Promise((resolve, reject) => {
+      conect.query(`
+      UPDATE tb_pedidos SET status = ? WHERE id = ?`,
+        [
+          pedido.status, pedido._id
+        ], (err, result) => {
+          if (err) {
+            console.log(err.message);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
+    });
+  }
+
   
   excluirPedido(pedido) {
     return new Promise((resolve, reject) => {
@@ -118,7 +138,7 @@ class PedidoModel {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT pedido.id, cesta.descricao, categoria.descricao AS categoria, COUNT(cesta.id) AS qtd_venda, ccompra.preco_unitario, (COUNT(cesta.id) * ccompra.preco_unitario) AS subtotal
       FROM tb_pedidos AS pedido, tb_cestas_compra AS ccompra, tb_cestas AS cesta, tb_categoria_cestas AS categoria
-      WHERE pedido.id_compras = ccompra.id_compra AND cesta.id = ccompra.id_cesta AND categoria.id = cesta.id_categoria_cesta AND pedido.status = ? GROUP BY cesta.id`, [pedido._status], (err, result) => {
+      WHERE pedido.id_compras = ccompra.id_compra AND cesta.id = ccompra.id_cesta AND categoria.id = cesta.id_categoria_cesta AND pedido.status = ? GROUP BY pedido.id`, [pedido._status], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -133,7 +153,7 @@ class PedidoModel {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT pedido.id, produto.descricao, categoria.descricao AS categoria, COUNT(produto.id) AS qtd_venda, pcompra.preco_unitario, (COUNT(produto.id) * pcompra.preco_unitario) AS subtotal
       FROM tb_pedidos AS pedido, tb_produtos_compra AS pcompra, tb_produtos AS produto, tb_categoria_produtos AS categoria
-      WHERE pedido.id_compras = pcompra.id_compra AND produto.id = pcompra.id_produto AND categoria.id = produto.id_categoria_produto AND pedido.status = ? GROUP BY produto.id`, [pedido._status], (err, result) => {
+      WHERE pedido.id_compras = pcompra.id_compra AND produto.id = pcompra.id_produto AND categoria.id = produto.id_categoria_produto AND pedido.status = ? GROUP BY pedido.id`, [pedido._status], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -192,7 +212,7 @@ class PedidoModel {
   selecionarProdutosDeUmaCestaComprada(arrayDeIds) {
     return new Promise((resolve, reject) => {
       //SELECT descricao FROM tb_produtos WHERE id IN (1,2,3)
-      conect.query(`SELECT id, descricao FROM tb_produtos WHERE id IN (${arrayDeIds})`, (err, result) => {
+      conect.query(`SELECT produto.id, produto.descricao, categoria.descricao AS categoria, produto.preco_venda AS preco_unitario FROM tb_produtos AS produto, tb_categoria_produtos AS categoria WHERE categoria.id = produto.id_categoria_produto AND produto.id IN(${arrayDeIds})`, (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -201,8 +221,53 @@ class PedidoModel {
         }
       });
     });
-}
-
+  }
+  
+  listarDadosGeraisDoPedido(pedido) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT cliente.nome, cliente.phone, cliente.endereco, cliente.cidade, cliente.estado, cliente.cep, regiao.descricao, pedido.retirar_na_loja, pedido.ecobag_adicional, pedido.anotacoes, pg.descricao AS pagamento, frete.preco AS frete, regiao.descricao AS regiao, compra.data_compra AS data, pedido.status
+      FROM tb_pedidos AS pedido, tb_compras AS compra, tb_clientes AS cliente, tb_regioes AS regiao, tb_tipos_pagamento AS pg, tb_fretes AS frete
+      WHERE pedido.id_compras = compra.id AND cliente.id_usuario = compra.id_usuario AND regiao.id = cliente.id_regiao AND pg.id = pedido.id_tipo_de_pagamento AND frete.id_destino = cliente.id_regiao AND pedido.id = ?`, [pedido._id], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+  
+  calcularTotalDeProdutoVendidoNoPedido(pedido) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT SUM(pc.quantidade * pc.preco_unitario) AS total_produto
+      FROM tb_produtos_compra AS pc ,tb_pedidos AS p,tb_compras AS c
+      WHERE c.id = p.id_compras AND p.id = ? AND pc.id_compra = p.id_compras`, [pedido._id], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+  
+  calcularTotalDeCestasVendidasNoPedido(pedido) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT SUM(cc.quantidade * cc.preco_unitario) AS total_cesta
+      FROM tb_pedidos AS p,tb_compras AS c, tb_cestas_compra AS cc
+      WHERE c.id = p.id_compras AND p.id = ? AND cc.id_compra = p.id_compras`, [pedido._id], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+  
   
 }
 

@@ -355,6 +355,10 @@ router.get('/pedido/:id', (req, res, next) => {
   (adminController.autenticar(req, res, next)) ? pedidoController.listarPedidoEspecifico(req, res, next) : '';
 });
 //------------------------------------------------------------------------------------------------------
-
+//Alterar status do pedido
+router.post('/status-pedido/:id/:status', (req, res, next) => {
+  (adminController.autenticar(req, res, next)) ? pedidoController.alterarStatusPedido(req, res, next) : '';
+});
+//------------------------------------------------------------------------------------------------------
 
 module.exports = router;

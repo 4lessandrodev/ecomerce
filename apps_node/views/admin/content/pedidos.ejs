@@ -16,7 +16,7 @@
                 <th scope="col">Pedido</th>
                 <th scope="col">Descrição</th>
                 <th scope="col">Categoria</th>
-                <th scope="col">Qtd. Vendida</th>
+                <th scope="col">Qtd.</th>
                 <th scope="col">Preço und.</th>
                 <th scope="col">Subtotal</th>
                 <th scope="col" class="col-small">Tipo</th>
@@ -27,7 +27,7 @@
             <tbody id="listagem-cestas">
               
               <% cestas.forEach(function(cesta){ %>
-                <tr>
+                <tr onclick="location.href=`/admin/pedido/<%=cesta.id%>`">
                   <td scope="row"><strong>000<%=cesta.id%></strong></td>
                   <td><%=cesta.descricao%></td>
                   <td><%=cesta.categoria%></td>
@@ -41,7 +41,7 @@
                   <% }); %>
                   
                   <% produtos.forEach(function(produto){ %>
-                    <tr>
+                    <tr onclick="location.href=`/admin/pedido/<%=produto.id%>`">
                       <td scope="row"><strong>000<%=produto.id%></strong></td>
                       <td><%=produto.descricao%></td>
                       <td><%=produto.categoria%></td>

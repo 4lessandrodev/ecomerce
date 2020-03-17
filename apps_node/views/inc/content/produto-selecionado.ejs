@@ -59,7 +59,7 @@
       </thead>
       <tbody>
         <%indicacoes.forEach(function(indicacao){ %>
-        <tr>
+        <tr onclick="location.href='/produto-selecionado/<%=indicacao.id%>'">
           <td scope="row" class="tr-id"><%=indicacao.id%></th>
           <td class="tr-imagem-produto"><img src="<%=indicacao.imagem%>" alt="imagem" class="imagem-produto"></td>
           <td class="tr-texto-centralizado"><%=indicacao.descricao%></td>

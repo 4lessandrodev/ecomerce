@@ -31,8 +31,10 @@ const renderizarPaginaDePedidos = (req, res, next, cestas = [], produtos=[]) => 
 };
 //-------------------------------------------------------------------------------------
 //Renderizar pedido selecionado 
-const renderizarPaginaDePedidoSelecionado = (req, res, next, frete = 0, total = 0, cliente = [], formaPagamento = [], produtosDaCesta=[], cestas=[], enderecos=[], produtos=[]) => {
+// renderizarPaginaDePedidoSelecionado(req, res, next, numeroPedido, total, produtosDaCesta, produtos, dadosGerais);
+const renderizarPaginaDePedidoSelecionado = (req, res, next, pedido, total = 0, produtosDaCesta=[], produtos=[], dadosGerais = []) => {
   let logado = (req.session.user != undefined);
+ //res.send(dadosGerais);
   res.render('admin/pedido-selecionado', {
     logado,
     data: '',
@@ -40,16 +42,16 @@ const renderizarPaginaDePedidoSelecionado = (req, res, next, frete = 0, total = 
     pagina: 'Pedidos',
     btnLabel: 'Exportar',
     local: 'http://localhost:3000',
-    cestas,
     produtos,
-    cliente,
-    frete,
-    formaPagamento,
+    dadosGerais: dadosGerais[0],
+    pedido,
+    produtosDaCesta,
+    total:total.toFixed(2),
     btn: {
       label: 'Voltar',
-      classe: 'display-none',
-      classe2: '',
-      caminho: '/admin'
+      classe: '',
+      classe2: 'display-none',
+      caminho: '/admin/pedido'
     }
   });
 };
@@ -105,35 +107,97 @@ const listarPedidos = (req, res, next) => {
 };
 //-------------------------------------------------------------------------------------
 const listarPedidoEspecifico = (req, res, next) => {
-  
-  let formaPagamento = new FormasPagamento();
-  let cliente = new Cliente();
-  let loja = new Loja();
-  let frete = new Frete();
-  let cestaCompra = new CestaCompra();
-  let produtoCompra = new ProdutoCompra();
+
   let pedido = new Pedido();
-  let total;
-  let endereco;
+  let total = 0;
+  let numeroPedido = req.params.id;
 
   pedido.id = req.params.id;
   pedido.selecionarIdsDosProdutosDeUmaCesta(pedido).then(result => {
-    pedido.listarResumoCestasVendidas(pedido).then(cestas => {
-      pedido.listarResumoProdutosVendidos(pedido).then(produtos => {
-        let arrayDeCodigos = [];
-        for (let r of result) {
-          arrayDeCodigos.push(r.codigos);
-        }
-        let arrayDeCodigosString = arrayDeCodigos.toString();
-        let arrayDeCodigosAux = arrayDeCodigosString.split();
-        if (arrayDeCodigos == []) {
-          renderizarPaginaDePedidoSelecionado(req, res, next, frete, total, clientes, formaPagamento, produtosDaCesta, cestas, endereco, produtos);
-        } else {
-          pedido.selecionarProdutosDeUmaCestaComprada(arrayDeCodigosString).then(produtosDaCesta => {
-            renderizarPaginaDePedidoSelecionado(req, res, next, frete, total, cliente, formaPagamento, produtosDaCesta, cestas, endereco, produtos);
+    pedido.listarProdutosVendidoSelecionado(pedido).then(produtos => {
+      pedido.listarDadosGeraisDoPedido(pedido).then(dadosGerais => {
+        pedido.calcularTotalDeCestasVendidasNoPedido(pedido).then(totalCesta => {
+          pedido.calcularTotalDeProdutoVendidoNoPedido(pedido).then(totalProduto => {
+
+           
+
+            let totalcesta = (totalCesta[0].total_cesta == null) ? 0 : parseFloat(totalCesta[0].total_cesta);
+            let totalproduto = (totalProduto[0].total_produto == null) ? 0 : parseFloat(totalProduto[0].total_produto);
+            let totalFrete = (dadosGerais[0].retirar_na_loja == 0) ? parseFloat(dadosGerais[0].frete) : 0;
+
+            total = totalcesta + totalproduto + totalFrete;
+
+            //Consultar produtos da cesta 
+            //----------------------------------------------------------------------------
+            let arrayDeCodigos = [];
+            for (let r of result) {
+              arrayDeCodigos.push(r.codigos);
+            }
+            let arrayDeCodigosString = arrayDeCodigos.toString();
+            let arrayDeCodigosAux = [];
+            for (let id of [...arrayDeCodigosString]) {
+              if (!isNaN(id)) {
+                arrayDeCodigosAux.push(parseInt(id));
+              }
+            }
+            // Verificar se existem produtos em alguma cesta que o cliente comprou
+            if (result[0] != undefined){
+              pedido.selecionarProdutosDeUmaCestaComprada(arrayDeCodigosString).then(retorno => {
+                let result = [];
+                for (let id of arrayDeCodigosAux) {
+                  for (let item of retorno) {
+                    if (id === item.id) {
+                      if (item.qtd_venda == null) {
+                        item.qtd_venda = 1;
+                        result.push(item);
+                      } else {
+                        item.qtd_venda = item.qtd_venda++;
+                        result.push(item);
+                      }
+                    }
+                  }
+                }
+                //Calcular total de itens na cesta 
+                let produtosDaCesta = [];
+                for (let item of result) {
+                  if (produtosDaCesta.indexOf(item) == -1) {
+                    produtosDaCesta.push(item);
+                  } else {
+                    produtosDaCesta[produtosDaCesta.indexOf(item)].qtd_venda += 1;
+                    produtosDaCesta[produtosDaCesta.indexOf(item)].subtotal = (produtosDaCesta[produtosDaCesta.indexOf(item)].qtd_venda * parseFloat(produtosDaCesta[produtosDaCesta.indexOf(item)].preco_unitario)).toFixed(2);
+                  }
+                }
+                
+
+
+                renderizarPaginaDePedidoSelecionado(req, res, next, numeroPedido, total, produtosDaCesta, produtos, dadosGerais);
+                //----------------------------------------------------------------------------
+                //Fim da consulta dos produtos da cesta 
+                
+                
+              }).catch(err => {
+                console.log(err.message);
+                res.send(err.message);
+              });
+              
+            } else {
+              renderizarPaginaDePedidoSelecionado(req, res, next, numeroPedido, total, produtosDaCesta=[], produtos, dadosGerais);
+              //----------------------------------------------------------------------------
+              //Renderizar pagina sem os produtos da cesta 
+              
+              //res.send('Vazio');
+              
+            }
+            
+          }).catch(err => {
+            console.log(err.message);
+            res.send(err.message);
           });
-        }
-        // renderizarPaginaDePedidos(req, res, next, cestas, produtos);
+        }).catch(err => {
+          console.log(err.message);
+          res.send(err.message);
+        });
+        
       }).catch(err => {
         console.log(err.message);
         res.send(err.message);
@@ -147,7 +211,21 @@ const listarPedidoEspecifico = (req, res, next) => {
     res.send(err.message);
   });
 };
+
+//-------------------------------------------------------------------------------------
+const alterarStatusPedido = (req, res, next) => {
+  let pedido = new Pedido();
+  pedido.id = req.params.id;
+  pedido.status = req.params.status;
+  pedido.alterarStatusDoPedido(pedido).then(pedido => {
+    res.send(pedido);
+  }).catch(err => {
+    console.log(err.message);
+    res.send(err.message);
+  });
+};
+
 //-------------------------------------------------------------------------------------
 
 
-module.exports = { listarPedidoEspecifico, salvarPedido, editarPedido, excluirPedido, listarPedidos };
+module.exports = { listarPedidoEspecifico, salvarPedido, editarPedido, excluirPedido, listarPedidos, alterarStatusPedido };

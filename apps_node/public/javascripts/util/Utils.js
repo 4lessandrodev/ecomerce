@@ -243,6 +243,38 @@ class Utils {
       });
   }
 
+
+
+
+
+
+  static alterarStatusDoPedido(el) {
+    let id_pedido = parseInt(el.querySelector('.numero_pedido').value);
+    let id_status = parseInt(el.querySelector('.code_status').value);
+
+    return fetch(`/admin/status-pedido/${id_pedido}/${id_status}`, {
+      headers: { "Content-Type": "application/json" },
+      method: 'POST'
+    }).then(res => {
+      if (!res.ok) {
+        swal("Oops!", "Algo errado ocorreu!", "error");
+        throw new Error('Erro ao alterar status');
+      }
+      return res;
+    }).then(res => {
+
+      let json = res.json();
+      swal("Status do pedido alterado com sucesso!")
+      .then((value) => {
+        location.reload();
+      });
+      return json;
+    });
+  }
+
+
+
+
 }
 
 
