@@ -32,7 +32,7 @@ switch (currentPage) {
   
   btnComprarCesta.addEventListener('click', function () {
     let cesta = cestaCont.novaCesta();
-    compraCont.iniciarCompra('Cesta', cesta);
+    compraCont.iniciarCompra('Cesta', cesta, true); //Parametros = Tipo de compra, objeto cesta, redirecionar para carrinho
   });
   btnAddCestaNoCarrinho.addEventListener('click', function () {
     let cesta = cestaCont.novaCesta();
@@ -48,11 +48,11 @@ switch (currentPage) {
   
   btnAddProdutoNoCarrinho.addEventListener('click', function () {
     let produto = produtoCont.novoProduto();
-    compraCont.iniciarCompra('Produto', produto);
+    compraCont.iniciarCompra('Produto', produto); //Parametros = Tipo de compra, objeto cesta, redirecionar para carrinho
   });
   btnComprarProduto.addEventListener('click', function () {
     let produto = produtoCont.novoProduto();
-    compraCont.iniciarCompra('Produto', produto);
+    compraCont.iniciarCompra('Produto', produto, true);
   });
   break;
   //-------------------------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ switch (currentPage) {
   //-------------------------------------------------------------------------------------------------
     const btnConfirmarPedido = document.querySelector('#btn-confirmar-pedido');
     btnConfirmarPedido.addEventListener('click', function () {
-      let pedido = pedidoCont.novoPedido();
+      let pedido = pedidoCont.novoPedido(); 
       pedidoCont.salvarPedido(pedido);
     });
 

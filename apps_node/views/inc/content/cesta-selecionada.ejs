@@ -61,12 +61,12 @@
         
         
         <div class="col-4" id="nav-lateral">
-          <div class="list-group" role="tablist">
+          <div class="list-group" role="tablist" id="div-cesta-selecionada">
             <a class="list-group-item list-group-item-success" data-toggle="list" role="tab" aria-controls="home">
               <h2><%=cesta.descricao%></h2>
             </a>
             <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="profile"
-            id="categoria"><%=cesta.descricao_categoria%> </a>
+            id="categoria" data-categoria="<%=cesta.descricao_categoria%>"><%=cesta.descricao_categoria%></a>
             <a class="list-group-item list-group-item-action descricao-item" data-toggle="list" role="tab"
             aria-controls="profile"><%=cesta.informacoes_nutricionais%></a>
             <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="messages">

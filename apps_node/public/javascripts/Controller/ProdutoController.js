@@ -18,7 +18,7 @@ export class ProdutoController {
 
   }
 
-  comprarProduto(compra, produto) {
+  comprarProduto(compra, produto, redirecionar) {
     produto._id_compra = compra;
     fetch(`/comprar-produto`, {
       headers: { "Content-Type": "application/json" },
@@ -27,8 +27,19 @@ export class ProdutoController {
     }).then(response => response.json())
       .then(json => {
         if (json.serverStatus == 2 && json.affectedRows == 1) {
-          console.log(json);
-          swal("Boa escolha!", "Produto adicionado com sucesso!", "success");
+          if (redirecionar) {
+            swal({
+              title: "Boa escolha",
+              text: "Produto adicionado com sucesso!",
+              icon: "success",
+              buttons: true,
+              dangerMode: false              
+            }).then(()=> {
+              location.href = '/carrinho';
+            });
+          } else {
+            swal("Boa escolha!", "Produto adicionado com sucesso!", "success");
+          }
         } else {
           swal("Oops!", `Ocorreu um erro ao comprar produto`, "error");
           reject('Ocorreu um erro ao comprar produto');

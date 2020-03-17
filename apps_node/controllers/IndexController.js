@@ -203,13 +203,16 @@ const exibirProdutoSelecionadoNaHome = (req, res, next) => {
 //------------------------------------------------------------------------------------------------------
 const iniciarCompra = (req, res, next) => {
   //let compra = new Compra(req.body.id_cliente);
-  if (req.session.user != undefined) {
-    let compra = new Compra(req.session.user.id);
-    compra.salvarCompra(compra).then(id_compra => {
-      res.send(id_compra);
-    }).catch(err => {
-      res.send(err.message);
-    });
+  let usuarioLogado = (req.session.user != undefined);
+  if (usuarioLogado) {
+    if (req.session.user != undefined) {
+      let compra = new Compra(req.session.user.id);
+      compra.salvarCompra(compra).then(id_compra => {
+        res.send(id_compra);
+      }).catch(err => {
+        res.send(err.message);
+      });
+    }
   }
 };
 //------------------------------------------------------------------------------------------------------
@@ -222,10 +225,12 @@ const addProdutoNoCarrinho = (req, res, next) => {
   }).catch(err => {
     res.send(err.message);
   });
+  
 };
 //------------------------------------------------------------------------------------------------------
 const addCestaNoCarrinho = (req, res, next) => {
   //id_cesta, id_compra, quantidade, preco_unitario, produtos
+  
   let cestaCompra = new CestaCompra(req.body._id_cesta, req.body._id_compra, req.body._quantidade, req.body._preco_unitario, req.body._produtos);
   req.session.id_compra = req.body._id_compra;
   cestaCompra.salvarCestaCompra(cestaCompra).then(resposta => {
@@ -257,40 +262,55 @@ const verificarUsuarioLogado = (req, res, next) => {
 //------------------------------------------------------------------------------------------------------
 //CARREGAR CARRINHO 
 const carregarCarrinhoDeCompras = (req, res, next) => {
-  let id_usuario = req.session.user.id;
-  let id_compra = req.session.id_compra;
-  if (req.session.id_compra == undefined) {
-    renderizarPaginaCarrinhoVazio(req, res, next);
-  } else {
-    let formaPagamento = new FormasPagamento();
-    let cliente = new Cliente();
-    let loja = new Loja();
-    let frete = new Frete();
-    let cestaCompra = new CestaCompra();
-    let produtoCompra = new ProdutoCompra();
+  let usuarioLogado = (req.session.user != undefined);
+  
+  console.log(usuarioLogado);
+  
+  if (usuarioLogado) {
     
-    produtoCompra.id_compra = id_compra;
-    cestaCompra.id_compra = id_compra;
-    cliente.id_usuario = id_usuario;
+    let id_usuario = req.session.user.id;
     
-    produtoCompra.listarProdutosDoCarrinho(produtoCompra, id_usuario).then(produtos => {
-      cestaCompra.listarCestasDoCarrinho(cestaCompra, id_usuario).then(cestas => {
-        formaPagamento.listarTiposPagamentoParaCarrinho(formaPagamento).then(formasPagamento => {
-          cliente.selecionarClienteParaCarrinho(cliente).then(clientes => {
-            frete.id_destino = clientes[0].id_regiao;
-            loja.listarEnderecosDeLojasParaCarrinho(loja).then(enderecos => {
-              frete.listarFretesParaCarrinho(frete).then(fretes => {
-                
-                const totalizar = (total, valor) => {
-                  return total + parseFloat(valor.subtotal);
-                };
-                let total_produto = produtos.reduce(totalizar, 0);
-                let total_cesta = cestas.reduce(totalizar, 0);
-                //5.00 adicional cobrado por cada ecobag
-                let total = total_produto + total_cesta + parseFloat(fretes[0].preco) + 5;
-                total = total.toFixed(2);
-                
-                renderizarPaginaCarrinho(req, res, next, fretes[0], total, clientes[0], formasPagamento, produtos, cestas, enderecos, vazio = false);
+    if (req.session.id_compra == undefined) {
+      //Carrinho vazio 
+      renderizarPaginaCarrinhoVazio(req, res, next);
+      
+    } else {
+      
+      let id_compra = req.session.id_compra;
+      
+      let formaPagamento = new FormasPagamento();
+      let cliente = new Cliente();
+      let loja = new Loja();
+      let frete = new Frete();
+      let cestaCompra = new CestaCompra();
+      let produtoCompra = new ProdutoCompra();
+      
+      produtoCompra.id_compra = id_compra;
+      cestaCompra.id_compra = id_compra;
+      cliente.id_usuario = id_usuario;
+      
+      produtoCompra.listarProdutosDoCarrinho(produtoCompra, id_usuario).then(produtos => {
+        cestaCompra.listarCestasDoCarrinho(cestaCompra, id_usuario).then(cestas => {
+          formaPagamento.listarTiposPagamentoParaCarrinho(formaPagamento).then(formasPagamento => {
+            cliente.selecionarClienteParaCarrinho(cliente).then(clientes => {
+              frete.id_destino = clientes[0].id_regiao;
+              loja.listarEnderecosDeLojasParaCarrinho(loja).then(enderecos => {
+                frete.listarFretesParaCarrinho(frete).then(fretes => {
+                  
+                  const totalizar = (total, valor) => {
+                    return total + parseFloat(valor.subtotal);
+                  };
+                  let total_produto = produtos.reduce(totalizar, 0);
+                  let total_cesta = cestas.reduce(totalizar, 0);
+                  //5.00 adicional cobrado por cada ecobag
+                  let total = total_produto + total_cesta + parseFloat(fretes[0].preco) + 5;
+                  total = total.toFixed(2);
+                  
+                  renderizarPaginaCarrinho(req, res, next, fretes[0], total, clientes[0], formasPagamento, produtos, cestas, enderecos, vazio = false);
+                }).catch(err => {
+                  console.log(err.message);
+                  res.send(err.message);
+                });
               }).catch(err => {
                 console.log(err.message);
                 res.send(err.message);
@@ -311,10 +331,10 @@ const carregarCarrinhoDeCompras = (req, res, next) => {
         console.log(err.message);
         res.send(err.message);
       });
-    }).catch(err => {
-      console.log(err.message);
-      res.send(err.message);
-    });
+    }
+  } else {
+    //Carrinho vazio
+    renderizarPaginaCarrinhoVazio(req, res, next);
   }
 };
 //------------------------------------------------------------------------------------------------------

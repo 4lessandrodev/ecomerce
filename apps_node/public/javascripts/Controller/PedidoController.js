@@ -32,11 +32,17 @@ export class PedidoController {
         let pedido = json.insertId;
         if (pedido != undefined) {
           localStorage.clear();
-          
-          swal(`Recebemos com sucesso seu pedido, anota ai 000${pedido}`)
-          .then((value) => {
+
+          swal({
+            title: "Muito Obrigado",
+            text: `Recebemos com sucesso seu pedido, anota ele ai... 000${pedido}`,
+            icon: "success",
+            buttons: true,
+            dangerMode: false
+          }).then(() => {
             window.location.href = '/';
           });
+          
         }
       } else {
         swal("Oops!", `Ocorreu um erro ao iniciar a compra`, "error");

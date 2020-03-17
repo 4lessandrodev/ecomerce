@@ -20,8 +20,9 @@
 						<li>
 							<a href="/contact">Contato</a>
 						</li>
-						<li>
-							<% if(!logado){ %> <a href="/login">Login</a> <% }else{ %> <a href="/logout">Sair</a> <% } %> 
+						<li id="login" data-login="<%=logado%>">
+							<% if(!logado){ %> <a href="/login">Login</a> <% }else{ %> <a href="/logout">Sair</a>
+							<% } %>
 						</li>
 						
 						<li class="btn-cta">
