@@ -1,4 +1,5 @@
 var createError = require('http-errors');
+var http = require('http');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -6,15 +7,16 @@ var bodyParse = require('body-parser');
 var logger = require('morgan');
 var formidable = require('formidable');
 var cookieSession = require('cookie-session');
-var hostname = 'localhost';
-var port = 3000;
+var hostname = 'fazendautopia.com';
+//var hostname = 'localhost';
+var port = 21183;
+//var port = 3000;
 var backlog = () => console.log(`Aplicação rodando... acesse em: ${hostname}:${port}`);
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
 
 var app = express();
-app.listen(port, hostname, backlog);
 app.use(express.json({ limit: '10mb' }));
 
 app.use(bodyParse.json({
@@ -86,11 +88,11 @@ app.use(function (req, res, next) {
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.error = req.app.get('env') === 'production' ? err : {};
 
   // render the error page
   res.status(err.status || 500);
   res.render('error');
 });
-
+app.listen(port, hostname, backlog);
 module.exports = app;
