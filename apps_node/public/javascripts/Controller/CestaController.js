@@ -10,16 +10,16 @@ export class CestaController {
     let id = document.getElementById('id_cesta').value;
     let preco = document.getElementById('preco_unitario').value;
     let quantidade = document.getElementById('quantidade').value;
-    let prdutos = document.querySelectorAll('tbody .itens-da-cesta .tr-id .id_produto_cesta');
+    let produtos = document.querySelectorAll('#produtos-cesta tr');
     let arr_codigos_produtos = [];
 
 
-    for (let produto of prdutos) {
-      arr_codigos_produtos.push(produto.value);
+    for (let produto of produtos) {
+      arr_codigos_produtos.push(parseInt(produto.cells[0].textContent.trim()));
     }
 
     const cesta = new CestaModel(id, '', quantidade, preco, arr_codigos_produtos);
-
+    console.log(cesta);
     return cesta;
 
   }

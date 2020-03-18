@@ -18,6 +18,26 @@ const autenticar = (req, res, next) => {
   }
 };
 //------------------------------------------------------------------------------------------------------
+const renderizarInscricoes = (req, res, next, inscricoes) => {
+  let logado = (req.session.user != undefined);
+  res.render('admin/inscricoes', {
+    logado,
+    data: '',
+    navbar: true,
+    pagina: 'Emails Inscritos',
+    btnLabel: 'Voltar',
+    inscricoes,
+
+    btn: {
+      label: 'Voltar',
+      classe: '',
+      classe2: 'display-none',
+      caminho: '/admin'
+    }
+  });
+};
+//-----------------------------------------------------------------------------
+
 //Renderizar a pagina principal de admin
 const renderizarAdmin = (req, res, next, dados) => {
   let logado = (req.session.user != undefined);
@@ -41,7 +61,7 @@ const listarInscricoes = (req, res, next) => {
   //chamar o metodo listar da classe inscricao
   inscricao.listarEmails().then(inscricoes => {
     //Enviar as inscricoes para o cliente, mensagem recebe nulo
-    res.send({ inscricoes, mensagem: null });
+    renderizarInscricoes(req, res, next, inscricoes);
   }).catch(err => {
     //Enviar um array vazio para o cliente, pois ocorreu algum erro, tambem enviar a mensagem com o erro
     console.log(err.message);

@@ -14,6 +14,7 @@ const clienteController = require('../controllers/ClienteController');
 const pedidoController = require('../controllers/PedidosController');
 //------------------------------------------------------------------------------------------------------
 const produtoParaCestaController = require('../controllers/ProdutosParaCestaController');
+const contatoController = require('../controllers/ContatosController');
 
 
 
@@ -24,13 +25,13 @@ router.get('/', (req, res, next) => {
 });
 //------------------------------------------------------------------------------------------------------
 //Metodo para listar os emails de usuarios inscritos 
-router.get('/inscricoes', (req, res, next) => {
+router.get('/inscricao', (req, res, next) => {
   (adminController.autenticar(req, res, next))?adminController.listarInscricoes(req, res, next):'';
 });
 //------------------------------------------------------------------------------------------------------
 //Metodo para listar as mensagens de usuarios  
-router.get('/mensagens', (req, res, next) => {
-  (adminController.autenticar(req, res, next))?adminController.listarMensagens(req, res, next):'';
+router.get('/mensagem', (req, res, next) => {
+  (adminController.autenticar(req, res, next))?contatoController.listarMensagens(req, res, next):'';
 });
 //------------------------------------------------------------------------------------------------------
 //Metodo para salvar as categorias de produto
@@ -360,5 +361,6 @@ router.post('/status-pedido/:id/:status', (req, res, next) => {
   (adminController.autenticar(req, res, next)) ? pedidoController.alterarStatusPedido(req, res, next) : '';
 });
 //------------------------------------------------------------------------------------------------------
+
 
 module.exports = router;

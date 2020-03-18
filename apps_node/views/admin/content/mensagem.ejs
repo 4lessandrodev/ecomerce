@@ -12,25 +12,21 @@
       <thead>
         <tr>
           <th scope="col">Nome</th>
-          <th scope="col">Telefone</th>
           <th scope="col">Email</th>
-          <th scope="col">Endereço</th>
-          <th scope="col">Região Atendida</th>
+          <th scope="col">Mensagem</th>
+          <th scope="col">Data</th>
         </tr>
       </thead>
       <tbody>
-        <%clientes.forEach(function(cliente){ %>
+        <%mensagens.forEach(function(msg){ %>
         <tr>
-          <th scope="row"><%=cliente.nome%></th>
-          <td><%=cliente.phone%></td>
-          <td><%=cliente.email%></td>
-          <td><%=cliente.endereco%>, <%=cliente.cidade%>-<%=cliente.estado%></td>
-          <td><% if(cliente.regiao_atendida == 1){ %>Sim<% }else{ %>Não<% }; %></td>
+          <th scope="row"><%=msg.nome%></th>
+          <td><%=msg.email%></td>
+          <td><%=msg.mensagem%></td>
+          <td><%=msg.data_envio.getDate()%>/<%=msg.data_envio.getMonth()+1%>/<%=msg.data_envio.getFullYear()%></td>
         </tr>
         <% }); %>
       </tbody>
     </table>
   </section>
 </main>
-
-

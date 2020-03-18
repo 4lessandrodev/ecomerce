@@ -53,7 +53,7 @@ const renderizarPaginaCestas = (req, res, next, produtos = [], cestas = []) => {
 //Rota para cesta selecionada
 const renderizarPaginaCestaSelecionada = (req, res, next, cesta = [], produtos = [], produtos_da_cesta = []) => {
   //res.send(produtos_da_cesta);
-  //res.send(cesta);
+  //res.send(produtos);
   let logado = (req.session.user != undefined);
   res.render('cesta-selecionada', {
     logado,

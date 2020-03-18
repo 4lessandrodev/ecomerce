@@ -1,15 +1,15 @@
 const Cliente = require('./../models/ClienteModel');
 
 //--------------------------------------------------------------------------------
-const renderizar = (req, res, next, unidades) => {
+const renderizar = (req, res, next, clientes) => {
   let logado = (req.session.user != undefined);
   res.render('admin/clientes', {
     logado,
-    unidades,
     data: '',
     navbar: true,
-    pagina: 'Cliente',
-    btnLabel: 'Cliente',
+    pagina: 'Clientes Cadastrados',
+    btnLabel: 'Voltar',
+    clientes,
 
     btn: {
       label: 'Voltar',
@@ -58,7 +58,7 @@ const desabilitarCliente = (req, res, next) => {
 const listarClientes = (req, res, next) => {
   let cliente = new Cliente();
   cliente.listarClientes(cliente).then(clientes => {
-    res.send(clientes);
+    renderizar(req, res, next, clientes);
   }).catch(err => {
     console.log(err.message);
     res.send(err.message);
