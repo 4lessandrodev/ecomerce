@@ -66,7 +66,6 @@ const editarCesta = (req, res, next) => {
   let produtosDeCesta = new ProdutosDeCesta();
   let cesta = new Cesta(req.body.descricao, req.body.id_categoria_cesta, req.body.preco, req.body.informacoes_nutricionais, req.body.alteracoes_permitidas, req.body.imagem, req.body.status);
   cesta.id = req.body.id;
-  console.log(cesta);
   cesta.atualizarCesta(cesta).then(result => {
     cesta.listarTodasCestas(cesta).then(cestas => {
       categoria.listarCategoriaCestasAtivas(categoria).then(categorias => {
@@ -99,7 +98,6 @@ const desabilitarCesta = (req, res, next) => {
   let cesta = new Cesta();
   cesta.id = req.params.id;
   cesta.cesta_excluida = 1;
-  console.log(cesta);
   cesta.desabilitarCesta(cesta).then(result => {
     res.send(result);
   }).catch(err => {

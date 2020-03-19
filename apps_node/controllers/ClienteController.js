@@ -25,7 +25,7 @@ const salvarCliente = (req, res, next) => {
   let endereco = req.body.endereco + req.body.numero;
   let cliente = new Cliente(req.body.id_usuario, req.body.phone, req.body.nome, req.body.cep, req.body.cidade, req.body.estado, endereco, req.body.codigo_ibge, req.body.id_regiao, req.body.bairro, req.body.regiao_atentida);
   cliente.salvarCliente(cliente).then(result => {
-    res.redirect('/');
+    res.redirect('/login');
   }).catch(err => {
     console.log(err.message);
     res.send(err.message);

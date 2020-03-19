@@ -1,4 +1,9 @@
 #!/usr/bin/env node
+//var hostname = 'fazendautopia.com';
+//var hostname = 'localhost';
+//var port = 8080;
+//var port = 21233;
+//var backlog = () => console.log(`Aplicação rodando... acesse em: ${hostname}:${port}`);
 
 /**
  * Module dependencies.
@@ -12,7 +17,8 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+//var port = normalizePort(21233 || '3000');
+var port = normalizePort(process.env.PORT || '21233');
 app.set('port', port);
 
 /**
@@ -88,3 +94,5 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+//app.listen(port, hostname, backlog);

@@ -7,11 +7,6 @@ var bodyParse = require('body-parser');
 var logger = require('morgan');
 var formidable = require('formidable');
 var cookieSession = require('cookie-session');
-//var hostname = 'fazendautopia.com';
-//var hostname = 'localhost';
-//var port = 21183;
-//var port = 3000;
-var backlog = () => console.log(`Aplicação rodando... acesse em: ${hostname}:${port}`);
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
@@ -94,5 +89,5 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-//app.listen(port, hostname, backlog);
+
 module.exports = app;

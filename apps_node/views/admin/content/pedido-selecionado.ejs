@@ -73,8 +73,8 @@
       </div>
     </div>
     
-    <form action="">
-      <table class="table table-hover table-bordered">
+    <form style="background-color: white;">
+      <table class="table table-hover table-bordered" style="background-color: white;">
         <thead>
           <tr>
             <th scope="col">Cliente</th>
@@ -82,7 +82,7 @@
             <th scope="col">Frete</th>
             <th scope="col" class="col-small">Ecobag</th>
             <th scope="col">Forma Pag.</th>
-            <th scope="col">Observações</th>
+            <th scope="col">Telefone</th>
             <th scope="col">Data</th>
             <th scope="col" style="width: auto;"><strong>Total</strong></th>
           </tr>
@@ -97,9 +97,10 @@
             </td>
             <td><%if(dadosGerais.ecobag_adicional == 1){%>Sim<%}else{%>Não<%}%></td>
             <td><%=dadosGerais.pagamento%></td>
-            <td><%=dadosGerais.anotacoes%></td>
+            <td><%=dadosGerais.phone%></td>
             <td>
               <%=dadosGerais.data.getDate()%>/<%=dadosGerais.data.getMonth()+1%>/<%=dadosGerais.data.getFullYear()%>
+              <%=dadosGerais.data.getHours()%>:00H
             </td>
             <td>R$ <strong><%=total%></strong></td>
           </tr>
@@ -109,13 +110,23 @@
     </form>
   </section>
   
-  <div class="container">
-    
-    <div class="navbar navbar-light" style="background-color: #e3f2fd;">
+  <div class="container" style="background-color: white;">
+    <div style="background-color: #f8fde3;">
       <!-- Navbar content -->
-      <textarea class="form-control" style="resize: none;" id="dados" rows="6" readonly>Dados adicionais Telefone: <%=dadosGerais.phone%> Endereço: <%=dadosGerais.endereco%>, <%=dadosGerais.cidade%>-<%=dadosGerais.estado%>, <%=dadosGerais.cep%> Região: <%=dadosGerais.regiao%>
-Observações: <%=dadosGerais.anotacoes%><%=dadosGerais.data.getDate()%>/<%=dadosGerais.data.getMonth()+1%>/<%=dadosGerais.data.getFullYear()%> <%=dadosGerais.data.getHours()%>:<%=dadosGerais.data.getMinutes()%>
-      </textarea>
+      <table class="table table-hover table-bordered" style="background-color: white;">
+        <thead>
+          <tr>
+            <th scope="col">Observações</th>
+            <th scope="col">Endereço</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td scope="row"><strong><%=dadosGerais.anotacoes%></strong></td>
+            <td><%=dadosGerais.endereco%>, <%=dadosGerais.cidade%>-<%=dadosGerais.estado%>, <%=dadosGerais.cep%> Região:
+              <%=dadosGerais.regiao%></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
   

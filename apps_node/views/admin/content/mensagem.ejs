@@ -4,7 +4,7 @@
   <section class="container list-itens-container table-responsive-md">
     <div class="navbar navbar-light">
       <h6 class="navbar-brand">
-        Lista de Clientes
+        Lista de Mensagens
       </h6>
     </div>
 
@@ -15,6 +15,7 @@
           <th scope="col">Email</th>
           <th scope="col">Mensagem</th>
           <th scope="col">Data</th>
+          <th scope="col">Lida</th>
         </tr>
       </thead>
       <tbody>
@@ -24,6 +25,7 @@
           <td><%=msg.email%></td>
           <td><%=msg.mensagem%></td>
           <td><%=msg.data_envio.getDate()%>/<%=msg.data_envio.getMonth()+1%>/<%=msg.data_envio.getFullYear()%></td>
+          <td><i class="fas fa-envelope-square"></i></td>
         </tr>
         <% }); %>
       </tbody>

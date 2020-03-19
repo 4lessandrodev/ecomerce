@@ -120,8 +120,6 @@ const listarPedidoEspecifico = (req, res, next) => {
         pedido.calcularTotalDeCestasVendidasNoPedido(pedido).then(totalCesta => {
           pedido.calcularTotalDeProdutoVendidoNoPedido(pedido).then(totalProduto => {
             
-            
-            
             let totalcesta = (totalCesta[0].total_cesta == null) ? 0 : parseFloat(totalCesta[0].total_cesta);
             let totalproduto = (totalProduto[0].total_produto == null) ? 0 : parseFloat(totalProduto[0].total_produto);
             let totalFrete = (dadosGerais[0].retirar_na_loja == 0) ? parseFloat(dadosGerais[0].frete) : 0;
@@ -135,25 +133,26 @@ const listarPedidoEspecifico = (req, res, next) => {
             for (let r of result) {
               arrayDeCodigos.push(r.codigos);
             }
+
             let arrayDeCodigosString = arrayDeCodigos.toString();
             let arrayDeCodigosAux = [];
-            for (let id of [...arrayDeCodigosString]) {
+
+            arrayDeCodigosString = arrayDeCodigosString.split(',');
+            for (let id of arrayDeCodigosString) {
               if (!isNaN(id)) {
                 arrayDeCodigosAux.push(parseInt(id));
               }
             }
+
+
             // Verificar se existem produtos em alguma cesta que o cliente comprou
             if (result[0] != undefined){
               pedido.selecionarProdutosDeUmaCestaComprada(arrayDeCodigosString).then(retorno => {
                 
-                //console.log(retorno);
-                
                 let resultado = [];
-                
+
                 for (let id of arrayDeCodigosAux) {
-                  console.log(`ID: ${id}`);
                   for (let item of retorno) {
-                    console.log(`ITEM: ${item.id}`);
                     if (id === item.id) {
                       if (item.qtd_venda == null) {
                         item.qtd_venda = 1;
@@ -194,7 +193,6 @@ const listarPedidoEspecifico = (req, res, next) => {
                     }
                     
                     //res.send(produtosDaCesta);
-                
                     renderizarPaginaDePedidoSelecionado(req, res, next, numeroPedido, total, produtosDaCesta, produtos, dadosGerais);
                     //----------------------------------------------------------------------------
                     //Fim da consulta dos produtos da cesta 
@@ -206,7 +204,7 @@ const listarPedidoEspecifico = (req, res, next) => {
                   });
                   
                 } else {
-
+                  
                   renderizarPaginaDePedidoSelecionado(req, res, next, numeroPedido, total, produtosDaCesta=[], produtos, dadosGerais);
                   //----------------------------------------------------------------------------
                   //Renderizar pagina sem os produtos da cesta                

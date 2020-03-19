@@ -66,8 +66,8 @@
               <label for="produto_especial"><strong>Tipo de Produto</strong></label>
               <select id="produto_especial" class="form-control" name="produto_especial">
                 <option disabled>Selecione...</option>
-                <option value="1">Produtos Especiais</option v>
-                <option value="0">Produto Normal</option>
+                <option <% if(produto.produto_especial == 1){%>Selected<% } %> value="1">Produtos Especiais</option>
+                <option <% if(produto.produto_especial == 0){%>Selected<% } %> value="0">Produto Normal</option>
               </select>
             </div>
 
