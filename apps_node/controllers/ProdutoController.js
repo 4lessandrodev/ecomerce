@@ -109,7 +109,7 @@ const listarTodosProdutos = (req, res, next) => {
   let produto = new Produto();
   let categoria = new Categoria();
   let unidade = new UndMedida();
-  produto.listarTodosProdutos(produto).then(produtos => {
+  produto.listarTodosProdutosParaAdmin(produto).then(produtos => {
     categoria.listarCategoriasAtivas(categoria).then(categorias => {
       unidade.listarUnidadesMedidaAtivas(unidade).then(unidades => {
         renderizar(req, res, next, produtos, categorias, unidades);

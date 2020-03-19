@@ -34,7 +34,7 @@ const renderizarPaginaDePedidos = (req, res, next, cestas = [], produtos=[]) => 
 // renderizarPaginaDePedidoSelecionado(req, res, next, numeroPedido, total, produtosDaCesta, produtos, dadosGerais);
 const renderizarPaginaDePedidoSelecionado = (req, res, next, pedido, total = 0, produtosDaCesta=[], produtos=[], dadosGerais = []) => {
   let logado = (req.session.user != undefined);
- //res.send(dadosGerais);
+  
   res.render('admin/pedido-selecionado', {
     logado,
     data: '',
@@ -54,6 +54,7 @@ const renderizarPaginaDePedidoSelecionado = (req, res, next, pedido, total = 0, 
       caminho: '/admin/pedido'
     }
   });
+  
 };
 //-------------------------------------------------------------------------------------
 //id_compras, ecobag_adicional, id_tipo_pagamento, anotacoes, retirar_na_loja = 0, status = 1
@@ -107,26 +108,27 @@ const listarPedidos = (req, res, next) => {
 };
 //-------------------------------------------------------------------------------------
 const listarPedidoEspecifico = (req, res, next) => {
-
+  
   let pedido = new Pedido();
   let total = 0;
   let numeroPedido = req.params.id;
-
+  
   pedido.id = req.params.id;
   pedido.selecionarIdsDosProdutosDeUmaCesta(pedido).then(result => {
     pedido.listarProdutosVendidoSelecionado(pedido).then(produtos => {
       pedido.listarDadosGeraisDoPedido(pedido).then(dadosGerais => {
         pedido.calcularTotalDeCestasVendidasNoPedido(pedido).then(totalCesta => {
           pedido.calcularTotalDeProdutoVendidoNoPedido(pedido).then(totalProduto => {
-
-           
-
+            
+            
+            
             let totalcesta = (totalCesta[0].total_cesta == null) ? 0 : parseFloat(totalCesta[0].total_cesta);
             let totalproduto = (totalProduto[0].total_produto == null) ? 0 : parseFloat(totalProduto[0].total_produto);
             let totalFrete = (dadosGerais[0].retirar_na_loja == 0) ? parseFloat(dadosGerais[0].frete) : 0;
-
-            total = totalcesta + totalproduto + totalFrete;
-
+            
+            //TOTAL 6.00 REFERE-SE AO PRECO DA ECOBAG
+            total = totalcesta + totalproduto + totalFrete + 6;
+            
             //Consultar produtos da cesta 
             //----------------------------------------------------------------------------
             let arrayDeCodigos = [];
@@ -143,51 +145,82 @@ const listarPedidoEspecifico = (req, res, next) => {
             // Verificar se existem produtos em alguma cesta que o cliente comprou
             if (result[0] != undefined){
               pedido.selecionarProdutosDeUmaCestaComprada(arrayDeCodigosString).then(retorno => {
-                let result = [];
+                
+                //console.log(retorno);
+                
+                let resultado = [];
+                
                 for (let id of arrayDeCodigosAux) {
+                  console.log(`ID: ${id}`);
                   for (let item of retorno) {
+                    console.log(`ITEM: ${item.id}`);
                     if (id === item.id) {
                       if (item.qtd_venda == null) {
                         item.qtd_venda = 1;
-                        result.push(item);
-                      } else {
-                        item.qtd_venda = item.qtd_venda++;
-                        result.push(item);
+                        resultado.push(
+                          {
+                            id: item.id,
+                            descricao: item.descricao,
+                            categoria: item.categoria,
+                            preco_unitario: item.preco_unitario,
+                            qtd_venda: item.qtd_venda
+                          }
+                          );
+                        } else {
+                          item.qtd_venda = item.qtd_venda++;
+                          resultado.push(
+                            {
+                              id:item.id,
+                              descricao:item.descricao,
+                              categoria:item.categoria,
+                              preco_unitario:item.preco_unitario,
+                              qtd_venda:item.qtd_venda
+                            }
+                            );
+                          }
+                        }
                       }
                     }
-                  }
-                }
-                //Calcular total de itens na cesta 
-                let produtosDaCesta = [];
-                for (let item of result) {
-                  if (produtosDaCesta.indexOf(item) == -1) {
-                    produtosDaCesta.push(item);
-                  } else {
-                    produtosDaCesta[produtosDaCesta.indexOf(item)].qtd_venda += 1;
-                    produtosDaCesta[produtosDaCesta.indexOf(item)].subtotal = (produtosDaCesta[produtosDaCesta.indexOf(item)].qtd_venda * parseFloat(produtosDaCesta[produtosDaCesta.indexOf(item)].preco_unitario)).toFixed(2);
-                  }
-                }
+                    
+                    //Calcular total de itens na cesta 
+                    let produtosDaCesta = [];
+                    for (let item of resultado) {
+                      if (produtosDaCesta.indexOf(item) == -1) {
+                        produtosDaCesta.push(item);
+                      } else {
+                        produtosDaCesta[produtosDaCesta.indexOf(item)].qtd_venda += 1;
+                        produtosDaCesta[produtosDaCesta.indexOf(item)].subtotal = (produtosDaCesta[produtosDaCesta.indexOf(item)].qtd_venda * parseFloat(produtosDaCesta[produtosDaCesta.indexOf(item)].preco_unitario)).toFixed(2);
+                      }
+                    }
+                    
+                    //res.send(produtosDaCesta);
                 
+                    renderizarPaginaDePedidoSelecionado(req, res, next, numeroPedido, total, produtosDaCesta, produtos, dadosGerais);
+                    //----------------------------------------------------------------------------
+                    //Fim da consulta dos produtos da cesta 
+                    
+                    
+                  }).catch(err => {
+                    console.log(err.message);
+                    res.send(err.message);
+                  });
+                  
+                } else {
 
-
-                renderizarPaginaDePedidoSelecionado(req, res, next, numeroPedido, total, produtosDaCesta, produtos, dadosGerais);
-                //----------------------------------------------------------------------------
-                //Fim da consulta dos produtos da cesta 
-                
+                  renderizarPaginaDePedidoSelecionado(req, res, next, numeroPedido, total, produtosDaCesta=[], produtos, dadosGerais);
+                  //----------------------------------------------------------------------------
+                  //Renderizar pagina sem os produtos da cesta                
+                  //res.send('Vazio');
+                }
                 
               }).catch(err => {
                 console.log(err.message);
                 res.send(err.message);
               });
-              
-            } else {
-              renderizarPaginaDePedidoSelecionado(req, res, next, numeroPedido, total, produtosDaCesta=[], produtos, dadosGerais);
-              //----------------------------------------------------------------------------
-              //Renderizar pagina sem os produtos da cesta 
-              
-              //res.send('Vazio');
-              
-            }
+            }).catch(err => {
+              console.log(err.message);
+              res.send(err.message);
+            });
             
           }).catch(err => {
             console.log(err.message);
@@ -197,35 +230,26 @@ const listarPedidoEspecifico = (req, res, next) => {
           console.log(err.message);
           res.send(err.message);
         });
-        
       }).catch(err => {
         console.log(err.message);
         res.send(err.message);
       });
-    }).catch(err => {
-      console.log(err.message);
-      res.send(err.message);
-    });
-  }).catch(err => {
-    console.log(err.message);
-    res.send(err.message);
-  });
-};
-
-//-------------------------------------------------------------------------------------
-const alterarStatusPedido = (req, res, next) => {
-  let pedido = new Pedido();
-  pedido.id = req.params.id;
-  pedido.status = req.params.status;
-  pedido.alterarStatusDoPedido(pedido).then(pedido => {
-    res.send(pedido);
-  }).catch(err => {
-    console.log(err.message);
-    res.send(err.message);
-  });
-};
-
-//-------------------------------------------------------------------------------------
-
-
-module.exports = { listarPedidoEspecifico, salvarPedido, editarPedido, excluirPedido, listarPedidos, alterarStatusPedido };
+    };
+    
+    //-------------------------------------------------------------------------------------
+    const alterarStatusPedido = (req, res, next) => {
+      let pedido = new Pedido();
+      pedido.id = req.params.id;
+      pedido.status = req.params.status;
+      pedido.alterarStatusDoPedido(pedido).then(pedido => {
+        res.send(pedido);
+      }).catch(err => {
+        console.log(err.message);
+        res.send(err.message);
+      });
+    };
+    
+    //-------------------------------------------------------------------------------------
+    
+    
+    module.exports = { listarPedidoEspecifico, salvarPedido, editarPedido, excluirPedido, listarPedidos, alterarStatusPedido };

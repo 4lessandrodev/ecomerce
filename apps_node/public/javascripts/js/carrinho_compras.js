@@ -24,11 +24,12 @@ const endereco = (e) => {
   }
 };
 
+//6.00 É O VALOR UNITÁRIO DE UMA ECOBAG ADICIONAL 
 const ecobag = (e) => {
   if (check_ecobag.checked) {
     input_total.value = TOTAL;
   } else {
-    let valor = (TOTAL - 5);
+    let valor = (TOTAL - 6);
     input_total.value = valor.toFixed(2);
   }
 };

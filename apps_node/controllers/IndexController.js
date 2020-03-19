@@ -302,8 +302,8 @@ const carregarCarrinhoDeCompras = (req, res, next) => {
                   };
                   let total_produto = produtos.reduce(totalizar, 0);
                   let total_cesta = cestas.reduce(totalizar, 0);
-                  //5.00 adicional cobrado por cada ecobag
-                  let total = total_produto + total_cesta + parseFloat(fretes[0].preco) + 5;
+                  //6.00 adicional cobrado por cada ecobag
+                  let total = total_produto + total_cesta + parseFloat(fretes[0].preco) + 6;
                   total = total.toFixed(2);
                   
                   renderizarPaginaCarrinho(req, res, next, fretes[0], total, clientes[0], formasPagamento, produtos, cestas, enderecos, vazio = false);
