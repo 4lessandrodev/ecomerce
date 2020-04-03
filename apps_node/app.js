@@ -5,7 +5,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParse = require('body-parser');
 var logger = require('morgan');
-var formidable = require('formidable');
 var cookieSession = require('cookie-session');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -51,28 +50,10 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/admin', adminRouter);
 //--------------------------------------------------
-
-//REALIZAR O UPLOAD DE ARQUIVOS 
-//-----------------------------------------------------------------
-app.post('/images/uploads', (req, res, next) => {
-  const form = formidable({
-    multiples: true,
-    uploadDir: path.join(__dirname, "/public/images/uploads"),
-    keepExtensions: true
-  });
-
-  form.parse(req, (err, fields, files) => {
-    if (err) {
-      next(err);
-      return;
-    }
-    var caminho = files.imagem.path;
-    var caminhoDoArquivo = caminho.slice(caminho.indexOf('public\\images\\'), caminho.length);
-    res.json({ caminhoDoArquivo });
-  });
+app.use((req, res, next) => {
+  let logado = (req.session.user != undefined);
+  res.status(404).render('nao-encontrado',{logado, rotulo:'404 Não encontrado'});
 });
-//-----------------------------------------------------------------
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -83,7 +64,7 @@ app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
+  
   // render the error page
   res.status(err.status || 500);
   res.render('error');

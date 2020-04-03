@@ -114,7 +114,7 @@ WHERE cesta_excluida = 0 AND cc.id = c.id_categoria_cesta GROUP BY c.id`, [
 
   listarCestasAtivas(cesta) {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT c.id, c.imagem, c.descricao, cc.descricao AS 'categoria', p.descricao AS 'produtos', p.status, p.fator_multiplicador, c.preco, c.alteracoes_permitidas, c.informacoes_nutricionais
+      conect.query(`SELECT c.id, c.imagem, c.descricao, cc.descricao AS 'categoria', p.descricao AS 'produtos', p.status, p.fator_multiplicador, c.preco, c.alteracoes_permitidas, c.informacoes_nutricionais, COUNT(p.descricao ) AS quantidade_itens
 FROM tb_cestas AS c, tb_produtos_para_cesta AS pc, tb_produtos AS p, tb_categoria_cestas AS cc 
 WHERE c.cesta_excluida = ? AND c.id = pc.id_cesta AND p.id = pc.id_produto AND cc.id = c.id_categoria_cesta AND c.status = ? GROUP BY c.id`, [
         cesta._cesta_excluida, cesta._status], (err, results) => {

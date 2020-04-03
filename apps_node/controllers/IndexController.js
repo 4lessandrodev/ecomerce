@@ -12,7 +12,8 @@ const Loja = require('./../models/LojaModel');
 const Frete = require('./../models/FreteModel');
 const FormasPagamento = require('./../models/FormaDePagamentoModel');
 const Pedido = require('./../models/PedidoModel');
-
+const pedidoController = require('./../controllers/PedidosController');
+const enviarEmail = require('./../services/enviarEmail');
 
 
 
@@ -174,7 +175,7 @@ const listarCestaSelecionada = (req, res, next) => {
   let produto = new Produto();
   let produtosDeCesta = new ProdutosDeCesta(null, cesta.id);
   cesta.listarCestaEspecifica(cesta).then(cesta => {
-    produto.listarTodosProdutos(produto).then(produtos => {
+    produto.listarTodosProdutosAdicionais(produto).then(produtos => {
       produtosDeCesta.listarDescricaoProdutosDeUmaCestaEspecifica(produtosDeCesta).then(produtos_da_cesta => {
         renderizarPaginaCestaSelecionada(req, res, next, cesta[0], produtos, produtos_da_cesta);
       }).catch(err => {
@@ -344,6 +345,9 @@ const salvarPedido = (req, res, next) => {
     let pedido = new Pedido(req.body._id_compras, req.body._ecobag_adicional, req.body._id_tipo_de_pagamento, req.body._anotacoes, req.body._retirar_na_loja, req.body._status);
     pedido.salvarPedido(pedido).then(result => {
       req.session.id_compra = undefined;
+
+      enviarEmail(req.session.user.email, 'Confirmação de pedido', req.body._email);
+
       res.send(result);
     }).catch(err => {
       console.log(err.message);
@@ -352,6 +356,10 @@ const salvarPedido = (req, res, next) => {
   } else {
     res.redirect('/login');
   }
+};
+
+const enviarEmailDeConfirmacao = (req, res, next, pedido) => {
+
 };
 
 module.exports = {

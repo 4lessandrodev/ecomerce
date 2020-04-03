@@ -15,25 +15,28 @@ let fator_multiplicador_saldo = 0;
 
 let TABELA_PRODUTOS_ADICIONAIS_GERAL = document.querySelector('#produtos-adicionais');
 let TABELA_PRODUTOS_ADICIONAIS_PERSONALIZADO = document.querySelector('#produtos-adicionais-personalizado');
-let qtd_alteracoes_realizadas = 0;
+let qtd_produtos_inseridos = 0;
+let qtd_produtos_retirados = 0;
 
 
 
 const retirarItem = (El) => {
-  if (qtd_alteracoes_realizadas < QUANTIDADE_ALTERACOES_PERMITIDAS && CATEGORIA_DESCRICAO == 'PERSONALIZADA') {
+  if (qtd_produtos_retirados < QUANTIDADE_ALTERACOES_PERMITIDAS && CATEGORIA_DESCRICAO == 'PERSONALIZADA') {
     ativarBotaoAdicionarItem();
     removerElemento(El);
-    desabilitarBtnsExcluir();
+    //desabilitarBtnsExcluir();
     listarProdutosGeral();
-  } else if (qtd_alteracoes_realizadas < QUANTIDADE_ALTERACOES_PERMITIDAS && CATEGORIA_DESCRICAO != 'PERSONALIZADA') {
+    qtd_produtos_retirados++;
+  } else if (qtd_produtos_retirados < QUANTIDADE_ALTERACOES_PERMITIDAS && CATEGORIA_DESCRICAO != 'PERSONALIZADA') {
     ativarBotaoAdicionarItem();
     removerElemento(El);
-    desabilitarBtnsExcluir();
+    //desabilitarBtnsExcluir();
+    qtd_produtos_retirados++;
     listarProdutosDeAcordoComFatorMultiplicador(El);  
   }else {
     notificarLimiteDeAlt();
-    desabilitarBtnsExcluir();
-    desativarBotaoAdicionarItem();
+    //desabilitarBtnsExcluir();
+    //desativarBotaoAdicionarItem();
   }
 };
 
@@ -42,7 +45,7 @@ const retirarItem = (El) => {
 //ALERTAS 
 //------------------------------------------------------
 const notificarLimiteDeAlt = (e) => {
-  swal('Oops!', 'Você atingiu o limite de alteraçõe para esta cesta', 'info');
+  swal('Oops!', 'Você atingiu o limite de alterações para esta cesta', 'info');
 };
 const itemAdicionado = () => {
   swal({
@@ -94,9 +97,19 @@ TABELA_PRODUTOS_DA_CESTA.addEventListener('click', function(e){
 //Adicionar produto cesta comun 
 TABELA_PRODUTOS_ADICIONAIS_PERSONALIZADO.addEventListener('click', function remover(e) {
   if (e.target.parentElement.parentNode.tagName == 'TR') {
-    adicionarItemAosProdutosDaCesta(e.target.parentElement.parentNode);
-    BTN_CLOSE_MODAL.click();
-    itemAdicionado();
+    if (qtd_produtos_inseridos < QUANTIDADE_ALTERACOES_PERMITIDAS && CATEGORIA_DESCRICAO != 'PERSONALIZADA') {
+      if (qtd_produtos_retirados > qtd_produtos_inseridos){
+        adicionarItemAosProdutosDaCesta(e.target.parentElement.parentNode);
+        //BTN_CLOSE_MODAL.click();
+        itemAdicionado();
+        qtd_produtos_inseridos++;
+        fator_multiplicador_saldo = parseFloat(El.dataset.fator) - fator_multiplicador_saldo;
+      } else {
+        notificarLimiteDeAlt();
+      }
+    } else {
+      notificarLimiteDeAlt();
+    }
   }
 });
 
@@ -104,17 +117,25 @@ TABELA_PRODUTOS_ADICIONAIS_PERSONALIZADO.addEventListener('click', function remo
 //Adicionar produto cesta personalizada
 TABELA_PRODUTOS_ADICIONAIS_GERAL.addEventListener('click', function adicionar(e) {
   if (e.target.parentElement.parentNode.tagName == 'TR') {
-    adicionarItemAosProdutosDaCesta(e.target.parentElement.parentNode);
-    BTN_CLOSE_MODAL.click();
-    itemAdicionado();
+    if (qtd_produtos_inseridos < QUANTIDADE_ALTERACOES_PERMITIDAS && CATEGORIA_DESCRICAO == 'PERSONALIZADA') {
+      if (qtd_produtos_retirados > qtd_produtos_inseridos) {
+        adicionarItemAosProdutosDaCesta(e.target.parentElement.parentNode);
+        //BTN_CLOSE_MODAL.click();
+        itemAdicionado();
+        qtd_produtos_inseridos++;
+        fator_multiplicador_saldo = parseFloat(El.dataset.fator) - fator_multiplicador_saldo;
+      } else {
+        notificarLimiteDeAlt();
+      }
+    } else {
+      notificarLimiteDeAlt();
+    }
   }
 });
 
 //-------------------------------------------
 
 const removerElemento = (El) => {
-  qtd_alteracoes_realizadas++;
-  fator_multiplicador_saldo = parseFloat(El.dataset.fator) - fator_multiplicador_saldo;
   El.remove();
   itemRemovido();
 };

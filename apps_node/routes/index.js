@@ -9,6 +9,7 @@ const produtoCompraController = require('../controllers/ProdutoCompraController'
 
 
 
+
 //Rota para renderizar a pagina principal  
 router.get('/', (req, res, next) => {
   indexController.carregarIndex(req, res, next);
@@ -96,7 +97,7 @@ router.post('/login', (req, res, next) => {
   usuarioController.entrar(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
-//Rota para realizar login
+//Rota para salvar o pedido
 router.post('/salvar-pedido', (req, res, next) => {
   indexController.salvarPedido(req, res, next);
 });
@@ -114,6 +115,11 @@ router.get('/teste', (req, res, next) => {
 //Rota para renderizar a pagina de login
 router.get('/teste2', (req, res, next) => {
   res.send(req.session.user);
+});
+
+router.get('/enviar-email', (req, res) => {
+  //enviarEmail(req.session.user.email).catch(console.error);
+  res.send(req.session.user.email);
 });
 
 

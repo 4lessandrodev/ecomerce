@@ -1,5 +1,5 @@
 export class PedidoModel {
-  constructor (ecobag_adicional, id_tipo_de_pagamento, retirar_na_loja, anotacoes, id_compras, status = 1) {
+  constructor (ecobag_adicional, id_tipo_de_pagamento, retirar_na_loja, anotacoes, id_compras, status = 1, email = ``) {
     this._id = null;
     this._ecobag_adicional = (ecobag_adicional == 'on' || ecobag_adicional == 1) ? 1 : 0;
     this._id_tipo_de_pagamento = id_tipo_de_pagamento;
@@ -7,6 +7,7 @@ export class PedidoModel {
     this._anotacoes = anotacoes;
     this._status = status;
     this._id_compras = localStorage.getItem('id_compra');
+    this._email = email;
   }
 
   get id() {
@@ -31,6 +32,10 @@ export class PedidoModel {
     return localStorage.getItem('id_compra');
   }
 
+  get email() {
+    return this._email;
+  }
+
   set id(value) {
     this._id = value;
   }
@@ -52,6 +57,9 @@ export class PedidoModel {
   }
   set id_compras(value) {
     this._id_compras = localStorage.getItem('id_compra');
+  }
+  set email(value) {
+    this._email = value;
   }
 
 }

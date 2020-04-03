@@ -137,7 +137,7 @@ class Utils {
       var option = `<option value="${id_produto}">${descricao}</option>`;
       select = select + option;
       select = document.querySelector('#produtos').innerHTML = select;
-      swal("Boa!", "Produto adicionado com sucesso!", "success");
+      //swal("Boa!", "Produto adicionado com sucesso!", "success");
       let json = res.json();
       return json;
     });
@@ -170,7 +170,7 @@ class Utils {
       return res;
     }).then(res => {
       produtoEl.remove();
-      swal("Boa!", "Produto removido com sucesso!", "success");
+      //swal("Boa!", "Produto removido com sucesso!", "success");
       let json = res.json();
       return json;
     });

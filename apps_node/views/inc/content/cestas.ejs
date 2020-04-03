@@ -5,33 +5,39 @@
         <h2 class="cursive-font primary-color">Cestas da Semana</h2>
         <p>Nossas cestas semanais são montadas de acordo com a colheita prevista de cada produtor, para que você receba
           sempre alimentos fresquinhos.</p>
+        </div>
       </div>
-    </div>
-    <div class="row item">
-
-      <% cestas.forEach(function(cesta){ %>
-      <div class="col-lg-4 col-md-4 col-sm-6">
-        <a href="/cesta-selecionada/<%=cesta.id%>" class="fh5co-card-item">
-          <input type="hidden" value="<%=cesta.id%>" class="item-id">
-          <figure>
-            <div class="overlay">
-              <i style="font-size: 1.5em;">
-                Comprar
-              </i>
+      <div class="row item">
+        <% if(cestas.length > 0){ %> 
+          <% cestas.forEach(function(cesta){ %>
+            <div class="col-lg-4 col-md-4 col-sm-6">
+              <a href="/cesta-selecionada/<%=cesta.id%>" class="fh5co-card-item">
+                <input type="hidden" value="<%=cesta.id%>" class="item-id">
+                <figure>
+                  <div class="overlay">
+                    <i style="font-size: 1.5em;">
+                      Comprar
+                    </i>
+                  </div>
+                  <img src="<%=cesta.imagem%>" alt="Image" class="img-responsive" style="margin: auto;">
+                </figure>
+                <div class="fh5co-text">
+                  <h2><%=cesta.descricao%></h2>
+                  <p><i><%=cesta.categoria%> - <%=cesta.quantidade_itens%> Itens</i></p>
+                  <p><%=cesta.informacoes_nutricionais%></p>
+                  <p>
+                    <span class="price cursive-font">R$ <%=cesta.preco%></span>
+                  </p>
+                </div>
+              </a>
             </div>
-            <img src="<%=cesta.imagem%>" alt="Image" class="img-responsive" style="margin: auto;">
-          </figure>
-          <div class="fh5co-text">
-            <h2><%=cesta.descricao%></h2>
-            <p><i><%=cesta.categoria%> - <%=cestas.length%> Itens</i></p>
-            <p><%=cesta.informacoes_nutricionais%></p>
-            <p>
-              <span class="price cursive-font">R$ <%=cesta.preco%></span>
-            </p>
+            <% }); %>
+            <% }else{ %> 
+              <div style="text-align: center;">
+                <h2 style="color: darkolivegreen; padding: 0 1vw;">Estamos preparando as cestas da semana, aguarde!</h2>
+                <img src="/images/images/no-cestas.png" alt="imagem" style="width: 100%;">
+              </div>
+              <% } %> 
+            </div>
           </div>
-        </a>
-      </div>
-      <% }); %>
-    </div>
-  </div>
-</div>
+        </div>

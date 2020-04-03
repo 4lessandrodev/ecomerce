@@ -5,6 +5,7 @@ const Loja = require('./../models/LojaModel');
 const Frete = require('./../models/FreteModel');
 const CestaCompra = require('./../models/CestaCompraModel');
 const ProdutoCompra = require('./../models/ProdutoCompraModel');
+const enviarEmail = require('./../services/enviarEmail');
 
 
 
