@@ -91,6 +91,19 @@ class CompraModel {
   }
 
 
+  limparCarrinhoDeCompras(query) {
+    return new Promise((resolve, reject) => {
+      conect.query(query, (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
 }
 
 module.exports = CompraModel;

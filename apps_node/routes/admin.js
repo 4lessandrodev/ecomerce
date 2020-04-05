@@ -347,18 +347,24 @@ router.delete('/produto-para-cesta/:id_produto/:id_cesta', (req, res, next) => {
 
 //------------------------------------------------------------------------------------------------------
 //Listar relatorio de pedidos
-router.get('/pedido', (req, res, next) => {
+//`/admin/pedido/${numero_pedido}/${status_pedido}/${data_inicial}/${data_final}`
+router.get('/pedido/:status_pedido?/:data_inicial?/:data_final?/:numero_pedido?', (req, res, next) => {
   (adminController.autenticar(req, res, next)) ? pedidoController.listarPedidos(req, res, next) : '';
 });
 //------------------------------------------------------------------------------------------------------
 //Listar pedido selecionado
-router.get('/pedido/:id', (req, res, next) => {
+router.get('/pedido-selecionado/:id', (req, res, next) => {
   (adminController.autenticar(req, res, next)) ? pedidoController.listarPedidoEspecifico(req, res, next) : '';
 });
 //------------------------------------------------------------------------------------------------------
 //Alterar status do pedido
 router.post('/status-pedido/:id/:status', (req, res, next) => {
   (adminController.autenticar(req, res, next)) ? pedidoController.alterarStatusPedido(req, res, next) : '';
+});
+//------------------------------------------------------------------------------------------------------
+//Alterar status dos pedidos listados
+router.post('/status-pedidos', (req, res, next) => {
+  (adminController.autenticar(req, res, next)) ? pedidoController.alterarStatusPedidos(req, res, next) : '';
 });
 //------------------------------------------------------------------------------------------------------
 

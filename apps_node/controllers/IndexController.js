@@ -14,7 +14,7 @@ const FormasPagamento = require('./../models/FormaDePagamentoModel');
 const Pedido = require('./../models/PedidoModel');
 const pedidoController = require('./../controllers/PedidosController');
 const enviarEmail = require('./../services/enviarEmail');
-
+const Estoque = require('./../models/EstoqueProdutoModel');
 
 
 
@@ -222,7 +222,15 @@ const addProdutoNoCarrinho = (req, res, next) => {
   let produtoCompra = new ProdutoCompra(req.body._id_produto, req.body._id_compra, req.body._quantidade, req.body._preco_unitario);
   req.session.id_compra = req.body._id_compra;
   produtoCompra.salvarProdutoCompra(produtoCompra).then(resposta => {
-    res.send(resposta);
+    
+    lancarSaidaDeEstoqueProduto(resposta, req, res, next).then(result => {
+      
+      // A função finaliza no lançamento de estoque
+      
+    }).catch(err => {
+      res.send(err.message);
+    });
+    
   }).catch(err => {
     res.send(err.message);
   });
@@ -235,7 +243,13 @@ const addCestaNoCarrinho = (req, res, next) => {
   let cestaCompra = new CestaCompra(req.body._id_cesta, req.body._id_compra, req.body._quantidade, req.body._preco_unitario, req.body._produtos);
   req.session.id_compra = req.body._id_compra;
   cestaCompra.salvarCestaCompra(cestaCompra).then(resposta => {
-    res.send(resposta);
+    lancarSaidaDeEstoqueProdutosDeCesta(resposta, req, res, next).then(result => {
+      
+      //A função finaliza no lançamento de estoque
+      
+    }).catch(err => {
+      res.send(err.message);
+    });
   }).catch(err => {
     res.send(err.message);
   });
@@ -344,11 +358,26 @@ const salvarPedido = (req, res, next) => {
   if (req.session.user !== undefined) {
     let pedido = new Pedido(req.body._id_compras, req.body._ecobag_adicional, req.body._id_tipo_de_pagamento, req.body._anotacoes, req.body._retirar_na_loja, req.body._status);
     pedido.salvarPedido(pedido).then(result => {
-      req.session.id_compra = undefined;
-
-      enviarEmail(req.session.user.email, 'Confirmação de pedido', req.body._email);
-
-      res.send(result);
+      
+      //Alterar status da compra para pedido fechado / tb_compra = pedido_aberto = 0
+      let compra = new Compra(req.session.user.id);
+      compra.id = req.session.id_compra;
+      compra.pedido_aberto = 0;
+      
+      compra.atualizarCompra(compra).then(result => {
+        
+        
+        req.session.id_compra = undefined;
+        //Enviar email de confirmação para o usuário que realizou a compra
+        enviarEmail(req.session.user.email, 'Confirmação de pedido', req.body._email);
+        
+        res.send(result);
+        
+        
+      }).catch(err => {
+        console.log(err.message);
+        res.send(err.message);
+      });
     }).catch(err => {
       console.log(err.message);
       res.send(err.message);
@@ -358,10 +387,76 @@ const salvarPedido = (req, res, next) => {
   }
 };
 
-const enviarEmailDeConfirmacao = (req, res, next, pedido) => {
-
+//---------------------------------------------------------------------------------------------------------------------
+//Lançar saida de estoque 
+const lancarSaidaDeEstoqueProdutosDeCesta = (resposta, req, res, next) => {
+  
+  
+  console.log('Entrou na função');
+  
+  let id_compra = req.session.id_compra;
+  let produtos = req.body._produtos;
+  let quantidade = req.body._quantidade;
+  
+  let ids_produtos = produtos.split(',');
+  let qry = ``;
+  // Criar uma query para lançar saida de estoque
+  for (let id_produto of ids_produtos) {
+    qry += `INSERT INTO tb_estoque (id_compra, id_produto, entrada, quantidade) VALUES(${id_compra}, ${id_produto}, 0, ${quantidade});`;
+  }
+  
+  const estoque = new Estoque();
+  
+  estoque.lancarSaidaDeEstoque(qry);
+  
+  //Retornar com o número do pedido
+  res.send(resposta);
+  
 };
-
+//---------------------------------------------------------------------------------------------------------------------
+//Lançar saida de produto
+const lancarSaidaDeEstoqueProduto = (resposta, req, res, next) => {
+  
+  let id_compra = req.session.id_compra;
+  let id_produto = req.body._id_produto;
+  let quantidade = req.body._quantidade;
+  
+  let qry = ``;
+  // Criar uma query para lançar saida de estoque
+  qry += `INSERT INTO tb_estoque (id_compra, id_produto, entrada, quantidade) VALUES(${id_compra}, ${id_produto}, 0, ${quantidade});`;
+  
+  const estoque = new Estoque();
+  
+  estoque.lancarSaidaDeEstoque(qry);
+  
+  //Retornar com o número do pedido
+  res.send(resposta);
+  
+};
+//---------------------------------------------------------------------------------------------------------------------
+//Limpar carrinho de compras excluindo tudo que já foi salvo 
+const limparCarrinho = (req, res, next) => {
+  const ID_COMPRA = req.session.id_compra;
+  req.session.id_compra = undefined;
+  
+  let compras = new Compra();
+  
+  let qry = `
+  DELETE FROM tb_estoque WHERE id_compra = ${ID_COMPRA};
+  DELETE FROM tb_cestas_compra WHERE id_compra = ${ID_COMPRA};
+  DELETE FROM tb_produtos_compra WHERE id_compra = ${ID_COMPRA};
+  DELETE FROM tb_planos_compra WHERE id_compra = ${ID_COMPRA};
+  DELETE FROM tb_compras WHERE id = ${ID_COMPRA};
+  `;
+  
+  compras.limparCarrinhoDeCompras(qry).then(result => {
+    res.send(result);
+  }).catch(err => {
+    console.log(err.message);
+    res.send(err.message);
+  });
+};
+//---------------------------------------------------------------------------------------------------------------------
 module.exports = {
   inscrever,
   carregarIndex,
@@ -375,5 +470,6 @@ module.exports = {
   sair,
   verificarUsuarioLogado,
   carregarCarrinhoDeCompras,
-  salvarPedido
+  salvarPedido,
+  limparCarrinho
 };

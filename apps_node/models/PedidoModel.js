@@ -81,6 +81,7 @@ class PedidoModel {
     });
   }
   
+  
   atualizarPedido(pedido) {
     return new Promise((resolve, reject) => {
       conect.query(`
@@ -98,26 +99,39 @@ class PedidoModel {
     });
   }
   
-
-
-
+  
+  
+  
   alterarStatusDoPedido(pedido) {
     return new Promise((resolve, reject) => {
       conect.query(`
       UPDATE tb_pedidos SET status = ? WHERE id = ?`,
-        [
-          pedido.status, pedido._id
-        ], (err, result) => {
-          if (err) {
-            console.log(err.message);
-            reject(err.message);
-          } else {
-            resolve(result);
-          }
-        });
+      [
+        pedido.status, pedido._id
+      ], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
     });
   }
 
+  alterarStatusDosPedidos(qry) {
+    return new Promise((resolve, reject) => {
+      conect.query(qry, (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+  
   
   excluirPedido(pedido) {
     return new Promise((resolve, reject) => {
@@ -149,11 +163,44 @@ class PedidoModel {
     });
   }
   
+  //SELECT APLICANDO FILTROS 
+  listarResumoCestasVendidasComFiltros(statusPedido, numeroPedido, dataInicialPedido, dataFinalPedido) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT pedido.id, cesta.descricao, categoria.descricao AS categoria, COUNT(cesta.id) AS qtd_venda, ccompra.preco_unitario, (COUNT(cesta.id) * ccompra.preco_unitario) AS subtotal, compras.data_compra, pedido.status, status_ped.descricao AS status_pedido
+      FROM tb_pedidos AS pedido, tb_cestas_compra AS ccompra, tb_cestas AS cesta, tb_categoria_cestas AS categoria, tb_compras AS compras, tb_status_pedido AS status_ped
+      WHERE pedido.id_compras = ccompra.id_compra AND cesta.id = ccompra.id_cesta AND categoria.id = cesta.id_categoria_cesta AND compras.id = pedido.id_compras AND status_ped.id = pedido.status
+      AND pedido.status LIKE '${statusPedido}' AND pedido.id LIKE '${numeroPedido}' AND (compras.data_compra BETWEEN '${dataInicialPedido}' AND '${dataFinalPedido}')  GROUP BY pedido.id`, (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+  
   listarResumoProdutosVendidos(pedido) {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT pedido.id, produto.descricao, categoria.descricao AS categoria, COUNT(produto.id) AS qtd_venda, pcompra.preco_unitario, (COUNT(produto.id) * pcompra.preco_unitario) AS subtotal
       FROM tb_pedidos AS pedido, tb_produtos_compra AS pcompra, tb_produtos AS produto, tb_categoria_produtos AS categoria
       WHERE pedido.id_compras = pcompra.id_compra AND produto.id = pcompra.id_produto AND categoria.id = produto.id_categoria_produto AND pedido.status = ? GROUP BY pedido.id`, [pedido._status], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+  
+  listarResumoProdutosVendidosComFiltros(statusPedido, numeroPedido, dataInicialPedido, dataFinalPedido) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT pedido.id, produto.descricao, categoria.descricao AS categoria, COUNT(produto.id) AS qtd_venda, pcompra.preco_unitario, (COUNT(produto.id) * pcompra.preco_unitario) AS subtotal, status_ped.descricao AS status_pedido
+      FROM tb_pedidos AS pedido, tb_produtos_compra AS pcompra, tb_produtos AS produto, tb_categoria_produtos AS categoria, tb_status_pedido AS status_ped,  tb_compras AS compras
+      WHERE pedido.id_compras = pcompra.id_compra AND produto.id = pcompra.id_produto AND status_ped.id = pedido.status AND
+      categoria.id = produto.id_categoria_produto AND compras.id = pedido.id_compras AND pedido.status LIKE '${statusPedido}' AND pedido.id LIKE '${numeroPedido}' AND (compras.data_compra BETWEEN '${dataInicialPedido}' AND '${dataFinalPedido}')  GROUP BY pedido.id`, (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -225,9 +272,9 @@ class PedidoModel {
   
   listarDadosGeraisDoPedido(pedido) {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT cliente.nome, cliente.phone, cliente.endereco, cliente.cidade, cliente.estado, cliente.cep, regiao.descricao, pedido.retirar_na_loja, pedido.ecobag_adicional, pedido.anotacoes, pg.descricao AS pagamento, frete.preco AS frete, regiao.descricao AS regiao, compra.data_compra AS data, pedido.status
-      FROM tb_pedidos AS pedido, tb_compras AS compra, tb_clientes AS cliente, tb_regioes AS regiao, tb_tipos_pagamento AS pg, tb_fretes AS frete
-      WHERE pedido.id_compras = compra.id AND cliente.id_usuario = compra.id_usuario AND regiao.id = cliente.id_regiao AND pg.id = pedido.id_tipo_de_pagamento AND frete.id_destino = cliente.id_regiao AND pedido.id = ?`, [pedido._id], (err, result) => {
+      conect.query(`SELECT cliente.nome, cliente.phone, cliente.endereco, cliente.cidade, cliente.estado, cliente.cep, regiao.descricao, pedido.retirar_na_loja, pedido.ecobag_adicional, pedido.anotacoes, pg.descricao AS pagamento, frete.preco AS frete, regiao.descricao AS regiao, compra.data_compra AS data, pedido.status, status_pedido.descricao AS status_pedido
+      FROM tb_pedidos AS pedido, tb_compras AS compra, tb_clientes AS cliente, tb_regioes AS regiao, tb_tipos_pagamento AS pg, tb_fretes AS frete, tb_status_pedido AS status_pedido
+      WHERE pedido.id_compras = compra.id AND cliente.id_usuario = compra.id_usuario AND regiao.id = cliente.id_regiao AND pg.id = pedido.id_tipo_de_pagamento AND status_pedido.id = pedido.status AND frete.id_destino = cliente.id_regiao AND pedido.id = ?`, [pedido._id], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);

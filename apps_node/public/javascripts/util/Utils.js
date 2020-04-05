@@ -26,11 +26,11 @@ class Utils {
       return 'Bloqueado';
     }
   }
-
+  
   static uploadImg(form) {
     form.querySelector("input[type='file']").click();
   }
-
+  
   static getItemById(el, id = null) {
     // el.getItemById(id);
     let code = el.querySelector('.item-id').value;
@@ -43,8 +43,8 @@ class Utils {
     }
     get();
   }
-
-
+  
+  
   static getProdutoById(el, id = null) {
     // el.getItemById(id);
     let code = el.querySelector('.item-id').value;
@@ -57,7 +57,7 @@ class Utils {
     }
     getItem();
   }
-
+  
   static atualizarQtdItensNoCarrinho() {
     let qtdItensNoCarrinho = document.querySelector('#cart-value');
     if (localStorage.getItem('itensDoCarrinho') != null) {
@@ -68,55 +68,55 @@ class Utils {
       qtdItensNoCarrinho.classList.add('hidden');
     }
   }
-
+  
   static buscarCep(cep) {
     return fetch(`https://viacep.com.br/ws/${cep}/json/`)
-      .then(res => {
-        if (!res.ok) {
-          throw new Error('Erro ao buscar cep');
-        }
-        return res;
-      })
-      .then(res => {
-        let json = res.json();
-        return json;
-      });
+    .then(res => {
+      if (!res.ok) {
+        throw new Error('Erro ao buscar cep');
+      }
+      return res;
+    })
+    .then(res => {
+      let json = res.json();
+      return json;
+    });
   }
-
+  
   static retornarEndereco(input) {
     input.value = input.value.replace('-', '');
     let cep = input.value;
     if (cep.length == 8 && !isNaN(cep)) {
       this.buscarCep(cep)
-        .then(res => {
-          let inputs = document.querySelectorAll('input');
-          for (let input of inputs) {
-            switch (input.name) {
-              case 'codigo_ibge':
-                (res.ibge != undefined) ? input.value = res.ibge : '';
-                break;
-              case 'endereco':
-                (res.logradouro != undefined) ? input.value = res.logradouro : '';
-                break;
-              case 'estado':
-                (res.uf != undefined) ? input.value = res.uf : '';
-                break;
-
-              case 'bairro':
-                (res.bairro != undefined) ? input.value = res.bairro : '';
-                break;
-              case 'cidade':
-                (res.localidade != undefined) ? input.value = res.localidade : '';
-                break;
-              default:
-                break;
-            }
+      .then(res => {
+        let inputs = document.querySelectorAll('input');
+        for (let input of inputs) {
+          switch (input.name) {
+            case 'codigo_ibge':
+            (res.ibge != undefined) ? input.value = res.ibge : '';
+            break;
+            case 'endereco':
+            (res.logradouro != undefined) ? input.value = res.logradouro : '';
+            break;
+            case 'estado':
+            (res.uf != undefined) ? input.value = res.uf : '';
+            break;
+            
+            case 'bairro':
+            (res.bairro != undefined) ? input.value = res.bairro : '';
+            break;
+            case 'cidade':
+            (res.localidade != undefined) ? input.value = res.localidade : '';
+            break;
+            default:
+            break;
           }
-        });
+        }
+      });
     }
   }
-
-
+  
+  
   //ADICIONAR PRODUTO NA CESTA 
   static adicionarProdutoNaCesta(produto) {
     let id_cesta = parseInt(document.querySelector('#id').value);
@@ -131,7 +131,7 @@ class Utils {
       }
       return res;
     }).then(res => {
-
+      
       //Adicionar elemento no html 
       var select = document.querySelector('#produtos').innerHTML;
       var option = `<option value="${id_produto}">${descricao}</option>`;
@@ -142,9 +142,9 @@ class Utils {
       return json;
     });
   }
-
-
-
+  
+  
+  
   static excluirProdutoDaCesta() {
     let id_produto = null;
     let produtoEl;
@@ -175,8 +175,8 @@ class Utils {
       return json;
     });
   }
-
-
+  
+  
   static leitorDeImagem(inputFile, img, callback) {
     document.querySelector(inputFile).addEventListener('change', e => {
       callback(e.target.files[0]).then(result => {
@@ -185,7 +185,7 @@ class Utils {
       });
     });
   }
-
+  
   static atribuirImagem(file) {
     return new Promise((resolve, reject) => {
       let reader = new FileReader();
@@ -198,60 +198,60 @@ class Utils {
       reader.readAsDataURL(file);
     });
   }
-
-
-
+  
+  
+  
   static obterIdUsuario(email, senha) {
     let inputId = document.getElementById("id_usuario");
     let usuario = { email, senha };
-
+    
     fetch(`/register-user`, {
       headers: { "Content-Type": "application/json" },
       method: 'POST',
       body: JSON.stringify(usuario)
-
+      
     }).then(response => response.json())
-      .then(json => {
-        if (json.serverStatus == 2) {
-          inputId.value = json.insertId;
-          dados.classList.remove('hidden');
-          login.classList.add('hidden');
-          btnNext.style.display = 'none';
-          document.querySelector('input[name=nome]').focus();
-        } else {
-          swal("Oops!", `Ocorreu um erro ao cadastrar o usuário`, "error");
-        }
-      });
+    .then(json => {
+      if (json.serverStatus == 2) {
+        inputId.value = json.insertId;
+        dados.classList.remove('hidden');
+        login.classList.add('hidden');
+        btnNext.style.display = 'none';
+        document.querySelector('input[name=nome]').focus();
+      } else {
+        swal("Oops!", `Ocorreu um erro ao cadastrar o usuário`, "error");
+      }
+    });
   }
-
-
+  
+  
   static login(e) {
     e.preventDefault();
     let email = document.getElementById('email').value;
     let senha = document.getElementById('senha').value;
     let usuario = { email, senha };
-
+    
     fetch(`/login`, {
       headers: { "Content-Type": "application/json" },
       method: 'POST',
       body: JSON.stringify(usuario)
-
+      
     }).then(response =>{ 
       
       //Não fazer nada 
-     
-      });
+      
+    });
   }
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
   static alterarStatusDoPedido(el) {
     let id_pedido = parseInt(el.querySelector('.numero_pedido').value);
     let id_status = parseInt(el.querySelector('.code_status').value);
-
+    
     return fetch(`/admin/status-pedido/${id_pedido}/${id_status}`, {
       headers: { "Content-Type": "application/json" },
       method: 'POST'
@@ -262,7 +262,7 @@ class Utils {
       }
       return res;
     }).then(res => {
-
+      
       let json = res.json();
       swal("Status do pedido alterado com sucesso!")
       .then((value) => {
@@ -271,10 +271,75 @@ class Utils {
       return json;
     });
   }
+  
+  
+  static alterarStatusDosPedidosListados(el) {
+    
+    
+    let listaIds = new Set();
+    let listaPedidos = [];
+    let idsPedidos = document.querySelectorAll('.trs');
+    for (let id of idsPedidos) {
+      listaIds.add(id.dataset.pedido);
+    }
+    listaIds.forEach(e => listaPedidos.push(e));
+    
+    let id_status = parseInt(el.querySelector('.code_status').value);
 
-
-
-
+    return fetch(`/admin/status-pedidos/`, {
+      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      body: JSON.stringify({
+        listaPedidos,
+        id_status
+      })
+    }).then(res => {
+      if (!res.ok) {
+        swal("Oops!", "Algo errado ocorreu!", "error");
+        throw new Error('Erro ao alterar status');
+      }
+      return res;
+    }).then(res => {
+      
+      let json = res.json();
+      swal("Status dos pedidos alterado com sucesso!")
+      .then((value) => {
+        location.reload();
+      });
+      return json;
+    });
+  
+  }
+  
+  
+  static limparCarrinho() {
+    localStorage.clear();  
+    fetch(`/limpar-carrinho`, {
+      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      body: JSON.stringify({})
+      
+    }).then(response => {
+      //Não fazer nada 
+      location.reload();
+    });
+  }
+  
+  
+  static filtrarPedido() {
+    
+    
+    const numero_pedido = document.querySelector('#numero-pedido').value;
+    const data_inicial = document.querySelector('#data-inicial').value;
+    const data_final = document.querySelector('#data-final').value;
+    const status_pedido = document.querySelector('#status_pedido').value;
+    
+    
+    
+    location.href = `/admin/pedido/${status_pedido}/${data_inicial}/${data_final}/${numero_pedido}`;
+  }
+  
+  
 }
 
 

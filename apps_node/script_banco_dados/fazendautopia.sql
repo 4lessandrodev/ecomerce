@@ -4,9 +4,12 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
 -- Schema fazendautopia
 -- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `fazendautopia` ;
 
 -- -----------------------------------------------------
 -- Schema fazendautopia
@@ -26,6 +29,7 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_categoria_cestas` (
   `categoria_c_excluida` TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 5
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -42,6 +46,7 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_categoria_produtos` (
   `categoria_p_excluida` TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 5
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -69,6 +74,7 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_cestas` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
+AUTO_INCREMENT = 6
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -87,6 +93,7 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_usuarios` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC))
 ENGINE = InnoDB
+AUTO_INCREMENT = 7
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -102,6 +109,7 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_regioes` (
   `regiao_excluida` TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 5
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -139,6 +147,7 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_clientes` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
+AUTO_INCREMENT = 7
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -157,9 +166,10 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_compras` (
   CONSTRAINT `fk_tb_compras_10`
     FOREIGN KEY (`id_usuario`)
     REFERENCES `fazendautopia`.`tb_clientes` (`id_usuario`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
+AUTO_INCREMENT = 39
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -189,6 +199,7 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_cestas_compra` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
+AUTO_INCREMENT = 57
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -206,6 +217,7 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_contatos` (
   `mensagem_lida` TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 5
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -245,6 +257,7 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_und_medidas` (
   `categoria_excluida` TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 5
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -280,6 +293,7 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_produtos` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
+AUTO_INCREMENT = 8
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -337,6 +351,7 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_lojas` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
+AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -366,7 +381,7 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_fretes` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 4
+AUTO_INCREMENT = 8
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -382,6 +397,7 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_inscricoes` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `emailNewsletter_UNIQUE` (`email` ASC))
 ENGINE = InnoDB
+AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -424,7 +440,20 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_tipos_pagamento` (
   `descricao` VARCHAR(20) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `fazendautopia`.`tb_status_pedido`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `fazendautopia`.`tb_status_pedido` ;
+
+CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_status_pedido` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `descricao` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -436,13 +465,14 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_pedidos` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `ecobag_adicional` TINYINT(1) NOT NULL,
   `id_tipo_de_pagamento` INT(11) NOT NULL,
-  `retirar_na_loja` TINYINT(1) NOT NULL,
+  `retirar_na_loja` INT(11) NOT NULL DEFAULT '0',
   `anotacoes` VARCHAR(256) NULL DEFAULT NULL,
   `status` INT(11) NOT NULL DEFAULT '1',
   `id_compras` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_tb_pedidos_2_idx` (`id_compras` ASC),
   INDEX `fk_tb_pedidos_1_idx` (`id_tipo_de_pagamento` ASC),
+  INDEX `fk_tb_pedidos_3_idx` (`status` ASC),
   CONSTRAINT `fk_tb_pedidos_1`
     FOREIGN KEY (`id_tipo_de_pagamento`)
     REFERENCES `fazendautopia`.`tb_tipos_pagamento` (`id`)
@@ -452,8 +482,14 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_pedidos` (
     FOREIGN KEY (`id_compras`)
     REFERENCES `fazendautopia`.`tb_compras` (`id`)
     ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tb_pedidos_3`
+    FOREIGN KEY (`status`)
+    REFERENCES `fazendautopia`.`tb_status_pedido` (`id`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
+AUTO_INCREMENT = 34
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -510,6 +546,7 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_produtos_compra` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
+AUTO_INCREMENT = 22
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -536,7 +573,45 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_produtos_para_cesta` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
+AUTO_INCREMENT = 27
 DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `fazendautopia`.`tb_estoque`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `fazendautopia`.`tb_estoque` ;
+
+CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_estoque` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `id_produto` INT NOT NULL,
+  `id_compra` INT NOT NULL DEFAULT 0,
+  `entrada` TINYINT(1) NOT NULL,
+  `data_hora` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `fk_tb_produto_1_idx` (`id_produto` ASC),
+  CONSTRAINT `fk_tb_produto_1`
+    FOREIGN KEY (`id_produto`)
+    REFERENCES `fazendautopia`.`tb_produtos` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+INSERT INTO tb_status_pedido
+  (descricao)
+VALUE('Em aberto');
+INSERT INTO tb_status_pedido
+  (descricao)
+VALUE('Em preparação');
+INSERT INTO tb_status_pedido
+  (descricao)
+VALUE('Em trânsito');
+INSERT INTO tb_status_pedido
+  (descricao)
+VALUE('Concluído');
+INSERT INTO tb_status_pedido
+  (descricao)
+VALUE('Cancelado');
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

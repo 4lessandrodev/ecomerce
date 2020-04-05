@@ -5,58 +5,141 @@
         <!--LISTAR CESTAS CADASTRADAS-->
         <section class="container list-itens-container table-responsive-md">
           <div class="navbar navbar-light">
-            <h6 class="navbar-brand">
+            <h6 class="navbar-brand" style="display: inline-block; width: 100%;">
               Lista de Pedidos
+              <!--dataInicialPedido, dataFinalPedido, numeroPedido, statusPedido-->
             </h6>
-          </div>
-          
-          <table class="table table-hover table-bordered">
-            <thead>
-              <tr>
-                <th scope="col">Pedido</th>
-                <th scope="col">Descrição</th>
-                <th scope="col">Categoria</th>
-                <th scope="col">Qtd.</th>
-                <th scope="col">Preço und.</th>
-                <th scope="col">Subtotal</th>
-                <th scope="col" class="col-small">Tipo</th>
-                <th scope="col" class="col-small">Detalhes</th>
-              </tr>
-            </thead>
-            
-            <tbody id="listagem-cestas">
-              
-              <% cestas.forEach(function(cesta){ %>
-                <tr onclick="location.href=`/admin/pedido/<%=cesta.id%>`">
-                  <td scope="row"><strong>000<%=cesta.id%></strong></td>
-                  <td><%=cesta.descricao%></td>
-                  <td><%=cesta.categoria%></td>
-                  <td><%=cesta.qtd_venda%></td>
-                  <td>R$ <%=cesta.preco_unitario%></td>
-                  <td>R$ <%=cesta.subtotal%></td>
-                  <td>Cesta</td>
-                  <td><button class=" btn btn-excluir" onclick="excluirItem(this)"> <input type="hidden"
-                    value="<%=cesta.id%>"><i class="fas fa-eye"></i></button></td>
-                  </tr>
-                  <% }); %>
-                  
-                  <% produtos.forEach(function(produto){ %>
-                    <tr onclick="location.href=`/admin/pedido/<%=produto.id%>`">
-                      <td scope="row"><strong>000<%=produto.id%></strong></td>
-                      <td><%=produto.descricao%></td>
-                      <td><%=produto.categoria%></td>
-                      <td><%=produto.qtd_venda%></td>
-                      <td>R$ <%=produto.preco_unitario%></td>
-                      <td>R$ <%=produto.subtotal%></td>
-                      <td>Adicional</td>
-                      <td><button class=" btn btn-excluir" onclick="excluirItem(this)"> <input type="hidden"
-                        value="<%=produto.id%>"><i class="fas fa-eye"></i></button></td>
-                      </tr>
-                      <% }); %>
-                    </tbody>
-                  </table>
-                </section>
-                <!------------------------------------------------------------------------------------------------------------>
+            <div style="display: flex; align-items: flex-end;">
+              <div style="margin-right: 1vh;">
+                <button class="btn btn-outline-danger my-2 my-sm-0"
+                title="Cuidado, esta opção altera o status de todos os pedidos listados"
+                onclick="Utils.exibirFormulario('#lista-produtos','display-none')">Alterar Status</button>
               </div>
-            </main>
+              <div style="margin-right: 1vh;">
+                <input type="number" class="btn btn-outline-success my-2 my-sm-0" placeholder="Número do pedido" value="<%=parseInt(numeroPedido)%>" min="1" id="numero-pedido">
+              </div>
+              <div style="margin-right: 1vh;">
+                De: <input type="date" class="btn btn-outline-success my-2 my-sm-0" title="Data inicial para aplicar o filtro" id="data-inicial"
+                value="<%=dataInicialPedido.slice(0,10)%>">
+              </div>
+              <div style="margin-right: 1vh;">
+                Até: <input type="date" class="btn btn-outline-success my-2 my-sm-0" title="Data final" id="data-final"
+                value="<%=dataFinalPedido.slice(0,10)%>">
+              </div>
+              <div style="margin-right: 1vh;">
+                <select class="custom-select btn btn-outline-success my-2 my-sm-0" id="status_pedido"  title="Escolha um status para aplicar filtro">
+                  <option disabled>Escolha o Status</option>
+                  <option value="1" <%if( statusPedido == '1'){%> "selected" <%}%>>Em aberto</option>
+                  <option value="2" <%if( statusPedido == '2'){%> selected <%}%>>Em preparação</option>
+                  <option value="3" <%if( statusPedido == '3'){%> selected <%}%>>Em trânsito</option>
+                  <option value="4" <%if( statusPedido == '4'){%> selected <%}%>>Concluído</option>
+                  <option value="5" <%if( statusPedido == '5'){%> selected <%}%>>Cancelado</option>
+                  <option value="0" <%if( statusPedido == '0'){%> selected <%}%>>Todos</option>
+                </select>
+              </div>
+              <div style="margin-right: 1vh;">
+                <button class="btn btn-outline-success my-2 my-sm-0" onclick="Utils.filtrarPedido()"><span><i
+                  class="fas fa-search"></i></span>
+                  Aplicar</button>
+                </div>
+              </div>
+            </div>
+            <table class="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col-small">Pedido</th>
+                  <th scope="col">Descrição</th>
+                  <th scope="col">Categoria</th>
+                  <th scope="col-small">Qtd.</th>
+                  <th scope="col-small">Preço und.</th>
+                  <th scope="col">Subtotal</th>
+                  <th scope="col" class="col-small">Tipo</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              
+              <tbody id="listagem-cestas">
+                
+                <% cestas.forEach(function(cesta){ %>
+                  <tr class="trs" onclick="location.href=`/admin/pedido-selecionado/<%=cesta.id%>`" data-pedido="<%=cesta.id%>">
+                    <td scope="row"><strong>000<%=cesta.id%></strong></td>
+                    <td><%=cesta.descricao%></td>
+                    <td><%=cesta.categoria%></td>
+                    <td><%=cesta.qtd_venda%></td>
+                    <td>R$ <%=cesta.preco_unitario%></td>
+                    <td>R$ <%=cesta.subtotal%></td>
+                    <td>Cesta</td>
+                    <td><button class=" btn btn-excluir" onclick="excluirItem(this)"> <input type="hidden"
+                      value="<%=cesta.id%>"><%=cesta.status_pedido%></button></td>
+                    </tr>
+                    <% }); %>
+                    
+                    <% produtos.forEach(function(produto){ %>
+                      <tr class="trs" onclick="location.href=`/admin/pedido-selecionado/<%=produto.id%>`"
+                        data-pedido="<%=produto.id%>">
+                        <td scope="row"><strong>000<%=produto.id%></strong></td>
+                        <td><%=produto.descricao%></td>
+                        <td><%=produto.categoria%></td>
+                        <td><%=produto.qtd_venda%></td>
+                        <td>R$ <%=produto.preco_unitario%></td>
+                        <td>R$ <%=produto.subtotal%></td>
+                        <td>Adicional</td>
+                        <td><button class=" btn btn-excluir" onclick="excluirItem(this)"> <input type="hidden"
+                          value="<%=produto.id%>"><%=produto.status_pedido%> </button></td>
+                        </tr>
+                        <% }); %>
+                      </tbody>
+                    </table>
+                  </section>
+                  <!------------------------------------------------------------------------------------------------------------>
+                </div>
+                
+                
+                <!-- MODAL COM A LISTA DE STATUS DE PEDIDO DISPONÍVEIS  -->
+                <!----------------------------------------------------------------------->
+                <section id="sessao-lista-produtos">
+                  <div class="display-none fade show" id="lista-produtos" tabindex="10" role="dialog"
+                  aria-labelledby="lista-produtos" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id=lista-produtos-titulo">Alterar Status do Pedido</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                        onclick="Utils.ocultarFormulario('#lista-produtos','display-none')">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <!--LISTAR STATUS AQUI -->
+                      <!----------------------------------------------------------------------->
+                      <div class="list-group">
+                        
+                        <% for(let status of listaDeStatus){ %>
+                          
+                          <button type="button" class="list-group-item list-group-item-action"
+                          onclick="Utils.alterarStatusDosPedidosListados(this)">
+                          <div src=""
+                          style="width: 100%; margin: 0 0.5em; font-size: 1.2em; color: rgb(119, 4, 4)"
+                          alt="imagem"><i class="fas fa-clipboard-check"></i> <%=status.descricao%> </div>
+                          <input type="hidden" class="numeros_pedidos" value="">
+                          <input type="hidden" class="code_status" value="<%=status.id%> ">
+                        </button>
+                        
+                        <% } %>
+                        
+                      </div>
+                      <!----------------------------------------------------------------------->
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <!----------------------------------------------------------------------->
             
+          </main>
+          
+          
+          
+          

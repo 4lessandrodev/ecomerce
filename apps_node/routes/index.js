@@ -102,24 +102,9 @@ router.post('/salvar-pedido', (req, res, next) => {
   indexController.salvarPedido(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
-
-
-
-
-//Rota para renderizar a pagina de login
-router.get('/teste', (req, res, next) => {
-  //req.session.user = `Usuario logado: ${req.params.id}`;
-  res.send(req.session.user);
-});
-//------------------------------------------------------------------------------------------------------
-//Rota para renderizar a pagina de login
-router.get('/teste2', (req, res, next) => {
-  res.send(req.session.user);
-});
-
-router.get('/enviar-email', (req, res) => {
-  //enviarEmail(req.session.user.email).catch(console.error);
-  res.send(req.session.user.email);
+//Limpar carrinho de compras
+router.post('/limpar-carrinho', (req, res, next) => {
+  indexController.limparCarrinho(req, res, next);
 });
 
 
