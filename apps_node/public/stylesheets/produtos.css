@@ -19,7 +19,7 @@ td .btn-excluir {
   display: inline-block;
   margin: 0 0.2em;
   padding: 0 1em;
-
+  
 }
 
 td .btn-excluir {
@@ -117,4 +117,11 @@ td .btn-excluir {
 tbody tr:hover {
   background-color: rgb(221, 235, 198) !important;
   cursor: pointer;
+}
+
+
+#lista-status{
+  -webkit-box-shadow: 0px -550px 800px 800px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0px -550px 800px 800px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px -550px 800px 800px rgba(0, 0, 0, 0.25);
 }

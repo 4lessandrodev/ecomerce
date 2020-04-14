@@ -285,7 +285,7 @@ class Utils {
     listaIds.forEach(e => listaPedidos.push(e));
     
     let id_status = parseInt(el.querySelector('.code_status').value);
-
+    
     return fetch(`/admin/status-pedidos/`, {
       headers: { "Content-Type": "application/json" },
       method: 'POST',
@@ -308,8 +308,47 @@ class Utils {
       });
       return json;
     });
-  
   }
+
+
+
+  static alterarStatusDosProdutosListados(el) {
+
+
+    let listaIds = new Set();
+    let listaProdutos = [];
+    let idsProdutos = document.querySelectorAll('.trs');
+    for (let id of idsProdutos) {
+      listaIds.add(id.dataset.produto);
+    }
+    listaIds.forEach(e => listaProdutos.push(e));
+
+    let id_status = parseInt(el.querySelector('.code_status').value);
+
+    return fetch(`/admin/status-produtos`, {
+      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      body: JSON.stringify({
+        listaProdutos,
+        id_status
+      })
+    }).then(res => {
+      if (!res.ok) {
+        swal("Oops!", "Algo errado ocorreu!", "error");
+        throw new Error('Erro ao alterar status');
+      }
+      return res;
+    }).then(res => {
+
+      let json = res.json();
+      swal("Status dos produtos alterado com sucesso!")
+        .then((value) => {
+          location.reload();
+        });
+      return json;
+    });
+  }
+
   
   
   static limparCarrinho() {
@@ -335,8 +374,19 @@ class Utils {
     const status_pedido = document.querySelector('#status_pedido').value;
     
     
-    
     location.href = `/admin/pedido/${status_pedido}/${data_inicial}/${data_final}/${numero_pedido}`;
+  }
+  static filtrarProduto() {
+    
+    
+    const descricao_produto = document.querySelector('#descricao-produto').value;
+    const status_produto = document.querySelector('#status_produtos').value;  
+    
+    if (descricao_produto.trim() == '') {
+      location.href = `/admin/produto?status=${status_produto}`;
+    } else {
+      location.href = `/admin/produto?status=${status_produto}&descricao=${descricao_produto}`;
+    }
   }
   
   

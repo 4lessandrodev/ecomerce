@@ -232,6 +232,11 @@ router.post('/produto', (req, res, next) => {
   (adminController.autenticar(req, res, next))?produtoController.salvarProduto(req, res, next):'';
 });
 //------------------------------------------------------------------------------------------------------
+//Editar status dos produtos
+router.post('/status-produtos', (req, res, next) => {
+  (adminController.autenticar(req, res, next)) ? produtoController.editarStatusProdutos(req, res, next):'';
+});
+//------------------------------------------------------------------------------------------------------
 //Editar uma produtos
 router.get('/editar-produto/:id', (req, res, next) => {
   (adminController.autenticar(req, res, next))?produtoController.exibirProdutoSelecionado(req, res, next):'';
@@ -367,6 +372,5 @@ router.post('/status-pedidos', (req, res, next) => {
   (adminController.autenticar(req, res, next)) ? pedidoController.alterarStatusPedidos(req, res, next) : '';
 });
 //------------------------------------------------------------------------------------------------------
-
 
 module.exports = router;
