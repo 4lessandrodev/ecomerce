@@ -164,12 +164,14 @@ tbody tr:hover {
     top: 1%;
   }
 
-
-
   /*
 EFEITO DA IMAGEM PRINCIPAL 
 
 */
-
+#lista-status {
+  -webkit-box-shadow: 0px -550px 800px 800px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0px -550px 800px 800px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px -550px 800px 800px rgba(0, 0, 0, 0.25);
+}
 
 }

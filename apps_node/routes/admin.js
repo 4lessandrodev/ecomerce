@@ -34,6 +34,11 @@ router.get('/mensagem', (req, res, next) => {
   (adminController.autenticar(req, res, next))?contatoController.listarMensagens(req, res, next):'';
 });
 //------------------------------------------------------------------------------------------------------
+//Excluir um email 
+router.delete('/deletar-email', (req, res, next) => {
+  (adminController.autenticar(req, res, next)) ? contatoController.excluirMensagem(req, res, next):'';
+});
+//------------------------------------------------------------------------------------------------------
 //Metodo para salvar as categorias de produto
 router.post('/salvar-categoria-produto', (req, res, next) => {
   (adminController.autenticar(req, res, next))?categoriaProdutoController.salvarCategoria(req, res, next):'';
@@ -280,6 +285,16 @@ router.get('/editar-cesta/:id', (req, res, next) => {
 //Deletar uma cesta
 router.delete('/cesta/:id', (req, res, next) => {
   (adminController.autenticar(req, res, next))?cestaController.desabilitarCesta(req, res, next):'';
+});
+//------------------------------------------------------------------------------------------------------
+//Alterar status das cestas listadas
+router.post('/status-cestas', (req, res, next) => {
+  (adminController.autenticar(req, res, next)) ? cestaController.alterarStatusCestas(req, res, next) : '';
+});
+//------------------------------------------------------------------------------------------------------
+//Limpar produtos da cesta
+router.post('/limpar-cesta', (req, res, next) => {
+  (adminController.autenticar(req, res, next)) ? produtoParaCestaController.limparProdutosDaCesta(req, res, next) : '';
 });
 //------------------------------------------------------------------------------------------------------
 

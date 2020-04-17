@@ -15,7 +15,7 @@
           <th scope="col">Email</th>
           <th scope="col">Mensagem</th>
           <th scope="col">Data</th>
-          <th scope="col">Lida</th>
+          <th scope="col">Excluir</th>
         </tr>
       </thead>
       <tbody>
@@ -24,8 +24,9 @@
           <th scope="row"><%=msg.nome%></th>
           <td><%=msg.email%></td>
           <td><%=msg.mensagem%></td>
-          <td><%=msg.data_envio.getDate()%>/<%=msg.data_envio.getMonth()+1%>/<%=msg.data_envio.getFullYear()%></td>
-          <td><i class="fas fa-envelope-square"></i></td>
+          <td><%=msg.data_hora%></td>
+          <td style="text-align: center; cursor: pointer;" data-id="<%=msg.id%>" onclick="Utils.excluirEmail(this)"><i
+              class="far fa-trash-alt"></i></td>
         </tr>
         <% }); %>
       </tbody>

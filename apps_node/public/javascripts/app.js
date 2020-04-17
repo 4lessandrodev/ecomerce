@@ -34,6 +34,7 @@ switch (currentPage) {
     let cesta = cestaCont.novaCesta();
     compraCont.iniciarCompra('Cesta', cesta, true); //Parametros = Tipo de compra, objeto cesta, redirecionar para carrinho
   });
+    
   btnAddCestaNoCarrinho.addEventListener('click', function () {
     let cesta = cestaCont.novaCesta();
     compraCont.iniciarCompra('Cesta', cesta);
@@ -50,6 +51,7 @@ switch (currentPage) {
     let produto = produtoCont.novoProduto();
     compraCont.iniciarCompra('Produto', produto); //Parametros = Tipo de compra, objeto cesta, redirecionar para carrinho
   });
+    
   btnComprarProduto.addEventListener('click', function () {
     let produto = produtoCont.novoProduto();
     compraCont.iniciarCompra('Produto', produto, true);

@@ -4,7 +4,7 @@ const CategoriaCesta = require('./../models/CategoriaCestasModel');
 const ProdutosDeCesta = require('./../models/ProdutosParaCestaModel');
 
 //--------------------------------------------------------------------------------
-const renderizar = (req, res, next, cestas, categorias, produtos, produtos_de_cestas) => {
+const renderizar = (req, res, next, cestas, categorias, produtos, produtos_de_cestas, descricao = '', status = 1) => {
   let logado = (req.session.user != undefined);
   res.render('admin/cestas', {
     logado,
@@ -17,7 +17,9 @@ const renderizar = (req, res, next, cestas, categorias, produtos, produtos_de_ce
     cestas,
     produtos_de_cestas,
     local: 'http://localhost:3000',
-
+    descricao,
+    status,
+    
     btn: {
       label: 'Voltar',
       classe: 'display-none',
@@ -40,7 +42,7 @@ const renderizarPaginaEditar = (req, res, next, cesta, categorias, produtos, pro
     cesta,
     produtos_da_cesta,
     local: 'http://localhost:3000',
-
+    
     btn: {
       label: 'Voltar',
       classe: '',
@@ -118,14 +120,20 @@ const listarCestasAtivas = (req, res, next) => {
 //---------------------------------------------------------------------------------------------
 const listarTodasCestas = (req, res, next) => {
   let cesta = new Cesta();
-  cesta.listarTodasCestas(cesta).then(cestas => {
+  
+  let { descricao, status } = req.query;
+  
+  cesta.descricao = (descricao != undefined) ? descricao : '';
+  cesta.status = (status != undefined) ? status : '';
+  
+  cesta.listarTodasCestasComFiltro(cesta).then(cestas => {
     let categoria = new CategoriaCesta();
     categoria.listarCategoriaCestasAtivas(categoria).then(categorias => {
       let produto = new Produto();
       produto.listarTodosProdutos(produto).then(produtos => {
         let produtosDeCesta = new ProdutosDeCesta();
         produtosDeCesta.listarProdutosDeCestas(produtosDeCesta).then(produtos_de_cestas => {
-          renderizar(req, res, next, cestas, categorias, produtos, produtos_de_cestas);
+          renderizar(req, res, next, cestas, categorias, produtos, produtos_de_cestas, descricao, status);
         }).catch(err => {
           console.log(err.message);
           res.send(err.message);
@@ -172,5 +180,29 @@ const listarCestaSelecionada = (req, res, next) => {
   });
 };
 //---------------------------------------------------------------------------------------------
+//Alterar status das cestas 
+const alterarStatusCestas = (req, res, next) => {
+  let cesta = new Cesta();
+  cesta.status = req.body.id_status;
+  console.log(cesta.status);
+  console.log(req.body.listaCestas);
+  let qry = '';
+  let ids = req.body.listaCestas;
+  async function alterarStatus() {
+    try {
+      for (let id of ids) {
+        qry += ` UPDATE tb_cestas SET status = ${cesta.status} WHERE id = ${id}; `;
+      }
+      let resultado = await cesta.alterarStatus(qry);
+      res.send(resultado);
+    } catch (error) {
+      res.send(res.status = 400);
+    }
+    
+  }
+  alterarStatus();
+  
+};
+//---------------------------------------------------------------------------------------------
 
-module.exports = { salvarCesta, editarCesta, desabilitarCesta, listarCestasAtivas, listarTodasCestas, listarCestaSelecionada };
+module.exports = { salvarCesta, editarCesta, desabilitarCesta, listarCestasAtivas, listarTodasCestas, listarCestaSelecionada, alterarStatusCestas };

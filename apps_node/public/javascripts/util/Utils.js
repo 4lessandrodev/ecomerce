@@ -349,6 +349,44 @@ class Utils {
     });
   }
 
+
+  static alterarStatusDasCestasListadas(el) {
+
+
+    let listaIds = new Set();
+    let listaCestas = [];
+    let idsCestas = document.querySelectorAll('.trs');
+    for (let id of idsCestas) {
+      listaIds.add(id.dataset.cesta);
+    }
+    listaIds.forEach(e => listaCestas.push(e));
+
+    let id_status = parseInt(el.querySelector('.code_status').value);
+
+    return fetch(`/admin/status-cestas`, {
+      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      body: JSON.stringify({
+        listaCestas,
+        id_status
+      })
+    }).then(res => {
+      if (!res.ok) {
+        swal("Oops!", "Algo errado ocorreu!", "error");
+        throw new Error('Erro ao alterar status');
+      }
+      return res;
+    }).then(res => {
+
+      let json = res.json();
+      swal("Status das cestas alterado com sucesso!")
+        .then((value) => {
+          location.reload();
+        });
+      return json;
+    });
+  }
+
   
   
   static limparCarrinho() {
@@ -361,6 +399,54 @@ class Utils {
     }).then(response => {
       //Não fazer nada 
       location.reload();
+    });
+  }
+
+  static excluirEmail(el) {
+    
+    let id = el.dataset.id;
+
+    fetch(`/admin/deletar-email`, {
+      headers: { "Content-Type": "application/json" },
+      method: 'DELETE',
+      body: JSON.stringify({
+        id
+      })
+      
+    }).then(response => {
+      //Não fazer nada 
+      location.reload();
+    });
+  }
+
+
+
+
+  static limparCesta(el) {  
+
+    let id = el.dataset.id;
+    
+    fetch(`/admin/limpar-cesta`, {
+      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      body: JSON.stringify({
+        id
+      })
+      
+    }).then(res => {
+      if (!res.ok) {
+        swal("Oops!", "Algo errado ocorreu!", "error");
+        throw new Error('Erro ao limpar produtos da cesta');
+      }
+      return res;
+    }).then(res => {
+
+      let json = res.json();
+      swal("Todos os produtos foram retirados com sucesso!")
+        .then((value) => {
+          location.reload();
+        });
+      return json;
     });
   }
   
@@ -376,6 +462,8 @@ class Utils {
     
     location.href = `/admin/pedido/${status_pedido}/${data_inicial}/${data_final}/${numero_pedido}`;
   }
+
+
   static filtrarProduto() {
     
     
@@ -386,6 +474,20 @@ class Utils {
       location.href = `/admin/produto?status=${status_produto}`;
     } else {
       location.href = `/admin/produto?status=${status_produto}&descricao=${descricao_produto}`;
+    }
+  }
+
+
+  static filtrarCestas() {
+    
+    
+    const descricao_cesta = document.querySelector('#descricao-cesta').value;
+    const status_cesta = document.querySelector('#status_cesta').value;  
+    
+    if (descricao_cesta.trim() == '') {
+      location.href = `/admin/cesta?status=${status_cesta}`;
+    } else {
+      location.href = `/admin/cesta?status=${status_cesta}&descricao=${descricao_cesta}`;
     }
   }
   

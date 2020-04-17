@@ -41,10 +41,37 @@ export class CestaController {
               buttons: true,
               dangerMode: false
             }).then(() => {
-              location.href = '/carrinho';
+              swal({
+                title: "Novidade",
+                text: "Gostaria de ver nossos produtos de mercearia?",
+                icon: "success",
+                buttons: true,
+                dangerMode: false,
+              })
+                .then((irMercearia) => {
+                  if (irMercearia) {
+                    location.href = '/cestas#mercearia';
+                  } else {
+                    location.href = '/carrinho';
+                  }
+                });
+
             });
           } else {
             swal("Boa escolha!", "Cesta adicionada com sucesso!", "success");
+            swal({
+              title: "Novidade",
+              text: "Gostaria de ver nossos produtos de mercearia?",
+              icon: "success",
+              buttons: true,
+              dangerMode: false,
+            })
+              .then((irMercearia) => {
+                if (irMercearia) {
+                  location.href = '/cestas#mercearia';
+                } 
+              });
+
           }
         } else {
           swal("Oops!", `Ocorreu um erro ao comprar produto`, "error");

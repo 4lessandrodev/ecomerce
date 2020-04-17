@@ -1,207 +1,285 @@
     <main>
-
+      
       <!-- MODAL COM A LISTA DE PRODUTOS DISPONÍVEIS  -->
       <!----------------------------------------------------------------------->
       <section style="position:fixed; left:40%; z-index: 5;">
         <div class="display-none fade show" id="lista-produtos" tabindex="10" role="dialog"
-          aria-labelledby="lista-produtos" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id=lista-produtos-titulo">Produtos Disponíveis</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                  onclick="Utils.ocultarFormulario('#lista-produtos','display-none')">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <!--LISTAR PRODUTOS AQUI-->
-                <!----------------------------------------------------------------------->
-                <div class="list-group">
-                  <%produtos.forEach(function(produto){ %>
-                  <button type="button" class="list-group-item list-group-item-action"
-                    onclick="Utils.adicionarProdutoNaCesta(this)">
-                    <%=produto.id%> - <%=produto.descricao%>
-                    <input type="hidden" value="<%=produto.id%>"></button><% }); %>
-                </div>
-                <!----------------------------------------------------------------------->
-              </div>
-              <div class="modal-footer">
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!----------------------------------------------------------------------->
-      <div class="background">
-        <!------------------------------------------------------------------------------------------------------------>
-        <!--FORMULARIO PARA CADASTRO DE UM NOVO PRODUTO-->
-        <section class="container formulario display-none" id="form-new" style="z-index: auto;">
-          <div style="margin-bottom: 1em;">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close-produto"
-              onclick="Utils.ocultarFormulario('#form-new', 'display-none', true)">
+        aria-labelledby="lista-produtos" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id=lista-produtos-titulo">Produtos Disponíveis</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+              onclick="Utils.ocultarFormulario('#lista-produtos','display-none')">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-
-          <form method="POST" action="/admin/cesta">
-            <div class="form-row">
-              <div class="form-group col-md-2" id="div-imagem-nova" onclick="Utils.uploadImg(this)">
-                <label for="imagem" class="caixaImg">
-                  <input type="hidden" value="/images/images/SemImagem-300x300px.png" name="imagem">
-                  <input type="file" hidden id="imagem-nova-input" accept="image/png, image/jpeg, image/jpg">
-                  <img src="../../../images/images/SemImagem-300x300px.png" alt="Imagem" class="imagem rounded-circle"
-                    id="imagem-nova-img">
-                  <div class="sobreposicao">
-                    <h5 class="texto">Adicionar Imagem</h5>
-                    <span class="icone"><i class="fas fa-chevron-circle-up"></i></span>
-                  </div>
-                </label>
+          <div class="modal-body">
+            <!--LISTAR PRODUTOS AQUI-->
+            <!----------------------------------------------------------------------->
+            <div class="list-group">
+              <%produtos.forEach(function(produto){ %>
+                <button type="button" class="list-group-item list-group-item-action"
+                onclick="Utils.adicionarProdutoNaCesta(this)">
+                <%=produto.id%> - <%=produto.descricao%>
+                <input type="hidden" value="<%=produto.id%>"></button><% }); %>
               </div>
-              <div class="form-group col-md-2">
-                <label for="id"><strong>Cod. Cesta</strong></label>
-                <input type="number" class="form-control" id="id" disabled name="id">
-              </div>
-              <div class="form-group col-md-4">
-                <label for="descricao"><strong>Descrição</strong></label>
-                <input type="text" class="form-control" id="descricao" name="descricao">
-              </div>
-              <div class="form-group col-md-4">
-                <label for="id_categoria_cesta"><strong>Categoria</strong></label>
-                <select class="form-control" id="id_categoria_cesta" name="id_categoria_cesta">
-                  <option selected>Selecione...</option>
-                  <% categorias.forEach(function(categ){ %>
-                  <option value="<%= categ.id%>"><%=categ.descricao%></option>
-                  <% }); %>
-                </select>
-              </div>
-
-              <div class="form-group col-md-4">
-                <label for="preco"><strong>Preço de Venda</strong></label>
-                <input type="number" class="form-control" id="preco" name="preco">
-              </div>
-
-              <!------------------------------------------------------------------>
-              <div class="form-group col-md-4">
-                <label for="alteracoes_permitidas"><strong><abbr title="Quantidade de alterações permitidas">Quantidade de alterações</abbr></strong></label>
-                <input type="number" class="form-control" id="alteracoes_permitidas" name="alteracoes_permitidas" min="0">
-              </div>
-              <div class="form-group col-md-4">
-                <label for="status"><strong>Status</strong></label>
-                <select id="status" class="form-control" name="status">
-                  <option selected disabled>Selecione...</option>
-                  <option value="1">Ativo</option>
-                  <option value="0">Bloqueado</option>
-                </select>
-              </div>
-              <!------------------------------------------------------------------>
-
-              <div class="form-group col-md-6">
-                <label for="informacoes_nutricionais"><strong>Informações Nutricionais</strong></label>
-                <textarea class="form-control" id="informacoes_nutricionais" rows="5"
-                  name="informacoes_nutricionais" maxlength="210"></textarea>
-                <div class="alert alert-warning display-none" role="alert" style="margin-top: 0.5em;" id="alerta">
-                  Antes de adicionar um produto é necessário salvar a cesta!
-                </div>
-              </div>
-
-              <!------------------------------------------------------------------>
-              <div class="form-group col-md-6">
-                <label for="produtos"><strong>Produtos da Cesta</strong></label>
-                <select class="mdb-select md-form form-control" size="5" name="produtos" id="produtos"
-                  data-item="<%= JSON.stringify(produtos)%>" disabled>
-
-                </select>
-                <div class="botoes-a-direita" style="margin: 0;">
-                  <div>
-                    <button type="button" class="btn btn-danger btn-add" onclick="exibirAlerta('#form-new #id')"
-                      disabled>Remover
-                      Prod.</button>
-                    <button type="button" class="btn btn-success btn-add" onclick="exibirAlerta('#form-new #id')"
-                      disabled>Add.
-                      Produto</button>
-                    <button type="submit" class="btn btn-primary botao-salvar">Salvar</button>
-                  </div>
-                </div>
-                <!------------------------------------------------------------------>
-              </div>
-          </form>
-        </section>
-        <!------------------------------------------------------------------------------------------------------------>
-
-        <script src="../../../javascripts/js/script-formsave.js"></script>
-        <script>
-          //Função statica de ler a imagem e gerar um arquivo base 64 exibindo o em uma tag img
-          Utils.leitorDeImagem('#imagem-nova-input', '#imagem-nova-img', Utils.atribuirImagem);
-        </script>
-
-        <!------------------------------------------------------------------------------------------------------------>
-        <!--LISTAR CESTAS CADASTRADAS-->
-        <section class="container list-itens-container table-responsive-md">
-          <div class="navbar navbar-light">
-            <h6 class="navbar-brand">
-              Lista de Cestas
-            </h6>
+              <!----------------------------------------------------------------------->
+            </div>
+            <div class="modal-footer">
+            </div>
           </div>
-
-          <table class="table table-hover table-bordered">
-            <thead>
-              <tr>
-                <th scope="col">Imagem</th>
-                <th scope="col">Descrição</th>
-                <th scope="col">Preço</th>
-                <th scope="col">Status</th>
-                <th scope="col">Categoria</th>
-                <th scope="col">Produtos</th>
-                <th scope="col" class="col-small">Excluir</th>
-                <th scope="col" class="col-small">Editar</th>
-              </tr>
-            </thead>
-            <tbody id="listagem-cestas">
-              <% cestas.forEach(function(cesta){ %>
-              <tr data-row="<%= JSON.stringify(cesta.id)%>">
-                <th scope="row"><img
-                    src="<%if(cesta.imagem.length > 50){%><%=cesta.imagem%><%}else{%><%=local%><%=cesta.imagem%><% }; %>"
-                    style="width: 4em; height: 4em" alt="Sem imagem"></th>
+        </div>
+      </div>
+    </section>
+    <!----------------------------------------------------------------------->
+    <div class="background">
+      <!------------------------------------------------------------------------------------------------------------>
+      <!--FORMULARIO PARA CADASTRO DE UM NOVO PRODUTO-->
+      <section class="container formulario display-none" id="form-new" style="z-index: auto;">
+        <div style="margin-bottom: 1em;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close-produto"
+          onclick="Utils.ocultarFormulario('#form-new', 'display-none', true)">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <form method="POST" action="/admin/cesta">
+        <div class="form-row">
+          <div class="form-group col-md-2" id="div-imagem-nova" onclick="Utils.uploadImg(this)">
+            <label for="imagem" class="caixaImg">
+              <input type="hidden" value="/images/images/SemImagem-300x300px.png" name="imagem">
+              <input type="file" hidden id="imagem-nova-input" accept="image/png, image/jpeg, image/jpg">
+              <img src="../../../images/images/SemImagem-300x300px.png" alt="Imagem" class="imagem rounded-circle"
+              id="imagem-nova-img">
+              <div class="sobreposicao">
+                <h5 class="texto">Adicionar Imagem</h5>
+                <span class="icone"><i class="fas fa-chevron-circle-up"></i></span>
+              </div>
+            </label>
+          </div>
+          <div class="form-group col-md-2">
+            <label for="id"><strong>Cod. Cesta</strong></label>
+            <input type="number" class="form-control" id="id" disabled name="id">
+          </div>
+          <div class="form-group col-md-4">
+            <label for="descricao"><strong>Descrição</strong></label>
+            <input type="text" class="form-control" id="descricao" name="descricao">
+          </div>
+          <div class="form-group col-md-4">
+            <label for="id_categoria_cesta"><strong>Categoria</strong></label>
+            <select class="form-control" id="id_categoria_cesta" name="id_categoria_cesta">
+              <option selected>Selecione...</option>
+              <% categorias.forEach(function(categ){ %>
+                <option value="<%= categ.id%>"><%=categ.descricao%></option>
+                <% }); %>
+              </select>
+            </div>
+            
+            <div class="form-group col-md-4">
+              <label for="preco"><strong>Preço de Venda</strong></label>
+              <input type="number" class="form-control" id="preco" name="preco">
+            </div>
+            
+            <!------------------------------------------------------------------>
+            <div class="form-group col-md-4">
+              <label for="alteracoes_permitidas"><strong><abbr title="Quantidade de alterações permitidas">Quantidade de alterações</abbr></strong></label>
+              <input type="number" class="form-control" id="alteracoes_permitidas" name="alteracoes_permitidas" min="0">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="status"><strong>Status</strong></label>
+              <select id="status" class="form-control" name="status">
+                <option selected disabled>Selecione...</option>
+                <option value="1">Ativo</option>
+                <option value="0">Bloqueado</option>
+              </select>
+            </div>
+            <!------------------------------------------------------------------>
+            
+            <div class="form-group col-md-6">
+              <label for="informacoes_nutricionais"><strong>Informações Nutricionais</strong></label>
+              <textarea class="form-control" id="informacoes_nutricionais" rows="5"
+              name="informacoes_nutricionais" maxlength="210"></textarea>
+              <div class="alert alert-warning display-none" role="alert" style="margin-top: 0.5em;" id="alerta">
+                Antes de adicionar um produto é necessário salvar a cesta!
+              </div>
+            </div>
+            
+            <!------------------------------------------------------------------>
+            <div class="form-group col-md-6">
+              <label for="produtos"><strong>Produtos da Cesta</strong></label>
+              <select class="mdb-select md-form form-control" size="5" name="produtos" id="produtos"
+              data-item="<%= JSON.stringify(produtos)%>" disabled>
+              
+            </select>
+            <div class="botoes-a-direita" style="margin: 0;">
+              <div>
+                <button type="button" class="btn btn-danger btn-add" onclick="exibirAlerta('#form-new #id')"
+                disabled>Remover
+                Prod.</button>
+                <button type="button" class="btn btn-success btn-add" onclick="exibirAlerta('#form-new #id')"
+                disabled>Add.
+                Produto</button>
+                <button type="submit" class="btn btn-primary botao-salvar">Salvar</button>
+              </div>
+            </div>
+            <!------------------------------------------------------------------>
+          </div>
+        </form>
+      </section>
+      <!------------------------------------------------------------------------------------------------------------>
+      
+      <script src="../../../javascripts/js/script-formsave.js"></script>
+      <script>
+        //Função statica de ler a imagem e gerar um arquivo base 64 exibindo o em uma tag img
+        Utils.leitorDeImagem('#imagem-nova-input', '#imagem-nova-img', Utils.atribuirImagem);
+      </script>
+      
+      <!------------------------------------------------------------------------------------------------------------>
+      <!--LISTAR CESTAS CADASTRADAS-->
+      <section class="container list-itens-container table-responsive-md">
+        <div class="navbar navbar-light" style="display: flex;">
+          <h6 class="navbar-brand" style="display: inline-block; width: 100%;">
+            Lista de Cestas
+          </h6>
+          
+          <div style="margin-right: 1vh;">
+            <button class="btn btn-outline-danger my-2 my-sm-0"
+            title="Cuidado, esta opção altera o status de todas as cestas listadas"
+            onclick="Utils.exibirFormulario('#lista-status','display-none')">Alterar Status</button>
+          </div>
+          
+          <div style="margin-right: 1vh; min-width: 450px;">
+            <input type="text" class="btn btn-outline-success my-2 my-sm-0" placeholder="Descrição da cesta"
+            value="<%=descricao%>" min="1" id="descricao-cesta" style="width: 440px;">
+          </div>
+          
+          
+          <select class="custom-select btn btn-outline-success my-2 my-sm-0" id="status_cesta"
+          title="Escolha um status para aplicar filtro" style="max-width: 250px;">
+          <option disabled>Escolha o Status</option>
+          <option value="1" <% if(status == 1){%>selected<%}%>>Ativo</option>
+          <option value="0" <% if(status == 0){%>selected<%}%>>Bloqueado</option>
+        </select>
+        
+        <button class="btn btn-outline-success my-2 my-sm-0" onclick="Utils.filtrarCestas()"><span><i
+          class="fas fa-search"></i></span>
+          Aplicar</button>
+        </button>
+        
+      </div>
+      
+      <table class="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Imagem</th>
+            <th scope="col">Descrição</th>
+            <th scope="col">Preço</th>
+            <th scope="col">Status</th>
+            <th scope="col">Categoria</th>
+            <th scope="col">Produtos</th>
+            <th scope="col" class="col-small">Excluir</th>
+            <th scope="col" class="col-small">Editar</th>
+          </tr>
+        </thead>
+        <tbody id="listagem-cestas">
+          <% cestas.forEach(function(cesta){ %>
+            <tr data-cesta="<%= JSON.stringify(cesta.id)%>" class="trs">
+              <th scope="row"><img
+                src="<%if(cesta.imagem.length > 50){%><%=cesta.imagem%><%}else{%><%=local%><%=cesta.imagem%><% }; %>"
+                style="width: 4em; height: 4em" alt="Sem imagem"></th>
                 <td><%=cesta.descricao%></td>
                 <td><%=cesta.preco%></td>
                 <td><% if(cesta.status){ %>Ativo<% }else{ %>Bloqueado<% }; %></td>
                 <td><%=cesta.categoria%></td>
-
+                
                 <td>
                   <ol>
                     <% produtos_de_cestas.forEach(function(item){ %>
-                    <% if(item.id_cesta == cesta.id){ %> <li><%=item.descricao_produto%></li><% }%> <% }); %>
-                  </ol>
-                </td>
-                <td>
-                  <button class=" btn btn-excluir" onclick="excluirItem(this)"> <input type="hidden"
+                      <% if(item.id_cesta == cesta.id){ %> <li><%=item.descricao_produto%></li><% }%> <% }); %>
+                    </ol>
+                  </td>
+                  <td>
+                    <button class=" btn btn-excluir" onclick="excluirItem(this)"> <input type="hidden"
                       value="<%=cesta.id%>"><i class="fas fa-trash-alt"></i></button>
-                </td>
-                <td>
-                  <a href="/admin/editar-cesta/<%=cesta.id%>">
-                    <button class="btn btn-editar"><i class="fa fa-pencil-alt"></i></button></a>
-                </td>
-              </tr>
-              <% }); %>
-            </tbody>
-          </table>
-        </section>
-        <!------------------------------------------------------------------------------------------------------------>
+                    </td>
+                    <td>
+                      <a href="/admin/editar-cesta/<%=cesta.id%>">
+                        <button class="btn btn-editar"><i class="fa fa-pencil-alt"></i></button></a>
+                      </td>
+                    </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </section>
+              <!------------------------------------------------------------------------------------------------------------>
+            </div>
+            
+            
+            
+            
+            <!-- MODAL COM A LISTA DE STATUS DE CESTAS DISPONÍVEIS  -->
+            <!----------------------------------------------------------------------->
+            <section id="sessao-lista-status" style="position: fixed; top: 10%; right: 40%;">
+              <div class="display-none fade show" id="lista-status" tabindex="10" role="dialog"
+              aria-labelledby="lista-status" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id=lista-produtos-titulo">Alterar Status das Cestas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                    onclick="Utils.ocultarFormulario('#lista-status','display-none')">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <!--LISTAR STATUS AQUI -->
+                  <!----------------------------------------------------------------------->
+                  <div class="list-group">
+                    
+                    <button type="button" class="list-group-item list-group-item-action"
+                    onclick="Utils.alterarStatusDasCestasListadas(this)">
+                    <div src=""
+                    style="width: 100%; margin: 0 0.5em; font-size: 1.2em; color: rgb(119, 4, 4)"
+                    alt="imagem"><i class="fas fa-clipboard-check"></i> Ativo</div>
+                    <input type="hidden" class="code_status" value="1">
+                  </button>
+                  
+                  <button type="button" class="list-group-item list-group-item-action"
+                  onclick="Utils.alterarStatusDasCestasListadas(this)">
+                  <div src=""
+                  style="width: 100%; margin: 0 0.5em; font-size: 1.2em; color: rgb(119, 4, 4)"
+                  alt="imagem"><i class="fas fa-clipboard-check"></i> Bloqueado
+                </div>
+                <input type="hidden" class="code_status" value="0">
+              </button>
+              
+              
+              
+            </div>
+            <!----------------------------------------------------------------------->
+          </div>
+          <div class="modal-footer">
+          </div>
+        </div>
       </div>
-    </main>
+    </div>
+  </section>
+  <!----------------------------------------------------------------------->
+  
+</main>
 
-    <script>
-      let alerta = document.querySelector('#alerta');
-      let butonsDisabled = document.querySelectorAll('#form-new .btn-add');
-
-      const excluirItem = (e) => {
-        let id = e.querySelector('input[type=hidden]').value
-        fetch(`/admin/cesta/${id}`, {
-            method: 'DELETE'
-          }).then(response => response.json())
-          .then(json => {
-            window.location.reload();
-          });
-      };
-    </script>
+<script>
+  let alerta = document.querySelector('#alerta');
+  let butonsDisabled = document.querySelectorAll('#form-new .btn-add');
+  
+  const excluirItem = (e) => {
+    let id = e.querySelector('input[type=hidden]').value
+    fetch(`/admin/cesta/${id}`, {
+      method: 'DELETE'
+    }).then(response => response.json())
+    .then(json => {
+      window.location.reload();
+    });
+  };
+</script>

@@ -117,6 +117,7 @@
               </select>
               <div class="botoes-a-direita" style="margin: 0;">
                 <div>
+                  <button type="button" class="btn btn-danger btn-add" onclick="Utils.limparCesta(this)" data-id="<%=cesta.id%>">Remover todos</button>
                   <button type="button" class="btn btn-danger btn-add" onclick="Utils.excluirProdutoDaCesta()">Remover
                     Prod.</button>
                   <button type="button" class="btn btn-success btn-add" onclick="exibirAlerta('#lista-produtos')">Add.

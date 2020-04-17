@@ -23,8 +23,8 @@ class ProdutosParaCestaModel {
   set id(value) {
     this._id = value;
   }
-
-
+  
+  
   salvarProdutoParaCesta(produto) {
     return new Promise((resolve, reject) => {
       conect.query(`INSERT INTO tb_produtos_para_cesta(id_produto, id_cesta) VALUES(?,?)`, [produto._id_produto, produto._id_cesta], (err, result) => {
@@ -37,8 +37,8 @@ class ProdutosParaCestaModel {
       });
     });
   }
-
-
+  
+  
   listarProdutoParaCesta(produto) {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT * FROM tb_produtos_para_cesta`, (err, result) => {
@@ -51,7 +51,7 @@ class ProdutosParaCestaModel {
       });
     });
   }
-
+  
   atualizarProdutoParaCesta(produto) {
     return new Promise((resolve, reject) => {
       conect.query(`UPDATE tb_produtos_para_cesta SET id_produto = ?, id_cesta = ? WHERE id = ?`, [produto._id_produto, produto._id_cesta, produto._id], (err, result) => {
@@ -64,8 +64,8 @@ class ProdutosParaCestaModel {
       });
     });
   }
-
-
+  
+  
   excluirProdutoParaCesta(produto) {
     return new Promise((resolve, reject) => {
       conect.query(`DELETE FROM tb_produtos_para_cesta WHERE id_produto = ? AND id_cesta = ?`, [produto._id_produto, produto._id_cesta, produto._id], (err, result) => {
@@ -78,13 +78,13 @@ class ProdutosParaCestaModel {
       });
     });
   }
-
-
+  
+  
   listarProdutosDeUmaCestaEspecifica(produto) {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT produto.id AS 'id_produto', cesta.id AS 'id_cesta', cesta.imagem AS 'imagem_cesta', produto.imagem AS 'imagem_produto', produto.descricao AS 'descricao_produto', cesta.descricao AS 'descricao_cesta', produto.fator_multiplicador, cesta.preco
-FROM tb_produtos_para_cesta AS pc, tb_produtos AS produto, tb_cestas AS cesta
-WHERE produto.id = pc.id_produto AND pc.id_cesta = cesta.id AND cesta.id = ?`, [produto._id_cesta], (err, result) => {
+      FROM tb_produtos_para_cesta AS pc, tb_produtos AS produto, tb_cestas AS cesta
+      WHERE produto.id = pc.id_produto AND pc.id_cesta = cesta.id AND cesta.id = ?`, [produto._id_cesta], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -94,13 +94,13 @@ WHERE produto.id = pc.id_produto AND pc.id_cesta = cesta.id AND cesta.id = ?`, [
       });
     });
   }
-
-
+  
+  
   listarDescricaoProdutosDeUmaCestaEspecifica(produto) {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT produto.id, produto.imagem, produto.descricao, produto.fator_multiplicador, categoria_produto.descricao AS categoria, und.descricao AS unidade_medida
-FROM tb_produtos_para_cesta AS pc, tb_produtos AS produto, tb_cestas AS cesta, tb_categoria_produtos AS categoria_produto, tb_und_medidas AS und
-WHERE produto.id = pc.id_produto AND pc.id_cesta = cesta.id AND cesta.id = ? AND categoria_produto.id = produto.id_categoria_produto AND produto.id_unidade_medida = und.id`, [produto._id_cesta], (err, result) => {
+      FROM tb_produtos_para_cesta AS pc, tb_produtos AS produto, tb_cestas AS cesta, tb_categoria_produtos AS categoria_produto, tb_und_medidas AS und
+      WHERE produto.id = pc.id_produto AND pc.id_cesta = cesta.id AND cesta.id = ? AND categoria_produto.id = produto.id_categoria_produto AND produto.id_unidade_medida = und.id`, [produto._id_cesta], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -110,14 +110,14 @@ WHERE produto.id = pc.id_produto AND pc.id_cesta = cesta.id AND cesta.id = ? AND
       });
     });
   }
-
-
-
+  
+  
+  
   listarProdutosDeCestas(produto) {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT produto.id AS 'id_produto', cesta.id AS 'id_cesta', cesta.imagem AS 'imagem_cesta', produto.imagem AS 'imagem_produto', produto.descricao AS 'descricao_produto', cesta.descricao AS 'descricao_cesta', produto.fator_multiplicador, cesta.preco
-FROM tb_produtos_para_cesta AS pc, tb_produtos AS produto, tb_cestas AS cesta
-WHERE produto.id = pc.id_produto AND pc.id_cesta = cesta.id`, (err, result) => {
+      FROM tb_produtos_para_cesta AS pc, tb_produtos AS produto, tb_cestas AS cesta
+      WHERE produto.id = pc.id_produto AND pc.id_cesta = cesta.id`, (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -127,16 +127,31 @@ WHERE produto.id = pc.id_produto AND pc.id_cesta = cesta.id`, (err, result) => {
       });
     });
   }
-
+  
+  
+  limparProdutosDaCesta(produto) {
+    return new Promise((resolve, reject) => {
+      conect.query(`DELETE FROM tb_produtos_para_cesta WHERE id_cesta = ${produto._id_cesta}`, (err, result) => {
+        if (err) {
+          console.log(err);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+  
+  
   /*
-   
-   SELECT produto.id AS 'id_produto', cesta.id AS 'id_cesta', cesta.imagem AS 'imagem_cesta', produto.imagem AS 'imagem_produto', produto.descricao AS 'descricao_produto', cesta.descricao AS 'descricao_cesta', produto.fator_multiplicador, cesta.preco
-FROM tb_produtos_para_cesta AS pc, tb_produtos AS produto, tb_cestas AS cesta
-WHERE produto.id = pc.id_produto AND pc.id_cesta = cesta.id AND cesta.id = 1
-
-
-   */
-
-
+  
+  SELECT produto.id AS 'id_produto', cesta.id AS 'id_cesta', cesta.imagem AS 'imagem_cesta', produto.imagem AS 'imagem_produto', produto.descricao AS 'descricao_produto', cesta.descricao AS 'descricao_cesta', produto.fator_multiplicador, cesta.preco
+  FROM tb_produtos_para_cesta AS pc, tb_produtos AS produto, tb_cestas AS cesta
+  WHERE produto.id = pc.id_produto AND pc.id_cesta = cesta.id AND cesta.id = 1
+  
+  
+  */
+  
+  
 }
 module.exports = ProdutosParaCestaModel;
