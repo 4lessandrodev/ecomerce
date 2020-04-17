@@ -1,6 +1,7 @@
 const Produto = require('./../models/ProdutoModel');
 const Categoria = require('./../models/CategoriaProdutoModel');
 const UndMedida = require('./../models/UnidadeMedidaModel');
+const Estoque = require('./../models/EstoqueProdutoModel');
 
 //--------------------------------------------------------------------------------
 const renderizar = (req, res, next, produtos, categorias, unidade, status = 1, descricao = '') => {
@@ -28,7 +29,7 @@ const renderizar = (req, res, next, produtos, categorias, unidade, status = 1, d
   });
 };
 //--------------------------------------------------------------------------------
-const renderizarEstoque = (req, res, next, produtos, categorias, unidade, status = 1, descricao = '') => {
+const renderizarEstoque = (req, res, next, produtos, status = 1, descricao = '') => {
   let logado = (req.session.user != undefined);
   res.render('admin/estoque', {
     logado,
@@ -37,13 +38,11 @@ const renderizarEstoque = (req, res, next, produtos, categorias, unidade, status
     navbar: true,
     pagina: 'Produtos e estoque',
     btnLabel: 'Voltar',
-    categorias,
-    unidade,
     fornecedor: [],
     local: 'http://localhost:3000',
     status,
     descricao,
-
+    
     btn: {
       label: 'Voltar',
       classe: '',
@@ -91,17 +90,17 @@ const salvarProduto = (req, res, next) => {
     });
   };
   //-----------------------------------------------------------------------------------
-const editarStatusProdutos = (req, res, next) => {
-  let produto = new Produto();
+  const editarStatusProdutos = (req, res, next) => {
+    let produto = new Produto();
     let produtos = req.body.listaProdutos;
     let status = req.body.id_status;
-  async function editar() {
+    async function editar() {
       try {
-      qry = '';
-      for (let produto of produtos) {
-        qry += ` UPDATE tb_produtos SET status = '${status}' WHERE id = '${produto}'; `;
-      }
-      let resultado = await produto.editarStatusProdutos(qry);
+        qry = '';
+        for (let produto of produtos) {
+          qry += ` UPDATE tb_produtos SET status = '${status}' WHERE id = '${produto}'; `;
+        }
+        let resultado = await produto.editarStatusProdutos(qry);
         res.send(resultado);
       } catch (error) {
         res.send(res.status = 400);
@@ -187,22 +186,12 @@ const editarStatusProdutos = (req, res, next) => {
       produto.descricao = (descricao == undefined) ? '' : descricao;
       produto.status = (status == undefined) ? '1' : status;
       
-      produto.listarTodosProdutosParaAdmin(produto).then(produtos => {
-        categoria.listarCategoriasAtivas(categoria).then(categorias => {
-          unidade.listarUnidadesMedidaAtivas(unidade).then(unidades => {
-            renderizarEstoque(req, res, next, produtos, categorias, unidades, status, descricao);
-          }).catch(err => {
-            console.log(err.message);
-            res.send(err.message);
-          });
-        }).catch(err => {
-          console.log(err.message);
-          res.send(err.message);
-        });
+      produto.listarTodosProdutosEmEstoque(produto).then(produtos => {
+        renderizarEstoque(req, res, next, produtos, status, descricao);
       }).catch(err => {
         console.log(err.message);
         res.send(err.message);
-      });
+      });    
     };
     //-----------------------------------------------------------------------------------
     const exibirProdutoSelecionado = (req, res, next) => {
@@ -243,4 +232,28 @@ const editarStatusProdutos = (req, res, next) => {
       });
     };
     
-module.exports = { salvarProduto, editarProduto, listarProdutoEspeciaisAtivos, desativarProduto, listarTodosProdutos, exibirProdutoSelecionado, editarStatusProdutos, listarTodosProdutosEstoque };
+    //-----------------------------------------------------------------------------------
+    const lancarEstoque = (req, res, next) => {
+      let estoque = new Estoque(req.body.id, 0, req.body.tipo, req.body.quantidade);
+      async function lancarEstoque() {
+        try {
+          let resultado = await estoque.lancarEstoqueAdmin(estoque);
+          res.redirect('/admin/estoque');
+        } catch (error) {
+          res.send(res.status = 400);
+        }
+      }
+      lancarEstoque();
+    };
+    
+    module.exports = {
+      salvarProduto,
+      editarProduto,
+      listarProdutoEspeciaisAtivos,
+      desativarProduto,
+      listarTodosProdutos,
+      exibirProdutoSelecionado,
+      editarStatusProdutos,
+      listarTodosProdutosEstoque,
+      lancarEstoque
+    };

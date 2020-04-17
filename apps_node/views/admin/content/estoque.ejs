@@ -5,59 +5,120 @@
           <h6 class="navbar-brand" style="display: inline-block; width: 100%;">
             Lista de Produtos e estoque
           </h6>
-
+          
           <div style="margin-right: 1vh; min-width: 650px;">
             <input type="text" class="btn btn-outline-success my-2 my-sm-0" placeholder="Descrição do produto"
-              value="<%=descricao%>" min="1" id="descricao-produto" style="width: 440px;">
+            value="<%=descricao%>" min="1" id="descricao-produto" style="width: 440px;">
           </div>
-
-
+          
+          
           <select class="custom-select btn btn-outline-success my-2 my-sm-0" id="status_produtos"
-            title="Escolha um status para aplicar filtro" style="max-width: 250px;">
-            <option disabled>Escolha o Status</option>
-            <option value="1" <% if(status == 1){%>selected<%}%>>Ativo</option>
-            <option value="0" <% if(status == 0){%>selected<%}%>>Bloqueado</option>
-          </select>
-          
-          <button class="btn btn-outline-success my-2 my-sm-0" onclick="Utils.filtrarProdutoEstoque()"><span><i
-            class="fas fa-search"></i></span>
-            Aplicar</button>
-          </button>
-          
-          
-        </div>
+          title="Escolha um status para aplicar filtro" style="max-width: 250px;">
+          <option disabled>Escolha o Status</option>
+          <option value="1" <% if(status == 1){%>selected<%}%>>Ativo</option>
+          <option value="0" <% if(status == 0){%>selected<%}%>>Bloqueado</option>
+        </select>
         
-        <table class="table table-hover table-bordered">
-          <thead>
-            <tr>
-              <th scope="col">Imagem</th>
-              <th scope="col">Descrição</th>
-              <th scope="col">Preço</th>
-              <th scope="col">Tipo</th>
-              <th scope="col">Status</th>
-              <th scope="col" class="col-small">Qtd</th>
-              <th scope="col" class="col-small">Lançar</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% produtos.forEach(function(produto){ %> <tr data-produto="<%=produto.id%>%>" class="trs">
-              <th scope="row"><img
-                  src="<%if(produto.imagem.length > 50){%><%=produto.imagem%><%}else{%><%=local%><%=produto.imagem%><% }; %>"
-                  style="width: 4em; height: 4em" alt="Sem imagem"></th>
+        <button class="btn btn-outline-success my-2 my-sm-0" onclick="Utils.filtrarProdutoEstoque()"><span><i
+          class="fas fa-search"></i></span>
+          Aplicar</button>
+        </button>
+        
+        
+      </div>
+      
+      <table class="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Imagem</th>
+            <th scope="col">Descrição</th>
+            <th scope="col">Preço</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Status</th>
+            <th scope="col" class="col-small">Qtd.disponível</th>
+            <th scope="col" class="col-small">Lançar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% produtos.forEach(function(produto){ %> <tr data-produto="<%=produto.id%>%>" class="trs">
+            <th scope="row"><img
+              src="<%if(produto.imagem.length > 50){%><%=produto.imagem%><%}else{%><%=local%><%=produto.imagem%><% }; %>"
+              style="width: 4em; height: 4em" alt="Sem imagem"></th>
               <td><%=produto.descricao %></td>
               <td><%=produto.preco_venda %></td>
               <td><% if(produto.produto_especial){ %>Especial<% }else{ %>Normal<% }; %></td>
               <td><% if(produto.status){ %>Ativo<% }else{ %>Bloqueado<% }; %></td>
-              <td>+99</td>
-              <td><a href="/admin/editar-produto/<%=produto.id%>">
-                  <button class="btn btn-editar"><i class="fas fa-sync-alt"></i></button></a>
+              <td style="font-size: medium; font-weight: 500;"><%=produto.estoque_disponivel%></td>
+              <td class="lancar"><button class="btn btn-lancar-estoque"
+                  data-produtoid="<%=produto.id%>" data-produtodescricao="<%=produto.descricao%>"><i
+                class="fas fa-sync-alt"></i></button></a>
               </td>
-              </tr>
-              <% }); %>
-              </tbody>
-              </table>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
       </section>
+      
+      
+      <!-- Modal -->
+      <div class="modal fade" id="lancarEstoque" tabindex="-1" role="dialog" aria-labelledby="lancarEstoque"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Lançar estoque</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="/admin/estoque" method="POST">
+              <div class="form-group">
+                <input class="form-control" type="text" placeholder="..." disabled name="descricao" id="descricao">
+                <input type="hidden" name="id" id="id">
+              </div>
+              <div class="form-group">
+                <label for="tipo">Tipo de lançamento</label>
+                <select class="form-control" id="tipo" name="tipo" required>
+                  <option value="1">Entrada</option>
+                  <option value="0">Saída</option>
+                </select>
+              </div>
+              <div>
+                 <label for="quantidade">Quantidade a ser lançada</label>
+                <input class="form-control form-control" type="number" placeholder="Quantidade" id="quantidade" name="quantidade" required>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
 
-    </main>
-    <!--------------------------------------------------------------------------------------------------------------------->
+    <script>
 
+      const TDS = document.querySelectorAll('td.lancar');
+      const DESCRICAO_PRODUTO = document.querySelector('#lancarEstoque #descricao');
+      const ID_PRODUTO = document.querySelector('#lancarEstoque #id');
+      for(let td of TDS){
+        td.addEventListener('click', function(e){
+          let el = e.target.parentNode;
+          let id = el.dataset.produtoid;;
+          let descricao = el.dataset.produtodescricao;;
+          if(id != undefined){
+            DESCRICAO_PRODUTO.value = descricao;
+            ID_PRODUTO.value = id;
+            $('#lancarEstoque').modal('show')
+          }
+        })
+      }
+
+    </script>
+    
+  </main>
+  <!--------------------------------------------------------------------------------------------------------------------->
+  
+  
