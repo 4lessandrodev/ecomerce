@@ -1,0 +1,63 @@
+    <main>
+      <!--------------------------------------------------------------------------------------------------------------------->
+      <section class="container list-itens-container table-responsive-md">
+        <div class="navbar navbar-light" style="display: flex;">
+          <h6 class="navbar-brand" style="display: inline-block; width: 100%;">
+            Lista de Produtos e estoque
+          </h6>
+
+          <div style="margin-right: 1vh; min-width: 650px;">
+            <input type="text" class="btn btn-outline-success my-2 my-sm-0" placeholder="Descrição do produto"
+              value="<%=descricao%>" min="1" id="descricao-produto" style="width: 440px;">
+          </div>
+
+
+          <select class="custom-select btn btn-outline-success my-2 my-sm-0" id="status_produtos"
+            title="Escolha um status para aplicar filtro" style="max-width: 250px;">
+            <option disabled>Escolha o Status</option>
+            <option value="1" <% if(status == 1){%>selected<%}%>>Ativo</option>
+            <option value="0" <% if(status == 0){%>selected<%}%>>Bloqueado</option>
+          </select>
+          
+          <button class="btn btn-outline-success my-2 my-sm-0" onclick="Utils.filtrarProdutoEstoque()"><span><i
+            class="fas fa-search"></i></span>
+            Aplicar</button>
+          </button>
+          
+          
+        </div>
+        
+        <table class="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Imagem</th>
+              <th scope="col">Descrição</th>
+              <th scope="col">Preço</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Status</th>
+              <th scope="col" class="col-small">Qtd</th>
+              <th scope="col" class="col-small">Lançar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% produtos.forEach(function(produto){ %> <tr data-produto="<%=produto.id%>%>" class="trs">
+              <th scope="row"><img
+                  src="<%if(produto.imagem.length > 50){%><%=produto.imagem%><%}else{%><%=local%><%=produto.imagem%><% }; %>"
+                  style="width: 4em; height: 4em" alt="Sem imagem"></th>
+              <td><%=produto.descricao %></td>
+              <td><%=produto.preco_venda %></td>
+              <td><% if(produto.produto_especial){ %>Especial<% }else{ %>Normal<% }; %></td>
+              <td><% if(produto.status){ %>Ativo<% }else{ %>Bloqueado<% }; %></td>
+              <td>+99</td>
+              <td><a href="/admin/editar-produto/<%=produto.id%>">
+                  <button class="btn btn-editar"><i class="fas fa-sync-alt"></i></button></a>
+              </td>
+              </tr>
+              <% }); %>
+              </tbody>
+              </table>
+      </section>
+
+    </main>
+    <!--------------------------------------------------------------------------------------------------------------------->
+

@@ -388,4 +388,16 @@ router.post('/status-pedidos', (req, res, next) => {
 });
 //------------------------------------------------------------------------------------------------------
 
+
+
+
+
+
+//------------------------------------------------------------------------------------------------------
+//Deletar uma produtos
+router.get('/estoque', (req, res, next) => {
+  (adminController.autenticar(req, res, next)) ? produtoController.listarTodosProdutosEstoque(req, res, next) : '';
+});
+//------------------------------------------------------------------------------------------------------
+
 module.exports = router;

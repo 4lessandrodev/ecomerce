@@ -476,6 +476,18 @@ class Utils {
       location.href = `/admin/produto?status=${status_produto}&descricao=${descricao_produto}`;
     }
   }
+  static filtrarProdutoEstoque() {
+    
+    
+    const descricao_produto = document.querySelector('#descricao-produto').value;
+    const status_produto = document.querySelector('#status_produtos').value;  
+    
+    if (descricao_produto.trim() == '') {
+      location.href = `/admin/estoque?status=${status_produto}`;
+    } else {
+      location.href = `/admin/estoque?status=${status_produto}&descricao=${descricao_produto}`;
+    }
+  }
 
 
   static filtrarCestas() {

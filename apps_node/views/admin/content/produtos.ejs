@@ -238,7 +238,7 @@
     <script>
       const excluirItem = (e) => {
         let id = e.querySelector('input[type=hidden]').value
-        fetch(`/admin/cesta/${id}`, {
+        fetch(`/admin/produto/${id}`, {
           method: 'DELETE'
         }).then(response => response.json())
         .then(json => {

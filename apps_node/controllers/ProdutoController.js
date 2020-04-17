@@ -28,6 +28,31 @@ const renderizar = (req, res, next, produtos, categorias, unidade, status = 1, d
   });
 };
 //--------------------------------------------------------------------------------
+const renderizarEstoque = (req, res, next, produtos, categorias, unidade, status = 1, descricao = '') => {
+  let logado = (req.session.user != undefined);
+  res.render('admin/estoque', {
+    logado,
+    produtos,
+    data: '',
+    navbar: true,
+    pagina: 'Produtos e estoque',
+    btnLabel: 'Voltar',
+    categorias,
+    unidade,
+    fornecedor: [],
+    local: 'http://localhost:3000',
+    status,
+    descricao,
+
+    btn: {
+      label: 'Voltar',
+      classe: '',
+      classe2: 'display-none',
+      caminho: '/admin'
+    }
+  });
+};
+//--------------------------------------------------------------------------------
 const renderizarEdicao = (req, res, next, produto, categorias, unidade, status = 1, descricao = '') => {
   let logado = (req.session.user != undefined);
   res.render('admin/editar-produto', {
@@ -154,6 +179,32 @@ const editarStatusProdutos = (req, res, next) => {
       });
     };
     //-----------------------------------------------------------------------------------
+    const listarTodosProdutosEstoque = (req, res, next) => {
+      let { descricao, status } = req.query;
+      let produto = new Produto();
+      let categoria = new Categoria();
+      let unidade = new UndMedida();
+      produto.descricao = (descricao == undefined) ? '' : descricao;
+      produto.status = (status == undefined) ? '1' : status;
+      
+      produto.listarTodosProdutosParaAdmin(produto).then(produtos => {
+        categoria.listarCategoriasAtivas(categoria).then(categorias => {
+          unidade.listarUnidadesMedidaAtivas(unidade).then(unidades => {
+            renderizarEstoque(req, res, next, produtos, categorias, unidades, status, descricao);
+          }).catch(err => {
+            console.log(err.message);
+            res.send(err.message);
+          });
+        }).catch(err => {
+          console.log(err.message);
+          res.send(err.message);
+        });
+      }).catch(err => {
+        console.log(err.message);
+        res.send(err.message);
+      });
+    };
+    //-----------------------------------------------------------------------------------
     const exibirProdutoSelecionado = (req, res, next) => {
       let produto = new Produto();
       produto.id = req.params.id;
@@ -192,4 +243,4 @@ const editarStatusProdutos = (req, res, next) => {
       });
     };
     
-    module.exports = { salvarProduto, editarProduto, listarProdutoEspeciaisAtivos, desativarProduto, listarTodosProdutos, exibirProdutoSelecionado, editarStatusProdutos };
+module.exports = { salvarProduto, editarProduto, listarProdutoEspeciaisAtivos, desativarProduto, listarTodosProdutos, exibirProdutoSelecionado, editarStatusProdutos, listarTodosProdutosEstoque };
