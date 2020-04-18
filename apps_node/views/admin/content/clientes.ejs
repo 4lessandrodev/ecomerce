@@ -5,10 +5,14 @@
     <div class="navbar navbar-light">
       <h6 class="navbar-brand">
         Lista de Clientes
+        <a style="text-decoration: none; cursor: pointer; padding-left: 2vw; font-size: 16px; font-weight: 500; color: darkgreen;" id="btn-export">
+          <i class="far fa-file-excel"></i>
+          Exportar
+        </a>
       </h6>
     </div>
-
-    <table class="table table-hover table-bordered">
+    
+    <table class="table table-hover table-bordered" id="clientes-table">
       <thead>
         <tr>
           <th scope="col">Nome</th>
@@ -16,21 +20,54 @@
           <th scope="col">Email</th>
           <th scope="col">Endereço</th>
           <th scope="col">Região Atendida</th>
+          <th scope="col">Maps</th>
         </tr>
       </thead>
       <tbody>
         <%clientes.forEach(function(cliente){ %>
-        <tr>
-          <th scope="row"><%=cliente.nome%></th>
-          <td><%=cliente.phone%></td>
-          <td><%=cliente.email%></td>
-          <td><%=cliente.endereco%>, <%=cliente.cidade%>-<%=cliente.estado%></td>
-          <td><% if(cliente.regiao_atendida == 1){ %>Sim<% }else{ %>Não<% }; %></td>
-        </tr>
-        <% }); %>
-      </tbody>
-    </table>
-  </section>
-</main>
-
-
+          <tr>
+            <th scope="row"><%=cliente.nome%></th>
+            <td><%=cliente.phone%></td>
+            <td><%=cliente.email%></td>
+            <td><%=cliente.endereco%>, <%=cliente.cidade%>-<%=cliente.estado%></td>
+            <td><% if(cliente.regiao_atendida == 1){ %>Sim<% }else{ %>Não<% }; %></td>
+            <td><a href="https://www.google.com.br/maps/place/<%=cliente.endereco%>, <%=cliente.cidade%>-<%=cliente.estado%>" target="_blank"><i class="fas fa-map-marked-alt"></i></a></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </section>
+  </main>
+  
+  
+  <script>
+    const BTNEXPORT = document.querySelector("#btn-export");
+    
+    BTNEXPORT.addEventListener('click', function () {
+      exportarParaExcel('clientes-table', 'Clientes');
+    });
+    
+    var exportarParaExcel = (function () {
+      var uri = 'data:application/vnd.ms-excel;charset=UTF-8;base64,',
+      template =
+      '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8" /><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>',
+      base64 = function (s) {
+        return window.btoa(unescape(encodeURIComponent(s)))
+      },
+      format = function (s, c) {
+        return s.replace(/{(\w+)}/g, function (m, p) {
+          return c[p];
+        })
+      }
+      return function (table, name) {
+        if (!table.nodeType) table = document.getElementById(table)
+        var ctx = {
+          worksheet: name || 'Worksheet',
+          table: table.innerHTML
+        }
+        window.location.href = uri + base64(format(template, ctx))
+      }
+    })()
+  </script>
+  
+  

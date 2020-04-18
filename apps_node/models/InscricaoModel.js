@@ -31,7 +31,7 @@ class InscricaoModel {
   //Metodo para listar todos os emails salvos 
   listarEmails() {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT * FROM tb_inscricoes`, (err, result) => {
+      conect.query(`SELECT id, email, DATE_FORMAT(data_inscricao, '%d/%m/%Y') AS data_inscricao FROM tb_inscricoes`, (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);

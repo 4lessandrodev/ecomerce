@@ -31,13 +31,24 @@ switch (currentPage) {
   const btnAddCestaNoCarrinho = document.querySelector('#btn-add-cesta');
   
   btnComprarCesta.addEventListener('click', function () {
-    let cesta = cestaCont.novaCesta();
-    compraCont.iniciarCompra('Cesta', cesta, true); //Parametros = Tipo de compra, objeto cesta, redirecionar para carrinho
+    let produtoEsgotado = document.querySelectorAll(".produto-esgotado");
+    if (produtoEsgotado.length > 0) {
+      swal("Oops!", "Há item em sua cesta que não temos em estoque", "error");
+    } else {
+      let cesta = cestaCont.novaCesta();
+      compraCont.iniciarCompra('Cesta', cesta, true); //Parametros = Tipo de compra, objeto cesta, redirecionar para carrinho
+    }
   });
-    
+  
   btnAddCestaNoCarrinho.addEventListener('click', function () {
-    let cesta = cestaCont.novaCesta();
-    compraCont.iniciarCompra('Cesta', cesta);
+    //Verificar se há algum produto esgotado na cesta 
+    let produtoEsgotado = document.querySelectorAll(".produto-esgotado");
+    if (produtoEsgotado.length > 0) {
+      swal("Oops!", "Há item em sua cesta que não temos em estoque", "error");
+    } else {
+      let cesta = cestaCont.novaCesta();
+      compraCont.iniciarCompra('Cesta', cesta);
+    }
   });
   
   //-------------------------------------------------------------------------------------------------
@@ -51,7 +62,7 @@ switch (currentPage) {
     let produto = produtoCont.novoProduto();
     compraCont.iniciarCompra('Produto', produto); //Parametros = Tipo de compra, objeto cesta, redirecionar para carrinho
   });
-    
+  
   btnComprarProduto.addEventListener('click', function () {
     let produto = produtoCont.novoProduto();
     compraCont.iniciarCompra('Produto', produto, true);
@@ -60,12 +71,12 @@ switch (currentPage) {
   //-------------------------------------------------------------------------------------------------
   case '/carrinho':
   //-------------------------------------------------------------------------------------------------
-    const btnConfirmarPedido = document.querySelector('#btn-confirmar-pedido');
-    btnConfirmarPedido.addEventListener('click', function () {
-      let pedido = pedidoCont.novoPedido(); 
-      pedidoCont.salvarPedido(pedido);
-    });
-
+  const btnConfirmarPedido = document.querySelector('#btn-confirmar-pedido');
+  btnConfirmarPedido.addEventListener('click', function () {
+    let pedido = pedidoCont.novoPedido(); 
+    pedidoCont.salvarPedido(pedido);
+  });
+  
   break;
   default:
   break;

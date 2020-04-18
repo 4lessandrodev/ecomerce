@@ -31,7 +31,7 @@ const renderizarPaginaDePedidos = (req, res, next, dataInicialPedido, dataFinalP
     btn: {
       label: 'Voltar',
       classe: 'display-none',
-      classe2: '',
+      classe2: 'display-none',
       caminho: '/admin'
     }
   });

@@ -31,7 +31,9 @@
                 <td scope="row" class="tr-id"><%=produto.id%><input type="hidden" class="id_produto_cesta"
                   value="<%=produto.id%>"></th>
                   <td class="tr-imagem-produto"><img src="<%=produto.imagem%>" alt="imagem" class="imagem-produto"></td>
-                  <td class="tr-texto-centralizado"><%=produto.descricao%></td>
+                  <td class="tr-texto-centralizado"><%=produto.descricao%> 
+                  <%if(produto.estoque_disponivel < 1){%><span style="font-weight: 500; color: red;"><br> ESGOTADO</span> <%}%>
+                  </td>
                   <td id="tr3"><%=produto.categoria%></td>
                   <td id="tr4"><%=produto.unidade_medida%></td>
                   <td class="opcoes" data-item="<%=produto.id%>"><i class="fas fa-plus-circle"
@@ -119,7 +121,10 @@
                   <td scope="row" class="tr-id"><%=produto.id%><input type="hidden" class="id_produto_cesta"
                     value="<%=produto.id%>"></th>
                     <td class="tr-imagem-produto"><img src="<%=produto.imagem%>" alt="imagem" class="imagem-produto"></td>
-                    <td class="tr-texto-centralizado"><%=produto.descricao%></td>
+                    <td class="tr-texto-centralizado"><%=produto.descricao%>
+                      <%if(produto.estoque_disponivel < 1){%><span style="font-weight: 500; color: red;" class="produto-esgotado"><br>
+                        ESGOTADO</span> <%}%>
+                    </td>
                     <td id="tr11"><%=produto.categoria%></td>
                     <td id="tr12"><%=produto.unidade_medida%></td>
                     <td class="opcoes" data-item="<%=produto.id%>"><i

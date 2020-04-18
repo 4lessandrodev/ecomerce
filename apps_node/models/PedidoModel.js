@@ -272,7 +272,7 @@ class PedidoModel {
   
   listarDadosGeraisDoPedido(pedido) {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT cliente.nome, cliente.phone, cliente.endereco, cliente.cidade, cliente.estado, cliente.cep, regiao.descricao, pedido.retirar_na_loja, pedido.ecobag_adicional, pedido.anotacoes, pg.descricao AS pagamento, frete.preco AS frete, regiao.descricao AS regiao, compra.data_compra AS data, pedido.status, status_pedido.descricao AS status_pedido
+      conect.query(`SELECT cliente.nome, cliente.phone, cliente.endereco, cliente.cidade, cliente.estado, cliente.cep, regiao.descricao, pedido.retirar_na_loja, pedido.ecobag_adicional, pedido.anotacoes, pg.descricao AS pagamento, frete.preco AS frete, regiao.descricao AS regiao, DATE_FORMAT(compra.data_compra, '%d/%m/%Y %h:%m:%s') AS data, pedido.status, status_pedido.descricao AS status_pedido
       FROM tb_pedidos AS pedido, tb_compras AS compra, tb_clientes AS cliente, tb_regioes AS regiao, tb_tipos_pagamento AS pg, tb_fretes AS frete, tb_status_pedido AS status_pedido
       WHERE pedido.id_compras = compra.id AND cliente.id_usuario = compra.id_usuario AND regiao.id = cliente.id_regiao AND pg.id = pedido.id_tipo_de_pagamento AND status_pedido.id = pedido.status AND frete.id_destino = cliente.id_regiao AND pedido.id = ?`, [pedido._id], (err, result) => {
         if (err) {

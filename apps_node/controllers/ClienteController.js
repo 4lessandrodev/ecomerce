@@ -22,7 +22,7 @@ const renderizar = (req, res, next, clientes) => {
 //-----------------------------------------------------------------------------
 const salvarCliente = (req, res, next) => {
   console.log(req.body);
-  let endereco = req.body.endereco + req.body.numero;
+  let endereco = req.body.endereco + ', ' + req.body.numero;
   let cliente = new Cliente(req.body.id_usuario, req.body.phone, req.body.nome, req.body.cep, req.body.cidade, req.body.estado, endereco, req.body.codigo_ibge, req.body.id_regiao, req.body.bairro, req.body.regiao_atentida);
   cliente.salvarCliente(cliente).then(result => {
     res.redirect('/login');
@@ -33,7 +33,7 @@ const salvarCliente = (req, res, next) => {
 };
 //-----------------------------------------------------------------------------
 const editarCliente = (req, res, next) => {
-  let endereco = req.body.endereco + req.body.numero;
+  let endereco = req.body.endereco + ', ' + req.body.numero;
   let cliente = new Cliente(req.body.id_usuario, req.body.phone, req.body.nome, req.body.cep, req.body.cidade, req.body.estado, endereco, req.body.codigo_ibge, req.body.id_regiao, req.body.bairro, req.body.regiao_atendida);
   cliente.atualizarCliente(cliente).then(cliente => {
     res.send(cliente);
