@@ -94,6 +94,20 @@ class CestaModel {
       });
     }
     
+    listarDescricaoECodigoCestas() {
+      return new Promise((resolve, reject) => {
+        conect.query(`SELECT cesta.id, cesta.descricao, categ.descricao AS categoria FROM tb_cestas cesta 
+        INNER JOIN tb_categoria_cestas categ ON cesta.id_categoria_cesta = categ.id
+        WHERE cesta.cesta_excluida = 0`, (err, result) => {
+          if (err) {
+            console.log(err);
+            reject(err.message);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    }
     
     listarTodasCestas(cesta) {
       return new Promise((resolve, reject) => {

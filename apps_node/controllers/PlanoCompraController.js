@@ -42,4 +42,4 @@ const excluirPlanoCompra = (req, res, next) => {
   });
 };
 
-module.exports = { salvarPlanoCompra, editarPlanoCompra, listarPlanoCompra, excluirPlanoCompra };
+module.exports = { salvarPlanoCompra, editarPlanoCompra, listarPlanoCompra, excluirPlanoCompra, renderizarPaginaAdminPlanos };

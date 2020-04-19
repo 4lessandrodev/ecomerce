@@ -12,17 +12,11 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema fazendautopia
+-- Table `tb_categoria_cestas`
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `fazendautopia` DEFAULT CHARACTER SET latin1 ;
-USE `fazendautopia` ;
+DROP TABLE IF EXISTS `tb_categoria_cestas` ;
 
--- -----------------------------------------------------
--- Table `fazendautopia`.`tb_categoria_cestas`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_categoria_cestas` ;
-
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_categoria_cestas` (
+CREATE TABLE IF NOT EXISTS `tb_categoria_cestas` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `descricao` VARCHAR(256) NOT NULL,
   `status` TINYINT(1) NOT NULL,
@@ -34,11 +28,11 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `fazendautopia`.`tb_categoria_produtos`
+-- Table `tb_categoria_produtos`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_categoria_produtos` ;
+DROP TABLE IF EXISTS `tb_categoria_produtos` ;
 
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_categoria_produtos` (
+CREATE TABLE IF NOT EXISTS `tb_categoria_produtos` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `descricao` VARCHAR(30) NOT NULL,
   `status` TINYINT(1) NOT NULL DEFAULT '1',
@@ -46,16 +40,16 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_categoria_produtos` (
   `categoria_p_excluida` TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 5
+AUTO_INCREMENT
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `fazendautopia`.`tb_cestas`
+-- Table `tb_cestas`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_cestas` ;
+DROP TABLE IF EXISTS `tb_cestas` ;
 
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_cestas` (
+CREATE TABLE IF NOT EXISTS `tb_cestas` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `imagem` MEDIUMBLOB NOT NULL,
   `descricao` VARCHAR(30) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL,
@@ -70,20 +64,47 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_cestas` (
   INDEX `fk_tb_cestas_2_idx` (`id_categoria_cesta` ASC),
   CONSTRAINT `fk_tb_cestas_2`
     FOREIGN KEY (`id_categoria_cesta`)
-    REFERENCES `fazendautopia`.`tb_categoria_cestas` (`id`)
+    REFERENCES `tb_categoria_cestas` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 6
+AUTO_INCREMENT
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `fazendautopia`.`tb_usuarios`
+-- Table `tb_pacotes_planos`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_usuarios` ;
+DROP TABLE IF EXISTS `tb_pacotes_planos` ;
 
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_usuarios` (
+CREATE TABLE IF NOT EXISTS `tb_pacotes_planos` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `quantidade_cestas` INT(11) NOT NULL,
+  `id_cesta` INT(11) NOT NULL,
+  `preco` DECIMAL(8,2) NOT NULL,
+  `descricao` VARCHAR(200) NOT NULL,
+  `titulo` VARCHAR(45) NOT NULL,
+  `status` TINYINT(1) NOT NULL DEFAULT '1',
+  `plano_excluido` TINYINT(1) NOT NULL DEFAULT '0',
+  `regulamento` TEXT NOT NULL,
+  `data_cadastro` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `fk_tb_pacotes_planos_1_idx` (`id_cesta` ASC),
+  CONSTRAINT `fk_tb_pacotes_planos_1`
+    FOREIGN KEY (`id_cesta`)
+    REFERENCES `tb_cestas` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tb_usuarios`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tb_usuarios` ;
+
+CREATE TABLE IF NOT EXISTS `tb_usuarios` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(120) NOT NULL,
   `senha` VARCHAR(30) NOT NULL,
@@ -93,32 +114,103 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_usuarios` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC))
 ENGINE = InnoDB
-AUTO_INCREMENT = 7
+AUTO_INCREMENT
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `fazendautopia`.`tb_regioes`
+-- Table `tb_status_pedido`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_regioes` ;
+DROP TABLE IF EXISTS `tb_status_pedido` ;
 
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_regioes` (
+CREATE TABLE IF NOT EXISTS `tb_status_pedido` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `descricao` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tb_planos_compra`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tb_planos_compra` ;
+
+CREATE TABLE IF NOT EXISTS `tb_planos_compra` (
+  `id` INT(11) NOT NULL,
+  `id_plano` INT(11) NOT NULL,
+  `id_usuario` INT(11) NOT NULL,
+  `quantidade` INT(11) NOT NULL,
+  `preco_unitario` DECIMAL(8,2) NOT NULL,
+  `data_compra` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` INT(11) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  INDEX `fk_tb_planos_compra_1_idx` (`id_plano` ASC),
+  INDEX `fk_tb_planos_compra_2_idx` (`id_usuario` ASC),
+  INDEX `fk_tb_planos_compra_3_idx` (`status` ASC),
+  CONSTRAINT `fk_tb_planos_compra_1`
+    FOREIGN KEY (`id_plano`)
+    REFERENCES `tb_pacotes_planos` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tb_planos_compra_2`
+    FOREIGN KEY (`id_usuario`)
+    REFERENCES `tb_usuarios` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tb_planos_compra_3`
+    FOREIGN KEY (`status`)
+    REFERENCES `tb_status_pedido` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tb_cesta_plano`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tb_cesta_plano` ;
+
+CREATE TABLE IF NOT EXISTS `tb_cesta_plano` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `data_entrega` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `id_plano_compra` INT(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_tb_cesta_plano_1_idx` (`id_plano_compra` ASC),
+  CONSTRAINT `fk_tb_cesta_plano_1`
+    FOREIGN KEY (`id_plano_compra`)
+    REFERENCES `tb_planos_compra` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+
+
+-- -----------------------------------------------------
+-- Table `tb_regioes`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tb_regioes` ;
+
+CREATE TABLE IF NOT EXISTS `tb_regioes` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `descricao` VARCHAR(256) NULL DEFAULT NULL,
   `status` TINYINT(1) NOT NULL DEFAULT '1',
   `regiao_excluida` TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 5
+AUTO_INCREMENT
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `fazendautopia`.`tb_clientes`
+-- Table `tb_clientes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_clientes` ;
+DROP TABLE IF EXISTS `tb_clientes` ;
 
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_clientes` (
+CREATE TABLE IF NOT EXISTS `tb_clientes` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `id_usuario` INT(11) NOT NULL,
   `phone` VARCHAR(15) NOT NULL,
@@ -138,25 +230,25 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_clientes` (
   INDEX `fk_tb_clientes_1_idx` (`id_usuario` ASC),
   CONSTRAINT `fk_tb_clientes_1`
     FOREIGN KEY (`id_usuario`)
-    REFERENCES `fazendautopia`.`tb_usuarios` (`id`)
+    REFERENCES `tb_usuarios` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tb_clientes_2`
     FOREIGN KEY (`id_regiao`)
-    REFERENCES `fazendautopia`.`tb_regioes` (`id`)
+    REFERENCES `tb_regioes` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 7
+AUTO_INCREMENT
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `fazendautopia`.`tb_compras`
+-- Table `tb_compras`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_compras` ;
+DROP TABLE IF EXISTS `tb_compras` ;
 
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_compras` (
+CREATE TABLE IF NOT EXISTS `tb_compras` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `id_usuario` INT(11) NOT NULL,
   `data_compra` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -165,20 +257,20 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_compras` (
   INDEX `fk_tb_compras_10_idx` (`id_usuario` ASC),
   CONSTRAINT `fk_tb_compras_10`
     FOREIGN KEY (`id_usuario`)
-    REFERENCES `fazendautopia`.`tb_clientes` (`id_usuario`)
+    REFERENCES `tb_clientes` (`id_usuario`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 39
-DEFAULT CHARACTER SET = latin1;
+AUTO_INCREMENT
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `fazendautopia`.`tb_cestas_compra`
+-- Table `tb_cestas_compra`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_cestas_compra` ;
+DROP TABLE IF EXISTS `tb_cestas_compra` ;
 
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_cestas_compra` (
+CREATE TABLE IF NOT EXISTS `tb_cestas_compra` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `id_cesta` INT(11) NOT NULL,
   `id_compra` INT(11) NOT NULL,
@@ -190,25 +282,25 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_cestas_compra` (
   INDEX `fk_tb_cestas_compras_2_idx` (`id_compra` ASC),
   CONSTRAINT `fk_tb_cestas_compras_1`
     FOREIGN KEY (`id_cesta`)
-    REFERENCES `fazendautopia`.`tb_cestas` (`id`)
+    REFERENCES `tb_cestas` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tb_cestas_compras_2`
     FOREIGN KEY (`id_compra`)
-    REFERENCES `fazendautopia`.`tb_compras` (`id`)
+    REFERENCES `tb_compras` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 57
-DEFAULT CHARACTER SET = latin1;
+AUTO_INCREMENT
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `fazendautopia`.`tb_contatos`
+-- Table `tb_contatos`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_contatos` ;
+DROP TABLE IF EXISTS `tb_contatos` ;
 
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_contatos` (
+CREATE TABLE IF NOT EXISTS `tb_contatos` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(50) NOT NULL,
   `email` VARCHAR(50) NOT NULL,
@@ -217,16 +309,92 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_contatos` (
   `mensagem_lida` TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 5
+AUTO_INCREMENT
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `fazendautopia`.`tb_fornecedores`
+-- Table `tb_und_medidas`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_fornecedores` ;
+DROP TABLE IF EXISTS `tb_und_medidas` ;
 
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_fornecedores` (
+CREATE TABLE IF NOT EXISTS `tb_und_medidas` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `descricao` VARCHAR(256) NOT NULL,
+  `status` TINYINT(1) NOT NULL DEFAULT '1',
+  `categoria_excluida` TINYINT(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tb_produtos`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tb_produtos` ;
+
+CREATE TABLE IF NOT EXISTS `tb_produtos` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `descricao` VARCHAR(256) NOT NULL,
+  `imagem` MEDIUMBLOB NULL DEFAULT NULL,
+  `info_nutricional` VARCHAR(256) NULL DEFAULT NULL,
+  `id_categoria_produto` INT(11) NOT NULL,
+  `status` TINYINT(1) NOT NULL DEFAULT '1',
+  `produto_especial` TINYINT(1) NOT NULL,
+  `fator_multiplicador` INT(2) NOT NULL,
+  `preco_venda` DECIMAL(10,2) NOT NULL,
+  `produto_excluido` TINYINT(1) NOT NULL DEFAULT '0',
+  `id_unidade_medida` INT(11) NOT NULL,
+  `data_cadastro` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `fk_tb_produtos_1_idx` (`id_categoria_produto` ASC),
+  INDEX `fk_tb_produtos_2_idx` (`id_unidade_medida` ASC),
+  CONSTRAINT `fk_tb_produtos_1`
+    FOREIGN KEY (`id_categoria_produto`)
+    REFERENCES `tb_categoria_produtos` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tb_produtos_2`
+    FOREIGN KEY (`id_unidade_medida`)
+    REFERENCES `tb_und_medidas` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tb_estoque`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tb_estoque` ;
+
+CREATE TABLE IF NOT EXISTS `tb_estoque` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `id_produto` INT(11) NOT NULL,
+  `id_compra` INT(11) NOT NULL DEFAULT '0',
+  `entrada` TINYINT(1) NOT NULL,
+  `data_hora` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `quantidade` INT(11) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  INDEX `fk_tb_produto_1_idx` (`id_produto` ASC),
+  CONSTRAINT `fk_tb_produto_1`
+    FOREIGN KEY (`id_produto`)
+    REFERENCES `tb_produtos` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tb_fornecedores`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tb_fornecedores` ;
+
+CREATE TABLE IF NOT EXISTS `tb_fornecedores` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `razao_social` VARCHAR(50) NOT NULL,
   `nome_fantasia` VARCHAR(50) NULL DEFAULT NULL,
@@ -246,63 +414,11 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `fazendautopia`.`tb_und_medidas`
+-- Table `tb_fornecedor_produtos`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_und_medidas` ;
+DROP TABLE IF EXISTS `tb_fornecedor_produtos` ;
 
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_und_medidas` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `descricao` VARCHAR(256) NOT NULL,
-  `status` TINYINT(1) NOT NULL DEFAULT '1',
-  `categoria_excluida` TINYINT(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 5
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `fazendautopia`.`tb_produtos`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_produtos` ;
-
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_produtos` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `descricao` VARCHAR(256) NOT NULL,
-  `imagem` MEDIUMBLOB NULL DEFAULT NULL,
-  `info_nutricional` VARCHAR(256) NULL DEFAULT NULL,
-  `id_categoria_produto` INT(11) NOT NULL,
-  `status` TINYINT(1) NOT NULL DEFAULT '1',
-  `produto_especial` TINYINT(1) NOT NULL,
-  `fator_multiplicador` INT(2) NOT NULL,
-  `preco_venda` DECIMAL(10,2) NOT NULL,
-  `produto_excluido` TINYINT(1) NOT NULL DEFAULT '0',
-  `id_unidade_medida` INT(11) NOT NULL,
-  `data_cadastro` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  INDEX `fk_tb_produtos_1_idx` (`id_categoria_produto` ASC),
-  INDEX `fk_tb_produtos_2_idx` (`id_unidade_medida` ASC),
-  CONSTRAINT `fk_tb_produtos_1`
-    FOREIGN KEY (`id_categoria_produto`)
-    REFERENCES `fazendautopia`.`tb_categoria_produtos` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_tb_produtos_2`
-    FOREIGN KEY (`id_unidade_medida`)
-    REFERENCES `fazendautopia`.`tb_und_medidas` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 8
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `fazendautopia`.`tb_fornecedor_produtos`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_fornecedor_produtos` ;
-
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_fornecedor_produtos` (
+CREATE TABLE IF NOT EXISTS `tb_fornecedor_produtos` (
   `id` INT(11) NOT NULL,
   `id_fornecedor` INT(11) NOT NULL,
   `id_produto` INT(11) NOT NULL AUTO_INCREMENT,
@@ -311,12 +427,12 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_fornecedor_produtos` (
   INDEX `fk_tb_fornecedor_produtos_2_idx` (`id_produto` ASC),
   CONSTRAINT `fk_tb_fornecedor_produtos_1`
     FOREIGN KEY (`id_fornecedor`)
-    REFERENCES `fazendautopia`.`tb_fornecedores` (`id`)
+    REFERENCES `tb_fornecedores` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tb_fornecedor_produtos_2`
     FOREIGN KEY (`id_produto`)
-    REFERENCES `fazendautopia`.`tb_produtos` (`id`)
+    REFERENCES `tb_produtos` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -324,11 +440,11 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `fazendautopia`.`tb_lojas`
+-- Table `tb_lojas`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_lojas` ;
+DROP TABLE IF EXISTS `tb_lojas` ;
 
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_lojas` (
+CREATE TABLE IF NOT EXISTS `tb_lojas` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `razao_social` VARCHAR(50) NOT NULL,
   `nome_fantasia` VARCHAR(50) NOT NULL,
@@ -347,20 +463,20 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_lojas` (
   INDEX `fk_tb_lojas_1_idx` (`id_regiao` ASC),
   CONSTRAINT `fk_tb_lojas_1`
     FOREIGN KEY (`id_regiao`)
-    REFERENCES `fazendautopia`.`tb_regioes` (`id`)
+    REFERENCES `tb_regioes` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 4
+AUTO_INCREMENT
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `fazendautopia`.`tb_fretes`
+-- Table `tb_fretes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_fretes` ;
+DROP TABLE IF EXISTS `tb_fretes` ;
 
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_fretes` (
+CREATE TABLE IF NOT EXISTS `tb_fretes` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `id_origem` INT(11) NOT NULL,
   `id_destino` INT(11) NOT NULL,
@@ -372,66 +488,70 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_fretes` (
   INDEX `fk_tb_fretes_2_idx` (`id_origem` ASC),
   CONSTRAINT `fk_tb_fretes_1`
     FOREIGN KEY (`id_destino`)
-    REFERENCES `fazendautopia`.`tb_regioes` (`id`)
+    REFERENCES `tb_regioes` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tb_fretes_2`
     FOREIGN KEY (`id_origem`)
-    REFERENCES `fazendautopia`.`tb_lojas` (`id`)
+    REFERENCES `tb_lojas` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 8
+AUTO_INCREMENT
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `fazendautopia`.`tb_inscricoes`
+-- Table `tb_inscricoes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_inscricoes` ;
+DROP TABLE IF EXISTS `tb_inscricoes` ;
 
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_inscricoes` (
+CREATE TABLE IF NOT EXISTS `tb_inscricoes` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(50) NOT NULL,
   `data_inscricao` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `emailNewsletter_UNIQUE` (`email` ASC))
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
+AUTO_INCREMENT
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `fazendautopia`.`tb_pacotes_planos`
+-- Table `tb_obs_plano`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_pacotes_planos` ;
+DROP TABLE IF EXISTS `tb_obs_plano` ;
 
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_pacotes_planos` (
+CREATE TABLE IF NOT EXISTS `tb_obs_plano` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `quantidade_cestas` INT(11) NOT NULL,
-  `id_cesta` INT(11) NOT NULL,
-  `preco` DECIMAL(8,2) NOT NULL,
-  `descricao` VARCHAR(200) NOT NULL,
-  `titulo` VARCHAR(45) NOT NULL,
-  `status` TINYINT(1) NOT NULL DEFAULT '1',
-  `plano_excluido` TINYINT(1) NOT NULL DEFAULT '0',
+  `observacao` TEXT NOT NULL,
+  `id_plano_compra` INT(11) NOT NULL,
+  `data_hora` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `id_remetente` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_tb_pacotes_planos_1_idx` (`id_cesta` ASC),
-  CONSTRAINT `fk_tb_pacotes_planos_1`
-    FOREIGN KEY (`id_cesta`)
-    REFERENCES `fazendautopia`.`tb_cestas` (`id`)
+  INDEX `fk_tb_obs_plano_1_idx1` (`id_plano_compra` ASC),
+  INDEX `fk_tb_obs_plano_2_idx` (`id_remetente` ASC),
+  CONSTRAINT `fk_tb_obs_plano_1`
+    FOREIGN KEY (`id_plano_compra`)
+    REFERENCES `tb_pacotes_planos` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tb_obs_plano_2`
+    FOREIGN KEY (`id_remetente`)
+    REFERENCES `tb_usuarios` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
 
 
 -- -----------------------------------------------------
--- Table `fazendautopia`.`tb_tipos_pagamento`
+-- Table `tb_tipos_pagamento`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_tipos_pagamento` ;
+DROP TABLE IF EXISTS `tb_tipos_pagamento` ;
 
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_tipos_pagamento` (
+CREATE TABLE IF NOT EXISTS `tb_tipos_pagamento` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `desconto` INT(11) NOT NULL,
   `descricao_regras` VARCHAR(256) NULL DEFAULT NULL,
@@ -440,28 +560,16 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_tipos_pagamento` (
   `descricao` VARCHAR(20) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 4
+AUTO_INCREMENT
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `fazendautopia`.`tb_status_pedido`
+-- Table `tb_pedidos`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_status_pedido` ;
+DROP TABLE IF EXISTS `tb_pedidos` ;
 
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_status_pedido` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `descricao` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `fazendautopia`.`tb_pedidos`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_pedidos` ;
-
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_pedidos` (
+CREATE TABLE IF NOT EXISTS `tb_pedidos` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `ecobag_adicional` TINYINT(1) NOT NULL,
   `id_tipo_de_pagamento` INT(11) NOT NULL,
@@ -475,58 +583,30 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_pedidos` (
   INDEX `fk_tb_pedidos_3_idx` (`status` ASC),
   CONSTRAINT `fk_tb_pedidos_1`
     FOREIGN KEY (`id_tipo_de_pagamento`)
-    REFERENCES `fazendautopia`.`tb_tipos_pagamento` (`id`)
+    REFERENCES `tb_tipos_pagamento` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tb_pedidos_2`
     FOREIGN KEY (`id_compras`)
-    REFERENCES `fazendautopia`.`tb_compras` (`id`)
+    REFERENCES `tb_compras` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tb_pedidos_3`
     FOREIGN KEY (`status`)
-    REFERENCES `fazendautopia`.`tb_status_pedido` (`id`)
+    REFERENCES `tb_status_pedido` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 34
+AUTO_INCREMENT
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `fazendautopia`.`tb_planos_compra`
+-- Table `tb_produtos_compra`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_planos_compra` ;
+DROP TABLE IF EXISTS `tb_produtos_compra` ;
 
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_planos_compra` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `id_plano` INT(11) NOT NULL,
-  `id_compra` INT(11) NOT NULL,
-  `quantidade` INT(11) NOT NULL,
-  `preco_unitario` DECIMAL(8,2) NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_tb_planos_compra_1_idx` (`id_plano` ASC),
-  INDEX `fk_tb_planos_compra_2_idx` (`id_compra` ASC),
-  CONSTRAINT `fk_tb_planos_compra_1`
-    FOREIGN KEY (`id_plano`)
-    REFERENCES `fazendautopia`.`tb_pacotes_planos` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_tb_planos_compra_2`
-    FOREIGN KEY (`id_compra`)
-    REFERENCES `fazendautopia`.`tb_compras` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
-
-
--- -----------------------------------------------------
--- Table `fazendautopia`.`tb_produtos_compra`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_produtos_compra` ;
-
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_produtos_compra` (
+CREATE TABLE IF NOT EXISTS `tb_produtos_compra` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `id_produto` INT(11) NOT NULL,
   `id_compra` INT(11) NOT NULL,
@@ -537,25 +617,25 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_produtos_compra` (
   INDEX `fk_tb_produtos_compra_2_idx` (`id_compra` ASC),
   CONSTRAINT `fk_tb_produtos_compra_1`
     FOREIGN KEY (`id_produto`)
-    REFERENCES `fazendautopia`.`tb_produtos` (`id`)
+    REFERENCES `tb_produtos` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tb_produtos_compra_2`
     FOREIGN KEY (`id_compra`)
-    REFERENCES `fazendautopia`.`tb_compras` (`id`)
+    REFERENCES `tb_compras` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 22
+AUTO_INCREMENT
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `fazendautopia`.`tb_produtos_para_cesta`
+-- Table `tb_produtos_para_cesta`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_produtos_para_cesta` ;
+DROP TABLE IF EXISTS `tb_produtos_para_cesta` ;
 
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_produtos_para_cesta` (
+CREATE TABLE IF NOT EXISTS `tb_produtos_para_cesta` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `id_produto` INT(11) NOT NULL,
   `id_cesta` INT(11) NOT NULL,
@@ -564,55 +644,42 @@ CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_produtos_para_cesta` (
   INDEX `fk_produto_1_idx` (`id_produto` ASC),
   CONSTRAINT `fk_produto_1`
     FOREIGN KEY (`id_produto`)
-    REFERENCES `fazendautopia`.`tb_produtos` (`id`)
+    REFERENCES `tb_produtos` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_produto_2`
     FOREIGN KEY (`id_cesta`)
-    REFERENCES `fazendautopia`.`tb_cestas` (`id`)
+    REFERENCES `tb_cestas` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 27
+AUTO_INCREMENT
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `fazendautopia`.`tb_estoque`
+-- Placeholder table for view `estoque_entrada`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fazendautopia`.`tb_estoque` ;
+CREATE TABLE IF NOT EXISTS `estoque_entrada` (`id_produto` INT, `total` INT);
 
-CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_estoque` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `id_produto` INT NOT NULL,
-  `id_compra` INT NOT NULL DEFAULT 0,
-  `entrada` TINYINT(1) NOT NULL,
-  `data_hora` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  INDEX `fk_tb_produto_1_idx` (`id_produto` ASC),
-  CONSTRAINT `fk_tb_produto_1`
-    FOREIGN KEY (`id_produto`)
-    REFERENCES `fazendautopia`.`tb_produtos` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+-- -----------------------------------------------------
+-- Placeholder table for view `estoque_saida`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `estoque_saida` (`id_produto` INT, `total` INT);
 
-INSERT INTO tb_status_pedido
-  (descricao)
-VALUE('Em aberto');
-INSERT INTO tb_status_pedido
-  (descricao)
-VALUE('Em preparação');
-INSERT INTO tb_status_pedido
-  (descricao)
-VALUE('Em trânsito');
-INSERT INTO tb_status_pedido
-  (descricao)
-VALUE('Concluído');
-INSERT INTO tb_status_pedido
-  (descricao)
-VALUE('Cancelado');
+-- -----------------------------------------------------
+-- View `estoque_entrada`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `estoque_entrada`;
+DROP VIEW IF EXISTS `estoque_entrada` ;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`fazendautopia`@`localhost` SQL SECURITY DEFINER VIEW `estoque_entrada` AS select `tb_estoque`.`id_produto` AS `id_produto`,sum(`tb_estoque`.`quantidade`) AS `total` from `tb_estoque` where (`tb_estoque`.`entrada` = 1) group by `tb_estoque`.`entrada`,`tb_estoque`.`id_produto`;
 
+-- -----------------------------------------------------
+-- View `estoque_saida`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `estoque_saida`;
+DROP VIEW IF EXISTS `estoque_saida` ;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`fazendautopia`@`localhost` SQL SECURITY DEFINER VIEW `estoque_saida` AS select `tb_estoque`.`id_produto` AS `id_produto`,sum(`tb_estoque`.`quantidade`) AS `total` from `tb_estoque` where (`tb_estoque`.`entrada` = 0) group by `tb_estoque`.`entrada`,`tb_estoque`.`id_produto`;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

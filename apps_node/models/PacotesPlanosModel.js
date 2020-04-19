@@ -1,6 +1,6 @@
 const conect = require('./../config/CONECT_BD');
 class PacotesPlanosModel {
-  constructor (descricao, titulo, id_cesta, preco, quantidade_cestas, status = 1, plano_excluido = 0) {
+  constructor (descricao, titulo, id_cesta, preco, quantidade_cestas, status = 1, plano_excluido = 0, regulamento = 'Em caso de dúvidas entre em contato') {
     this._id = null;
     this._descricao = descricao;
     this._titulo = titulo;
@@ -9,6 +9,7 @@ class PacotesPlanosModel {
     this._preco = preco;
     this._quantidade_cestas = quantidade_cestas;
     this._plano_excluido = plano_excluido;
+    this._regulamento = regulamento;
   }
   get id() {
     return this._id;
@@ -30,6 +31,9 @@ class PacotesPlanosModel {
   }
   get quantidade_cestas() {
     return this._quantidade_cestas;
+  }
+  get regulamento() {
+    return this._regulamento;
   }
   set id(value) {
     this._id = value;
@@ -57,14 +61,19 @@ class PacotesPlanosModel {
   } set plano_excluido(value) {
     this._plano_excluido = value;
   }
-
-  salvarPacotePlano(pacotePlano) {
+  set regulamento(value) {
+    this._regulamento = value;
+  }
+  
+  salvarPacote(pacote) {
+    console.log(pacote);
     return new Promise((resolve, reject) => {
-      conect.query(`INSERT INTO tb_pacotes_planos(quantidade_cestas, id_cesta, preco, descricao, titulo, status) VALUES(?,?,?,?,?,?)`, [
-        pacotePlano.quantidade_cestas, pacotePlano._id_cesta, pacotePlano._preco, pacotePlano._descricao, pacotePlano._titulo, pacotePlano._status
+      conect.query(`INSERT INTO tb_pacotes_planos (quantidade_cestas, id_cesta, preco, descricao, titulo, status, regulamento) VALUES(?,?,?,?,?,?,?)      
+      `, [
+        pacote.quantidade_cestas, pacote._id_cesta, pacote._preco, pacote._descricao, pacote._titulo, pacote._status, pacote._regulamento
       ], (err, result) => {
         if (err) {
-          console.log(err.message);
+          console.log(err);
           reject(err.message);
         } else {
           resolve(result);
@@ -72,11 +81,11 @@ class PacotesPlanosModel {
       });
     });
   }
-
-
-  listarPacotesPlanosAtivos(pacotePlano) {
+  
+  
+  listarPacotesPlanosAtivos(pacote) {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT * FROM tb_pacotes_planos WHERE plano_excluido = ? AND status = ?`, [pacotePlano._plano_excluido, pacotePlano._status], (err, result) => {
+      conect.query(`SELECT * FROM tb_pacotes_planos WHERE plano_excluido = ? AND status = ?`, [pacote._plano_excluido, pacote._status], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -86,10 +95,13 @@ class PacotesPlanosModel {
       });
     });
   }
-
-  listarTodosPacotesPlanos(pacotePlano) {
+  
+  listarTodosPacotesPlanos(pacote) {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT * FROM tb_pacotes_planos WHERE plano_excluido = ?`, [pacotePlano._plano_excluido], (err, result) => {
+      conect.query(`SELECT plano.*, cesta.descricao AS cesta, ctg.descricao AS categoria FROM tb_pacotes_planos plano
+      INNER JOIN tb_cestas cesta ON cesta.id = plano.id_cesta
+      INNER JOIN tb_categoria_cestas ctg ON ctg.id = cesta.id_categoria_cesta 
+      WHERE plano_excluido = ?`, [pacote._plano_excluido], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -99,11 +111,11 @@ class PacotesPlanosModel {
       });
     });
   }
-
-  atualizarPacotePlano(pacotePlano) {
+  
+  atualizarpacote(pacote) {
     return new Promise((resolve, reject) => {
       conect.query(`UPDATE tb_pacotes_planos SET quantidade_cestas = ?, id_cesta = ?, preco = ?, descricao = ?, titulo = ?, status = ? WHERE id = ?`, [
-        pacotePlano.quantidade_cestas, pacotePlano._id_cesta, pacotePlano._preco, pacotePlano._descricao, pacotePlano._titulo, pacotePlano._status, pacotePlano._id
+        pacote.quantidade_cestas, pacote._id_cesta, pacote._preco, pacote._descricao, pacote._titulo, pacote._status, pacote._id
       ], (err, result) => {
         if (err) {
           console.log(err.message);
@@ -114,12 +126,12 @@ class PacotesPlanosModel {
       });
     });
   }
-
-
-  desabilitarPacotePlano(pacotePlano) {
+  
+  
+  desabilitarpacote(pacote) {
     return new Promise((resolve, reject) => {
       conect.query(`UPDATE tb_pacotes_planos SET plano_excluido = ? WHERE id = ?`, [
-        pacotePlano.plano_excluido, pacotePlano._id
+        pacote.plano_excluido, pacote._id
       ], (err, result) => {
         if (err) {
           console.log(err.message);
@@ -130,8 +142,8 @@ class PacotesPlanosModel {
       });
     });
   }
-
-
+  
+  
 }
 
 module.exports = PacotesPlanosModel;

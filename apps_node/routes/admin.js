@@ -15,6 +15,7 @@ const pedidoController = require('../controllers/PedidosController');
 //------------------------------------------------------------------------------------------------------
 const produtoParaCestaController = require('../controllers/ProdutosParaCestaController');
 const contatoController = require('../controllers/ContatosController');
+const planoController = require('../controllers/PacotesPlanoController');
 
 
 
@@ -402,6 +403,22 @@ router.get('/estoque', (req, res, next) => {
 //lançar estoque
 router.post('/estoque', (req, res, next) => {
   (adminController.autenticar(req, res, next)) ? produtoController.lancarEstoque(req, res, next) : '';
+});
+//------------------------------------------------------------------------------------------------------
+
+
+
+
+
+//------------------------------------------------------------------------------------------------------
+//Planos de assinatura
+router.get('/planos', (req, res, next) => {
+  (adminController.autenticar(req, res, next)) ? planoController.paginaPlanos(req, res, next) : '';
+});
+//------------------------------------------------------------------------------------------------------
+//Planos de assinatura
+router.post('/planos', (req, res, next) => {
+  (adminController.autenticar(req, res, next)) ? planoController.salvarPacotePlano(req, res, next) : '';
 });
 //------------------------------------------------------------------------------------------------------
 
