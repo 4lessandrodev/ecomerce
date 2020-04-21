@@ -15,16 +15,18 @@ const Pedido = require('./../models/PedidoModel');
 const pedidoController = require('./../controllers/PedidosController');
 const enviarEmail = require('./../services/enviarEmail');
 const Estoque = require('./../models/EstoqueProdutoModel');
-
+const PlanoModel = require('./../models/PacotesPlanosModel');
+const PlanoCompraModel = require('./../models/PlanoCompraModel');
 
 
 //------------------------------------------------------------------------------------------------------
-const renderizar = (req, res, next, produtos = [], cestas = []) => {
+const renderizar = (req, res, next, produtos = [], cestas = [], planos = []) => {
   let logado = (req.session.user != undefined);
   res.render('index', {
     logado,
     produtos,
     cestas,
+    planos,
     
     btn: {
       label: 'Voltar',
@@ -135,14 +137,23 @@ const carregarIndex = (req, res, next) => {
   let produto = new Produto();
   let cesta = new Cesta();
   produto.produto_especial = 1;
-  produto.listarProdutosEspeciaisAtivos(produto).then(produtos => {
-    cesta.listarCestasAtivas(cesta).then(cestas => {
-      renderizar(req, res, next, produtos, cestas);
-    });
-  }).catch(err => {
-    console.log(err);
-    res.send(err.message);
-  });
+  
+  let plano = new PlanoModel();
+  plano.status = 1;
+  plano.excluido = 0;
+  
+  async function listar() {
+    try {
+      let cestas = await cesta.listarCestasAtivas(cesta);
+      let produtos = await produto.listarProdutosEspeciaisAtivos(produto);
+      let planos = await plano.listarPacotesPlanosAtivos(plano);
+      renderizar(req, res, next, produtos, cestas, planos);
+    } catch (error) {
+      console.log(err);
+      res.send(err.message);
+    }
+  }
+  listar();
 };
 //------------------------------------------------------------------------------------------------------
 const carregarMercearia = (req, res, next) => {
@@ -457,6 +468,43 @@ const limparCarrinho = (req, res, next) => {
   });
 };
 //---------------------------------------------------------------------------------------------------------------------
+
+const verPlano = (req, res, next) => {
+  let logado = (req.session.user !== undefined);
+  let plano = new PlanoModel();
+  plano.id = req.params.id;
+  async function listar() {
+    try {
+      let plan = await plano.listarPacotePlanoSelecionado(plano);
+      res.render('plano-selecionado', {
+        logado,
+        plan:plan[0],
+        rotulo:'Plano Selecionado'
+      });
+    } catch (error) {
+      console.log(error);
+      res.send(error.message);
+    }
+  }
+  listar();
+};
+
+//---------------------------------------------------------------------------------------------------------------------
+const assinarPlano = (req, res, next) => {
+  async function assinar() {
+    try {
+      //constructor (id_plano, id_usuario, quantidade, preco_unitario, data_compra, status = 1)
+      let compra = new PlanoCompraModel(req.body.id_plano, req.session.user.id, req.body.quantidade, req.body.preco_unitario);
+      let resultado = await compra.salvarPlanoCompra(compra);
+      res.send(resultado);
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(400);
+    }
+  }
+  assinar();
+};
+//---------------------------------------------------------------------------------------------------------------------
 module.exports = {
   inscrever,
   carregarIndex,
@@ -471,5 +519,7 @@ module.exports = {
   verificarUsuarioLogado,
   carregarCarrinhoDeCompras,
   salvarPedido,
-  limparCarrinho
+  limparCarrinho,
+  verPlano,
+  assinarPlano
 };

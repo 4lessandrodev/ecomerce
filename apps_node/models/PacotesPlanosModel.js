@@ -85,7 +85,25 @@ class PacotesPlanosModel {
   
   listarPacotesPlanosAtivos(pacote) {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT * FROM tb_pacotes_planos WHERE plano_excluido = ? AND status = ?`, [pacote._plano_excluido, pacote._status], (err, result) => {
+      conect.query(`SELECT plano.*, cesta.descricao AS cesta, ctg.descricao AS categoria FROM tb_pacotes_planos plano
+      INNER JOIN tb_cestas cesta ON cesta.id = plano.id_cesta
+      INNER JOIN tb_categoria_cestas ctg ON ctg.id = cesta.id_categoria_cesta 
+      WHERE plano.plano_excluido = ? AND plano.status = ?`, [pacote._plano_excluido, pacote._status], (err, result) => {
+        if (err) {
+          console.log(err.message);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+  listarPacotePlanoSelecionado(pacote) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT plano.*, cesta.descricao AS cesta, ctg.descricao AS categoria FROM tb_pacotes_planos plano
+      INNER JOIN tb_cestas cesta ON cesta.id = plano.id_cesta
+      INNER JOIN tb_categoria_cestas ctg ON ctg.id = cesta.id_categoria_cesta 
+      WHERE plano.id = ?`, [pacote._id], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -114,8 +132,8 @@ class PacotesPlanosModel {
   
   atualizarpacote(pacote) {
     return new Promise((resolve, reject) => {
-      conect.query(`UPDATE tb_pacotes_planos SET quantidade_cestas = ?, id_cesta = ?, preco = ?, descricao = ?, titulo = ?, status = ? WHERE id = ?`, [
-        pacote.quantidade_cestas, pacote._id_cesta, pacote._preco, pacote._descricao, pacote._titulo, pacote._status, pacote._id
+      conect.query(`UPDATE tb_pacotes_planos SET quantidade_cestas = ?, id_cesta = ?, preco = ?, descricao = ?, titulo = ?, status = ?, regulamento = ? WHERE id = ?`, [
+        pacote.quantidade_cestas, pacote._id_cesta, pacote._preco, pacote._descricao, pacote._titulo, pacote._status, pacote._regulamento, pacote._id
       ], (err, result) => {
         if (err) {
           console.log(err.message);

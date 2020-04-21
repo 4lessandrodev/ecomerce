@@ -118,7 +118,7 @@ class PedidoModel {
       });
     });
   }
-
+  
   alterarStatusDosPedidos(qry) {
     return new Promise((resolve, reject) => {
       conect.query(qry, (err, result) => {
@@ -272,7 +272,7 @@ class PedidoModel {
   
   listarDadosGeraisDoPedido(pedido) {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT cliente.nome, cliente.phone, cliente.endereco, cliente.cidade, cliente.estado, cliente.cep, regiao.descricao, pedido.retirar_na_loja, pedido.ecobag_adicional, pedido.anotacoes, pg.descricao AS pagamento, frete.preco AS frete, regiao.descricao AS regiao, DATE_FORMAT(compra.data_compra, '%d/%m/%Y %h:%m:%s') AS data, pedido.status, status_pedido.descricao AS status_pedido
+      conect.query(`SELECT cliente.nome, cliente.phone, cliente.endereco, cliente.cidade, cliente.estado, cliente.cep, regiao.descricao, pedido.retirar_na_loja, pedido.ecobag_adicional, pedido.anotacoes, pg.descricao AS pagamento, frete.preco AS frete, regiao.descricao AS regiao, DATE_FORMAT(compra.data_compra, '%d/%m/%Y %h:%i:%s') AS data, pedido.status, status_pedido.descricao AS status_pedido
       FROM tb_pedidos AS pedido, tb_compras AS compra, tb_clientes AS cliente, tb_regioes AS regiao, tb_tipos_pagamento AS pg, tb_fretes AS frete, tb_status_pedido AS status_pedido
       WHERE pedido.id_compras = compra.id AND cliente.id_usuario = compra.id_usuario AND regiao.id = cliente.id_regiao AND pg.id = pedido.id_tipo_de_pagamento AND status_pedido.id = pedido.status AND frete.id_destino = cliente.id_regiao AND pedido.id = ?`, [pedido._id], (err, result) => {
         if (err) {
@@ -308,6 +308,34 @@ class PedidoModel {
         if (err) {
           console.log(err.message);
           reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+  
+  listarRelatorioDePedidos() {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT pedido.id AS pedido, cliente.nome, cliente.phone, cliente.endereco , 
+      cliente.bairro , regiao.descricao AS regiao, produto.descricao, cestas.descricao AS cesta, categoria.descricao AS categoria , SUM(estoque.quantidade) AS quantidade, 
+      pedido.anotacoes, pedido.ecobag_adicional, pedido.retirar_na_loja, frete.preco AS frete, ((pdc.preco_unitario * pdc.quantidade) + (ctc.preco_unitario * ctc.quantidade)) AS subtotal
+      FROM tb_estoque estoque 
+      INNER JOIN tb_pedidos pedido ON pedido.id_compras = estoque.id_compra
+      INNER JOIN tb_compras compras ON compras.id = pedido.id_compras
+      INNER JOIN tb_clientes cliente ON compras.id_usuario = cliente.id_usuario
+      INNER JOIN tb_produtos produto ON produto.id = estoque.id_produto
+      INNER JOIN tb_regioes regiao ON cliente.id_regiao = regiao.id
+      INNER JOIN tb_produtos_compra pdc ON pdc.id_compra = compras.id
+      INNER JOIN tb_cestas_compra ctc ON ctc.id_compra = compras.id
+      INNER JOIN tb_fretes frete ON frete.id_destino = cliente.id_regiao
+      INNER JOIN tb_cestas cestas ON ctc.id_cesta = cestas.id
+      INNER JOIN tb_categoria_cestas categoria ON cestas.id_categoria_cesta = categoria.id
+      WHERE compras.pedido_aberto = 0 AND pedido.status = 1 AND estoque.entrada = 0 AND frete.tabela_excluida = 0
+      GROUP BY pedido.id, estoque.id_produto`, (err, result) => {
+        if (err) {
+          console.log(err);
+          resolve.send(err.message);
         } else {
           resolve(result);
         }

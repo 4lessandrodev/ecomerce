@@ -1,0 +1,191 @@
+    <main>
+      
+      <!-- MODAL COM A LISTA DE STATUS DISPONÍVEIS  -->
+      <!----------------------------------------------------------------------->
+      <section id="sessao-lista-produtos">
+        <div class="display-none fade show" id="lista-produtos" tabindex="10" role="dialog"
+        aria-labelledby="lista-produtos" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id=lista-produtos-titulo">Alterar Status do Plano</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+              onclick="Utils.ocultarFormulario('#lista-produtos','display-none')">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!--LISTAR PRODUTOS ADICIONAIS AQUI-->
+            <!----------------------------------------------------------------------->
+            <div class="list-group">
+              
+              <% for(let status of statusPedido){ %>
+                
+                <button type="button" class="list-group-item list-group-item-action"
+                onclick="Utils.alterarStatusDoPlano(this)">
+                <div src="" style="width: 100%; margin: 0 0.5em; font-size: 1.2em; color: rgb(119, 4, 4)"
+                alt="imagem"><i class="fas fa-clipboard-check"></i> <%=status.descricao%> </div>
+                <input type="hidden" class="code_plano" value="<%=plano.id%>">
+                <input type="hidden" class="code_status" value="<%=status.id%> ">
+              </button>
+              
+              <% } %>
+              
+            </div>
+            <!----------------------------------------------------------------------->
+          </div>
+          <div class="modal-footer">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!----------------------------------------------------------------------->
+  
+  
+  <div class="background">
+    <section class="container">
+      <div class="breadcrumb d-flex bd-highlight mb-3">
+        <div class="p-2 bd-highlight">
+          <h4>Detalhes do plano: <span class="badge badge-secondary">000<%=plano.id%></span></h4>
+        </div>
+        <div class="ml-auto p-2 bd-highlight">
+          <a name="imprimir" id="imprimir" class="btn btn-outline-primary" role="button"
+          onclick="window.print();">Imprimir</a>
+          <button name="alterar-status" id="alterar-status" class="btn
+          <%if(plano.status == "Em aberto"){%>btn-warning<%}else{%>btn-success<%}%> mr" role="button"><%=plano.status%>....<i
+          class=" fas fa-edit"></i></button>
+        </div>
+      </div>
+      
+      <form style="background-color: white;">
+        <table class="table table-hover table-bordered" style="background-color: white;" id="pedidos">
+          <thead>
+            <tr>
+              <th scope="col">Cliente</th>
+              <th scope="col">Qtd. Entregue</th>
+              <th scope="col">Total Cestas</th>
+              <th scope="col" class="col-small">Titulo</th>
+              <th scope="col">Descrição</th>
+              <th scope="col">Telefone</th>
+              <th scope="col">Data Assinatura</th>
+              <th scope="col" style="width: auto;"><strong>Total</strong></th>
+            </tr>
+          </thead>
+          
+          <tbody id="listagem-cestas">
+            <tr data-plano="<%=plano.id%>" class="dados-plano">
+              <td scope="row"><strong><%=plano.nome%></strong></td>
+              <td>
+                <%=plano.entregas%>
+              </td>
+               <td><%=plano.quantidade_total_cestas%></td>
+              <td><%=plano.titulo%></td>
+              <td><%=plano.plano_descricao%></td>
+              <td><%=plano.phone%></td>
+              <td>
+                <%=plano.data_compra%>
+              </td>
+              <td>R$ <strong><%=plano.preco_total%></strong></td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </form>
+    </section>
+    
+    <div class="container" style="background-color: white;">
+      <div style="background-color: #f8fde3;">
+        <!-- Navbar content -->
+        <table class="table table-hover table-bordered" style="background-color: white;">
+          <thead>
+            <tr>
+              <th scope="col">Cesta do plano</th>
+              <th scope="col">Endereço</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td scope="row"><strong><%=plano.cesta%> - <%=plano.categoria%></strong></td>
+                <td><%=plano.endereco%>, <%=plano.bairro%>, <%=plano.cidade%>-<%=plano.estado%></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+    </section>
+    
+    <!------------------------------------------------------------------------------------------------------------>
+    <!--LISTAR CESTAS CADASTRADAS-->
+    <section class="container list-itens-container table-responsive-md">
+      <div class="navbar navbar-light">
+        <h6 class="navbar-brand">
+          Entregas:
+        </h6>
+      </div>
+      
+      <table class="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Codigo</th>
+            <th scope="col">Cesta</th>
+            <th scope="col">Data da entrega</th>
+          </tr>
+        </thead>
+        
+        <tbody id="listagem-cestas">
+          
+          <% cestas.forEach(function(cesta){ %>
+            <tr>
+              <td scope="row"><strong><%=cesta.id%></strong></td>
+              <td><%=plano.cesta%> - <%=plano.categoria%></td>
+              <td><%=cesta.data_entrega%></td>
+            </tr>
+            <% }); %>
+            <tr>
+              <td colspan="2">Total entregas:</td>
+              <td><%=plano.entregas%></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="text-align: right">
+          <input type="button" value="Lançar entrega" class="btn btn-success" onclick="lancarEntrega()"> 
+        </div>
+      </section>
+      <!------------------------------------------------------------------------------------------------------------>
+    </div>
+  </main>
+  
+  <script>
+    const lancarEntrega = () =>{
+      let id = JSON.parse(document.querySelector('tbody .dados-plano').dataset.plano);
+      async function lancar(){
+        try{
+          let promise = await fetch('/admin/cesta-entregue', {
+            headers: { "Content-Type": "application/json" },
+            method:'POST',
+            body:JSON.stringify({id})
+          })
+          
+          if(!promise.ok){
+            throw new Error('Não foi possível realizar o lançamento');
+          }
+          
+          let resposta = await promise.json();
+          location.reload();
+          
+        }catch(err){
+          throw new Error('Não foi possível realizar o lançamento');
+        }
+      }
+      lancar();
+    };
+  </script>
+  
+  <script>
+    let btn = document.querySelector('#alterar-status');
+    let modal = document.querySelector('#lista-produtos');
+    btn.addEventListener('click', function () {
+      modal.classList.toggle('display-none');
+    });
+  </script>

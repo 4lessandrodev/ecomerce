@@ -1,0 +1,101 @@
+<div class="container">
+  <section class="cesta-selecionada">
+    <!-- Stack the columns on mobile by making one full-width and the other half-width -->
+    <div class="row" data-plano="<%=JSON.stringify(plan)%>" id="plano">
+      <div class="col-md-8 div-imagem">
+        <img src="/images/images/planos.jpg" class="img-fluid" alt="Responsive image" alt="Imagem da cesta"
+        id="imagem-principal-cesta">
+      </div>
+      <div class="col-6 col-md-4">
+        <div class="col-4" id="nav-lateral">
+          <div class="list-group" role="tablist">
+            <a class="list-group-item list-group-item-success" data-toggle="list" role="tab" aria-controls="home">
+              <h2><%=plan.titulo%></h2>
+            </a>
+            <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="profile"
+            id="categoria"><%=plan.descricao%> </a>
+            <a class="list-group-item list-group-item-action descricao-item" data-toggle="list" role="tab"
+            aria-controls="profile">0<%=plan.quantidade_cestas%> - <%=plan.cesta%> - <%=plan.categoria%>  </a>
+            <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="messages">
+              <h3>R$ <%=plan.preco%> </h3>
+            </a>
+            <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="settings">
+              <div class="form-group">
+                <label for="quantidade">Quantidade de assinaturas</label>
+                <select class="form-control" id="quantidade" name="quantidade">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                </select>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="adicionar-produto">
+          <button type="button" class="btn btn-success botao-comprar" id="btn-comprar-produto"
+          onclick="assinarPlano()">Assinar agora</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <hr>
+  <h3>Veja o regulamento para assinar este plano</h3>
+  <section class="tabela-produtos">
+    <p style="padding: 1vw;"><%=plan.regulamento%></p>
+  </section>
+</div>
+
+
+<script>
+  function assinarPlano(){
+    
+    const PLANO = JSON.parse(document.querySelector('#plano').dataset.plano);
+    
+    let id_plano = PLANO.id;
+    let quantidade = document.querySelector('#quantidade').value;
+    let preco_unitario = PLANO.preco;
+    let login = document.querySelector('#login').dataset.login;
+    
+    async function assinar(){
+      try{
+        let promise = await fetch('/assinar-plano', {
+          headers: { "Content-Type": "application/json" },
+          method:'POST',
+          body:JSON.stringify({
+            id_plano,
+            quantidade,
+            preco_unitario
+          })
+        })
+        
+        if(!promise.ok){
+          swal("Oops!", "Não conseguimos confirmar sua assinatura", "error");
+          throw new Error('Não foi possível realizar a assinatura');
+        }
+        
+        let resposta = await promise.json();
+        swal("Obrigado!", "Recebemos sua assinatura!", "success")
+        .then((value)=>{
+          location.reload();
+        });
+        
+        
+      }catch(err){
+        swal("Oops!", "Não conseguimos confirmar sua assinatura", "error");
+        throw new Error('Não foi possível realizar a assinatura');
+      }
+    }
+    if(login == 'true'){
+      assinar()
+    }else{
+      swal("Oops!", "Você precisa estar logado", "error")
+      .then((value)=>{
+        location.href='/login'
+      });
+    }
+  };
+</script>

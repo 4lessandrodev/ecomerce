@@ -421,5 +421,48 @@ router.post('/planos', (req, res, next) => {
   (adminController.autenticar(req, res, next)) ? planoController.salvarPacotePlano(req, res, next) : '';
 });
 //------------------------------------------------------------------------------------------------------
+//Deletar plano de assinatura
+router.delete('/plano', (req, res, next) => {
+  (adminController.autenticar(req, res, next)) ? planoController.deletarPlano(req, res, next) : '';
+});
+//------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------------------------
+//Relatorio entregas
+router.get('/relatorio-entregas', (req, res, next) => {
+  (adminController.autenticar(req, res, next)) ? adminController.relatorioEntregas(req, res, next) : '';
+});
+//------------------------------------------------------------------------------------------------------
+//Relatorio entregas
+router.get('/relatorio-produtos', (req, res, next) => {
+  (adminController.autenticar(req, res, next)) ? adminController.relatorioPedidos(req, res, next) : '';
+});
+//------------------------------------------------------------------------------------------------------
+//Relatorio entregas
+router.get('/relatorio-assinantes', (req, res, next) => {
+  (adminController.autenticar(req, res, next)) ? adminController.relatorioAssinantes(req, res, next) : '';
+});
+//------------------------------------------------------------------------------------------------------
+//Relatorio assinatura selecionada
+router.get('/assinatura-selecionada/:id', (req, res, next) => {
+  (adminController.autenticar(req, res, next)) ? adminController.assinaturaSelecionada(req, res, next) : '';
+});
+//------------------------------------------------------------------------------------------------------
+//Lançar cesta entregue ao cliente
+router.post('/cesta-entregue', (req, res, next) => {
+  (adminController.autenticar(req, res, next)) ? adminController.lancarCestaEntregue(req, res, next) : '';
+});
+//------------------------------------------------------------------------------------------------------
+//Alterar status do plano
+router.post('/status-plano', (req, res, next) => {
+  (adminController.autenticar(req, res, next)) ? adminController.alterarStatusPlano(req, res, next) : '';
+});
+//------------------------------------------------------------------------------------------------------
 
 module.exports = router;

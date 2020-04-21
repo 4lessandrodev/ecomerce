@@ -106,6 +106,16 @@ router.post('/salvar-pedido', (req, res, next) => {
 router.post('/limpar-carrinho', (req, res, next) => {
   indexController.limparCarrinho(req, res, next);
 });
+//------------------------------------------------------------------------------------------------------
+//Ver plano especifico
+router.get('/plano/:id', (req, res, next) => {
+  indexController.verPlano(req, res, next);
+});
+//------------------------------------------------------------------------------------------------------
+//Assinar um plano
+router.post('/assinar-plano', (req, res, next) => {
+  indexController.assinarPlano(req, res, next);
+});
 
 
 

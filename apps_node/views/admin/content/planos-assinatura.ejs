@@ -20,15 +20,19 @@
       </thead>
       <tbody>
         <% for(let plano of planos){%> 
-          <tr data-plano="<%JSON.stringify(plano)%> ">
+          <tr>
             <th scope="row"><%=plano.id%></th>
             <td><%=plano.titulo%></td>
             <td><%=plano.descricao%></td>
-            <td><%=plano.cesta%>-<%=plano.categoria%></td>
+            <td><%=plano.cesta%> - <%=plano.categoria%></td>
             <td><%=plano.preco%></td>
             <td><%if(plano.status == 1){%>Ativo<%}else{%>Bloqueado<%}%></td>
-            <td style="text-align: right"><i class="far fa-edit"></i></td>
-            <td style="text-align: right"><i class="far fa-trash-alt"></i></td>
+            <td style="text-align: right" class="btn-edit" data-plano="<%=JSON.stringify(plano)%>" onclick="editar(this)">
+              <i class="far fa-edit"></i>
+            </td>
+            <td style="text-align: right" class="btn-delete" data-id="<%=plano.id%>" onclick="deletar(this)">
+              <i class="far fa-trash-alt"></i>
+            </td>
           </tr>
           <% } %> 
         </tbody>
@@ -49,6 +53,7 @@
           </div>
           <div class="modal-body">
             <form action="/admin/planos" method="POST">
+              <input type="hidden" name="id" id="id">
               <div class="form-group">
                 <label for="titulo">Titulo do plano</label>
                 <input type="text" class="form-control" id="titulo" placeholder="Plano Mensal" maxlength="45"
@@ -110,10 +115,46 @@
   
   <script>
     const BTN_NOVO = document.querySelector('#btn-new');
+    const INPUTS = document.querySelectorAll('#modal-novo-plano input, #modal-novo-plano select, #modal-novo-plano textarea');
+    const MODAL = document.querySelector('#modal-novo-plano');
     
     BTN_NOVO.addEventListener('click', function(e){
       e.preventDefault();
-      console.log("Clicou");
-      $('#modal-novo-plano').modal('show')
+      $("#modal-novo-plano input, #modal-novo-plano select, #modal-novo-plano textarea").val("");
+      $('#modal-novo-plano').modal('show');
     });
+    
+    function editar(e){
+      let plano = JSON.parse(e.dataset.plano);
+      for(let input of INPUTS){
+        input.value = plano[input.name];
+      }
+      $('#modal-novo-plano').modal('show');
+    };
+    
+    function deletar(e){
+      let id = e.dataset.id;
+      async function excluir(){
+        try{
+          let promise = await fetch('/admin/plano', {
+            headers: { "Content-Type": "application/json" },
+            method:'DELETE',
+            body:JSON.stringify({id})
+          })
+          
+          if(!promise.ok){
+            throw new Error('Não foi possível excluir');
+          }
+          
+          let resposta = await promise.json();
+          location.reload();
+          
+        }catch(err){
+          throw new Error('Não foi possível excluir');
+        }
+      }
+      excluir();
+    };
+    
+    
   </script>

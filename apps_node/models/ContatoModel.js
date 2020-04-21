@@ -61,7 +61,7 @@ class ContatoModel {
 
   listarMensagens() {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT *, DATE_FORMAT(data_envio, '%d/%m/%Y %H:%m:%s') AS data_hora FROM tb_contatos`, (err, result) => {
+      conect.query(`SELECT *, DATE_FORMAT(data_envio, '%d/%m/%Y %H:%i:%s') AS data_hora FROM tb_contatos`, (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);

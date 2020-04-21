@@ -271,6 +271,37 @@ class Utils {
       return json;
     });
   }
+
+
+
+
+  static alterarStatusDoPlano(el) {
+    let id_plano = parseInt(el.querySelector('.code_plano').value);
+    let id_status = parseInt(el.querySelector('.code_status').value);
+    
+    return fetch(`/admin/status-plano`, {
+      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      body: JSON.stringify({
+        id_plano,
+        id_status
+      })
+    }).then(res => {
+      if (!res.ok) {
+        swal("Oops!", "Algo errado ocorreu!", "error");
+        throw new Error('Erro ao alterar status');
+      }
+      return res;
+    }).then(res => {
+      
+      let json = res.json();
+      swal("Status do plano alterado com sucesso!")
+      .then((value) => {
+        location.reload();
+      });
+      return json;
+    });
+  }
   
   
   static alterarStatusDosPedidosListados(el) {

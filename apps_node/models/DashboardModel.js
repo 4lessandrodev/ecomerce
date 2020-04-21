@@ -46,7 +46,14 @@ SELECT(
 	  ) AS lojas,
       (SELECT COUNT(*)
 	  FROM   tb_regioes WHERE regiao_excluida = 0 AND status = 1
-	  ) AS regioes
+	  ) AS regioes,
+      (SELECT COUNT(*)
+	  FROM   tb_pacotes_planos WHERE plano_excluido = 0 AND status = 1
+	  ) AS planos,
+      (SELECT (SUM(entrada.total)) - (SUM(saida.total))
+	  FROM   estoque_entrada entrada
+      INNER JOIN estoque_saida saida ON entrada.id_produto = saida.id_produto
+	  ) AS estoque
 FROM dual
     `, (err, result) => {
         if (err) {

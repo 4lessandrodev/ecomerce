@@ -1,0 +1,35 @@
+<hr>
+<div class="gtco-section">
+  <div class="gtco-container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
+        <h2 class="cursive-font primary-color">Seja Assinante</h2>
+        <p>Assine um de nossos planos.</p>
+      </div>
+    </div>
+    <div class="row" id="mercearia">
+
+      <% planos.forEach(function(plano){ %>
+      <div class="col-lg-4 col-md-4 col-sm-6">
+        <a href="/plano/<%=plano.id%>" class="fh5co-card-item">
+          <figure>
+            <div class="overlay">
+              <i style="font-size: 1.5em;">
+                Comprar
+              </i>
+            </div>
+            <img src="/images/images/planos.jpg" alt="Image" class="img-responsive" style="margin: auto;">
+          </figure>
+          <div class="fh5co-text">
+            <h2><%=plano.titulo%></h2>
+            <p>0<%=plano.quantidade_cestas%> - <%=plano.cesta%> - <%=plano.categoria%></p>
+            <p>
+              <span class="price cursive-font">R$ <%=plano.preco%></span>
+            </p>
+          </div>
+        </a>
+      </div>
+      <% }); %>
+    </div>
+  </div>
+</div>
