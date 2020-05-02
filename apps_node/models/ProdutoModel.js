@@ -174,10 +174,10 @@ class ProdutoModel {
           listarTodosProdutosEmEstoque(produto) {
             return new Promise((resolve, reject) => {
               conect.query(`
-              SELECT p.id, p.imagem, p.descricao, p.preco_venda, p.produto_especial, p.status, ctg.descricao AS categoria_descricao, saida.total AS total_saida, entrada.total AS total_entrada, (entrada.total - saida.total) AS estoque_disponivel 
+              SELECT p.id, p.imagem, p.descricao, p.preco_venda, p.produto_especial, p.status, ctg.descricao AS categoria_descricao, COALESCE(saida.total, 0) AS total_saida, COALESCE(entrada.total, 0) AS total_entrada, (COALESCE(entrada.total, 0) - COALESCE(saida.total,0)) AS estoque_disponivel 
               FROM tb_produtos AS p
-              INNER JOIN estoque_saida saida ON saida.id_produto = p.id
-              INNER JOIN estoque_entrada entrada ON entrada.id_produto = p.id
+              LEFT JOIN estoque_saida saida ON saida.id_produto = p.id
+              LEFT JOIN estoque_entrada entrada ON entrada.id_produto = p.id
               INNER JOIN tb_categoria_produtos ctg ON ctg.id = p.id_categoria_produto
               WHERE p.produto_excluido = 0 AND p.descricao LIKE ${"'"+produto._descricao+"%'"} AND p.status LIKE ${"'"+produto._status+"%'"}
               GROUP BY p.id`, [

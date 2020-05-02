@@ -103,14 +103,14 @@ class ProdutosParaCestaModel {
   
   listarDescricaoProdutosDeUmaCestaEspecifica(produto) {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT produto.id, produto.imagem, produto.descricao, produto.fator_multiplicador, categoria_produto.descricao AS categoria, und.descricao AS unidade_medida, (entrada.total - saida.total) AS estoque_disponivel 
+      conect.query(`SELECT produto.id, produto.imagem, produto.descricao, produto.fator_multiplicador, categoria_produto.descricao AS categoria, und.descricao AS unidade_medida, (COALESCE(entrada.total,0) - COALESCE(saida.total,0)) AS estoque_disponivel 
       FROM tb_produtos_para_cesta pc
       INNER JOIN tb_produtos produto ON produto.id = pc.id_produto
       INNER JOIN tb_cestas cesta ON pc.id_cesta = cesta.id
       INNER JOIN tb_categoria_produtos categoria_produto ON categoria_produto.id = produto.id_categoria_produto
       INNER JOIN tb_und_medidas und ON produto.id_unidade_medida = und.id
-      INNER JOIN estoque_saida saida ON saida.id_produto = produto.id
-      INNER JOIN estoque_entrada entrada ON entrada.id_produto = produto.id
+      LEFT JOIN estoque_saida saida ON saida.id_produto = produto.id
+      LEFT JOIN estoque_entrada entrada ON entrada.id_produto = produto.id
       WHERE cesta.id = ?`, [produto._id_cesta], (err, result) => {
         if (err) {
           console.log(err.message);
