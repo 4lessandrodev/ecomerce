@@ -1,6 +1,6 @@
 const conect = require('./../config/CONECT_BD'); 
 class PedidoModel {
-  constructor (id_compras, ecobag_adicional, id_tipo_pagamento, anotacoes, retirar_na_loja = 0, status = 1) {
+  constructor (id_compras, ecobag_adicional, id_tipo_pagamento, anotacoes, retirar_na_loja = 0, status = 1, total = 0) {
     this._id = null;
     this._id_compras = id_compras;
     this._ecobag_adicional = ecobag_adicional;
@@ -8,6 +8,7 @@ class PedidoModel {
     this._retirar_na_loja = retirar_na_loja;
     this._anotacoes = anotacoes;
     this._status = status;
+    this._total = total;
   }
   get id_compras() {
     return this._id_compras;
@@ -26,6 +27,9 @@ class PedidoModel {
   }
   get status() {
     return this._status;
+  }
+  get total() {
+    return this._total;
   }
   
   set id_compras(value) {
@@ -52,11 +56,15 @@ class PedidoModel {
   set id(value) {
     this._id = value;
   }
+  set total(value) {
+    this._total = value;
+  }
   
   salvarPedido(pedido) {
+    console.log(pedido);
     return new Promise((resolve, reject) => {
-      conect.query(`INSERT INTO tb_pedidos(ecobag_adicional, id_tipo_de_pagamento, retirar_na_loja, anotacoes, status, id_compras) 
-      VALUES(?,?,?,?,?,?)`,[pedido._ecobag_adicional, pedido._id_tipo_pagamento, pedido._retirar_na_loja, pedido._anotacoes, pedido._status, pedido._id_compras], (err, result) => {
+      conect.query(`INSERT INTO tb_pedidos(ecobag_adicional, id_tipo_de_pagamento, retirar_na_loja, anotacoes, status, id_compras, total) 
+      VALUES(?,?,?,?,?,?,?)`, [pedido._ecobag_adicional, pedido._id_tipo_pagamento, pedido._retirar_na_loja, pedido._anotacoes, pedido._status, pedido._id_compras, pedido._total], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -151,8 +159,11 @@ class PedidoModel {
   listarResumoCestasVendidas(pedido) {
     return new Promise((resolve, reject) => {
       conect.query(`SELECT pedido.id, cesta.descricao, categoria.descricao AS categoria, COUNT(cesta.id) AS qtd_venda, ccompra.preco_unitario, (COUNT(cesta.id) * ccompra.preco_unitario) AS subtotal
-      FROM tb_pedidos AS pedido, tb_cestas_compra AS ccompra, tb_cestas AS cesta, tb_categoria_cestas AS categoria
-      WHERE pedido.id_compras = ccompra.id_compra AND cesta.id = ccompra.id_cesta AND categoria.id = cesta.id_categoria_cesta AND pedido.status = ? GROUP BY pedido.id`, [pedido._status], (err, result) => {
+      FROM tb_pedidos AS pedido
+      INNER JOIN tb_cestas_compra AS ccompra ON pedido.id_compras = ccompra.id_compra
+      INNER JOIN tb_cestas AS cesta ON cesta.id = ccompra.id_cesta 
+      INNER JOIN tb_categoria_cestas AS categoria ON categoria.id = cesta.id_categoria_cesta
+      WHERE pedido.status = ? GROUP BY pedido.id`, [pedido._status], (err, result) => {
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -317,22 +328,25 @@ class PedidoModel {
   
   listarRelatorioDePedidos() {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT pedido.id AS pedido, cliente.nome, cliente.phone, cliente.endereco , 
-      cliente.bairro , regiao.descricao AS regiao, produto.descricao, cestas.descricao AS cesta, categoria.descricao AS categoria , SUM(estoque.quantidade) AS quantidade, 
-      pedido.anotacoes, pedido.ecobag_adicional, pedido.retirar_na_loja, frete.preco AS frete, ((pdc.preco_unitario * pdc.quantidade) + (ctc.preco_unitario * ctc.quantidade)) AS subtotal
-      FROM tb_estoque estoque 
-      INNER JOIN tb_pedidos pedido ON pedido.id_compras = estoque.id_compra
-      INNER JOIN tb_compras compras ON compras.id = pedido.id_compras
-      INNER JOIN tb_clientes cliente ON compras.id_usuario = cliente.id_usuario
+      conect.query(`SELECT pedido.id AS pedido, cliente.nome, cliente.phone, cliente.endereco, cliente.bairro, regiao.descricao AS regiao, 
+      cesta.descricao AS cesta, categoria.descricao AS categoria, ccompra.quantidade AS quantidade_cesta, ccompra.preco_unitario, 
+      (ccompra.quantidade * ccompra.preco_unitario) AS subtotal, produto.descricao AS produto, SUM(estoque.quantidade) AS quantidade_produto, 
+      frete.preco AS frete, pedido.anotacoes, pedido.ecobag_adicional, pedido.retirar_na_loja, SUM(COALESCE(produtos.quantidade, 0)) AS item_extra, 
+      COALESCE(produto.preco_venda , 0) AS preco_item_extra, DATE_FORMAT(compra.data_compra, '%d/%m/%Y %H:%m') AS data_pedido, pedido.total
+      FROM tb_pedidos AS pedido 
+      INNER JOIN tb_cestas_compra ccompra ON pedido.id_compras = ccompra.id_compra
+      INNER JOIN tb_cestas cesta ON cesta.id = ccompra.id_cesta 
+      INNER JOIN tb_categoria_cestas categoria ON categoria.id = cesta.id_categoria_cesta
+      INNER JOIN tb_estoque estoque ON estoque.id_compra = pedido.id_compras
       INNER JOIN tb_produtos produto ON produto.id = estoque.id_produto
-      INNER JOIN tb_regioes regiao ON cliente.id_regiao = regiao.id
-      INNER JOIN tb_produtos_compra pdc ON pdc.id_compra = compras.id
-      INNER JOIN tb_cestas_compra ctc ON ctc.id_compra = compras.id
+      INNER JOIN tb_compras compra ON compra.id = pedido.id_compras
+      INNER JOIN tb_clientes cliente ON cliente.id_usuario = compra.id_usuario
+      LEFT JOIN tb_produtos_compra produtos ON compra.id = produtos.id_compra AND produto.id = produtos.id_produto
+      INNER JOIN tb_regioes regiao ON regiao.id = cliente.id_regiao
       INNER JOIN tb_fretes frete ON frete.id_destino = cliente.id_regiao
-      INNER JOIN tb_cestas cestas ON ctc.id_cesta = cestas.id
-      INNER JOIN tb_categoria_cestas categoria ON cestas.id_categoria_cesta = categoria.id
-      WHERE compras.pedido_aberto = 0 AND pedido.status = 1 AND estoque.entrada = 0 AND frete.tabela_excluida = 0
-      GROUP BY pedido.id, estoque.id_produto`, (err, result) => {
+      WHERE pedido.status = 1 AND compra.pedido_aberto = 0
+      GROUP BY produto.id, pedido.id
+      ORDER BY pedido.id ASC`, (err, result) => {
         if (err) {
           console.log(err);
           resolve.send(err.message);

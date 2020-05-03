@@ -364,10 +364,14 @@ const carregarCarrinhoDeCompras = (req, res, next) => {
   }
 };
 //------------------------------------------------------------------------------------------------------
-//id_compras, ecobag_adicional, id_tipo_pagamento, anotacoes, retirar_na_loja = 0, status = 1
+//id_compras, ecobag_adicional, id_tipo_pagamento, anotacoes, retirar_na_loja = 0, status = 1, total = 0
 const salvarPedido = (req, res, next) => {
   if (req.session.user !== undefined) {
-    let pedido = new Pedido(req.body._id_compras, req.body._ecobag_adicional, req.body._id_tipo_de_pagamento, req.body._anotacoes, req.body._retirar_na_loja, req.body._status);
+
+    //id_compras, ecobag_adicional, id_tipo_pagamento, anotacoes, retirar_na_loja = 0, status = 1, total = 0)
+    let pedido = new Pedido(
+      req.body._id_compras, req.body._ecobag_adicional, req.body._id_tipo_de_pagamento,
+      req.body._anotacoes, req.body._retirar_na_loja, req.body._status, req.body._total);
     pedido.salvarPedido(pedido).then(result => {
       
       //Alterar status da compra para pedido fechado / tb_compra = pedido_aberto = 0
@@ -456,7 +460,6 @@ const limparCarrinho = (req, res, next) => {
   DELETE FROM tb_estoque WHERE id_compra = ${ID_COMPRA};
   DELETE FROM tb_cestas_compra WHERE id_compra = ${ID_COMPRA};
   DELETE FROM tb_produtos_compra WHERE id_compra = ${ID_COMPRA};
-  DELETE FROM tb_planos_compra WHERE id_compra = ${ID_COMPRA};
   DELETE FROM tb_compras WHERE id = ${ID_COMPRA};
   `;
   

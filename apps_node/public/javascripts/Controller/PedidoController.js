@@ -71,18 +71,17 @@ export class PedidoController {
     let input_id_tipo_pagamento = document.querySelector('#id_tipo_de_pagamento');
     let input_retirada_na_loja = document.querySelector('#retirar_na_loja');
     let input_anotacoes = document.querySelector('#anotacoes');
+    let input_total = document.querySelector('#total');
     
     
     //(ecobag_adicional, id_tipo_de_pagamento, retirar_na_loja, anotacoes, id_compras, status = 1)
-    
-    let pedido = new PedidoModel(input_ecobag.value, input_id_tipo_pagamento.value, input_retirada_na_loja.value, input_anotacoes.value);
+    let pedido = new PedidoModel(input_total.value, input_ecobag.checked, input_id_tipo_pagamento.value, input_retirada_na_loja.value, input_anotacoes.value);
     pedido.email = this.criarEmail();
     return pedido;
     
   }
   
   salvarPedido(pedido) {
-    
     let total = document.querySelector('#total').value;
     total = parseFloat(total);
     if (total > 50) {

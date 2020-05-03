@@ -1,13 +1,20 @@
 export class PedidoModel {
-  constructor (ecobag_adicional, id_tipo_de_pagamento, retirar_na_loja, anotacoes, id_compras, status = 1, email = ``) {
+  constructor (total, ecobag_adicional, id_tipo_de_pagamento, retirar_na_loja, anotacoes, id_compras, status = 1, email = ``) {
+    let result = 0;
+    if (ecobag_adicional) {
+      result = 1;
+    } else {
+      result = 0;
+    }
     this._id = null;
-    this._ecobag_adicional = (ecobag_adicional == 'on' || ecobag_adicional == 1) ? 1 : 0;
+    this._ecobag_adicional = result;
     this._id_tipo_de_pagamento = id_tipo_de_pagamento;
     this._retirar_na_loja = retirar_na_loja;
     this._anotacoes = anotacoes;
     this._status = status;
     this._id_compras = localStorage.getItem('id_compra');
     this._email = email;
+    this._total = total;
   }
 
   get id() {
@@ -32,6 +39,10 @@ export class PedidoModel {
     return localStorage.getItem('id_compra');
   }
 
+  get total() {
+    return this._total;
+  }
+
   get email() {
     return this._email;
   }
@@ -40,8 +51,13 @@ export class PedidoModel {
     this._id = value;
   }
   set ecobag_adicional(value) {
-    value = (value == 'on') ? 1 : 0;
-    this._ecobag_adicional = value;
+    let result = 0;
+    if (value) {
+      result = 1;
+    } else {
+      result = 0;
+    }
+    this._ecobag_adicional = result;
   }
   set id_tipo_de_pagamento(value) {
     this._id_tipo_de_pagamento = value;
@@ -60,6 +76,10 @@ export class PedidoModel {
   }
   set email(value) {
     this._email = value;
+  }
+
+  set total(value) {
+    this._total = value;
   }
 
 }

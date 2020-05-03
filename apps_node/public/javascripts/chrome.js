@@ -103,7 +103,7 @@ TABELA_PRODUTOS_ADICIONAIS_PERSONALIZADO.addEventListener('click', function remo
         //BTN_CLOSE_MODAL.click();
         itemAdicionado();
         qtd_produtos_inseridos++;
-        fator_multiplicador_saldo = parseFloat(El.dataset.fator) - fator_multiplicador_saldo;
+        fator_multiplicador_saldo = parseFloat(e.target.parentElement.parentNode.dataset.fator) - fator_multiplicador_saldo;
       } else {
         notificarLimiteDeAlt();
       }
@@ -123,7 +123,7 @@ TABELA_PRODUTOS_ADICIONAIS_GERAL.addEventListener('click', function adicionar(e)
         //BTN_CLOSE_MODAL.click();
         itemAdicionado();
         qtd_produtos_inseridos++;
-        fator_multiplicador_saldo = parseFloat(El.dataset.fator) - fator_multiplicador_saldo;
+        fator_multiplicador_saldo = parseFloat(e.target.parentElement.parentNode.dataset.fator) - fator_multiplicador_saldo;
       } else {
         notificarLimiteDeAlt();
       }

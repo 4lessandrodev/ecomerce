@@ -50,9 +50,9 @@ SELECT(
       (SELECT COUNT(*)
 	  FROM   tb_pacotes_planos WHERE plano_excluido = 0 AND status = 1
 	  ) AS planos,
-      (SELECT (SUM(entrada.total)) - (SUM(saida.total))
+      (SELECT (SUM(COALESCE(entrada.total,0))) - (SUM(COALESCE(saida.total,0)))
 	  FROM   estoque_entrada entrada
-      INNER JOIN estoque_saida saida ON entrada.id_produto = saida.id_produto
+      LEFT JOIN estoque_saida saida ON entrada.id_produto = saida.id_produto
 	  ) AS estoque
 FROM dual
     `, (err, result) => {
