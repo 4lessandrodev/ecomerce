@@ -61,7 +61,6 @@ class PedidoModel {
   }
   
   salvarPedido(pedido) {
-    console.log(pedido);
     return new Promise((resolve, reject) => {
       conect.query(`INSERT INTO tb_pedidos(ecobag_adicional, id_tipo_de_pagamento, retirar_na_loja, anotacoes, status, id_compras, total) 
       VALUES(?,?,?,?,?,?,?)`, [pedido._ecobag_adicional, pedido._id_tipo_pagamento, pedido._retirar_na_loja, pedido._anotacoes, pedido._status, pedido._id_compras, pedido._total], (err, result) => {
@@ -347,6 +346,34 @@ class PedidoModel {
       WHERE pedido.status = 1 AND compra.pedido_aberto = 0
       GROUP BY produto.id, pedido.id
       ORDER BY pedido.id ASC`, (err, result) => {
+        if (err) {
+          console.log(err);
+          resolve.send(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+  
+  listarRelatorioDeProdutosEmPedidos() {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT produto.descricao AS produto, SUM(estoque.quantidade) AS quantidade_produto, SUM(COALESCE(produtos.quantidade, 0)) AS item_extra, 
+      COALESCE(produto.preco_venda , 0) AS preco_item_extra, DATE_FORMAT(compra.data_compra, '%d/%m/%Y %H:%m') AS data_pedido
+      FROM tb_pedidos AS pedido 
+      INNER JOIN tb_cestas_compra ccompra ON pedido.id_compras = ccompra.id_compra
+      INNER JOIN tb_cestas cesta ON cesta.id = ccompra.id_cesta 
+      INNER JOIN tb_categoria_cestas categoria ON categoria.id = cesta.id_categoria_cesta
+      INNER JOIN tb_estoque estoque ON estoque.id_compra = pedido.id_compras
+      INNER JOIN tb_produtos produto ON produto.id = estoque.id_produto
+      INNER JOIN tb_compras compra ON compra.id = pedido.id_compras
+      INNER JOIN tb_clientes cliente ON cliente.id_usuario = compra.id_usuario
+      LEFT JOIN tb_produtos_compra produtos ON compra.id = produtos.id_compra AND produto.id = produtos.id_produto
+      INNER JOIN tb_regioes regiao ON regiao.id = cliente.id_regiao
+      INNER JOIN tb_fretes frete ON frete.id_destino = cliente.id_regiao
+      WHERE pedido.status = 1 AND compra.pedido_aberto = 0
+      GROUP BY produto.id
+      ORDER BY quantidade_produto DESC`, (err, result) => {
         if (err) {
           console.log(err);
           resolve.send(err.message);

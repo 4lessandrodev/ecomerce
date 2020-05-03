@@ -92,15 +92,6 @@ const listarPainel = (req, res, next) => {
   });
 };
 //------------------------------------------------------------------------------------------------------
-const relatorioEntregas = (req, res, next) => {
-  let logado = (req.session.user != undefined);
-  res.render('admin/relatorio_entregas', {
-    data: '',
-    navbar: false,
-    logado
-  });
-};
-//------------------------------------------------------------------------------------------------------
 const relatorioPedidos = (req, res, next) => {
   let logado = (req.session.user != undefined);
   async function listar() {
@@ -108,6 +99,37 @@ const relatorioPedidos = (req, res, next) => {
       let pedido = new Pedido();
       let pedidos = await pedido.listarRelatorioDePedidos(pedido);
       res.render('admin/relatorio_pedidos', {
+        data: '',
+        navbar: true,
+        logado,
+        pedidos,
+        pagina: 'Relatório',
+        btnLabel: 'Voltar',
+        assinaturas:[],
+        btn: {
+          label: 'Voltar',
+          classe: '',
+          classe2: 'display-none',
+          caminho: '/admin'
+        }
+      });
+      
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(400);
+    }
+    
+  }
+  listar();
+};
+//------------------------------------------------------------------------------------------------------
+const relatorioEntregas = (req, res, next) => {
+  let logado = (req.session.user != undefined);
+  async function listar() {
+    try {
+      let pedido = new Pedido();
+      let pedidos = await pedido.listarRelatorioDeProdutosEmPedidos(pedido);
+      res.render('admin/relatorio_entregas', {
         data: '',
         navbar: true,
         logado,

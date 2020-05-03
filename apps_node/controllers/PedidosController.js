@@ -67,7 +67,7 @@ const renderizarPaginaDePedidoSelecionado = (req, res, next, pedido, total = 0, 
 //-------------------------------------------------------------------------------------
 //id_compras, ecobag_adicional, id_tipo_pagamento, anotacoes, retirar_na_loja = 0, status = 1
 const salvarPedido = (req, res, next) => {
-  let pedido = new Pedido(req.body.id_compras, req.body.ecobag_adicional, req.body.id_tipo_pagamento, req.body.anotacoes, req.body.retirar_na_loja, req.body.status);
+  let pedido = new Pedido(req.body.id_compras, req.body.ecobag_adicional, req.body.id_tipo_pagamento, req.body.anotacoes, req.body.retirar_na_loja, req.body._status, req.body._total);
   pedido.salvarPedido(pedido).then(pedido => {
     res.send(pedido);
   }).catch(err => {

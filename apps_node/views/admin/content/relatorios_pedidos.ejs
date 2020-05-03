@@ -2,77 +2,112 @@
   <div class="navbar navbar-light" style="display: flex;">
     <h6 class="navbar-brand" style="display: inline-block; width: 100%;">
       Relatório de Pedidos
-    </h6>
-  </div>
-  
-  <ul class="nav nav-tabs" id="tabb" role="tablist">
-    <li class="nav-item" onclick="location.href='/admin/relatorio-produtos'">
-      <a class="nav-link active" id="relatorio-produtos" data-toggle="tab" href="/admin/relatorio-produtos" role="tab"
-      aria-controls="relatorio-produtos" aria-selected="true">Produtos pedido</a>
-    </li>
-    <li class="nav-item" onclick="location.href='/admin/relatorio-entregas'">
-      <a class="nav-link" id="relatorio-entregas" data-toggle="tab" href="/admin/relatorio-entregas" role="tab"
-      aria-controls="relatorio-entregas" aria-selected="false">Entregas</a>
-    </li>
-    <li class="nav-item" onclick="location.href='/admin/relatorio-assinantes'">
-      <a class="nav-link" id="relatorio-assinantes" data-toggle="tab" href="/admin/relatorio-assinantes"
-      role="tab" aria-controls="relatorio-assinantes" aria-selected="false">Assinantes</a>
-    </li>
-  </ul>
-  <div class="tab-content" id="conteudo" style="width: 97.5vw; overflow: scroll; height: 76vh;">
-    <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="home-tab">
-      <table class="table table-bordered" style="max-height: 100vh; width: 150vw;">
-        <thead>
-          <tr>
-            <th scope="col">Pedido</th>
-            <th scope="col">Tipo</th>
-            <th scope="col">Nome</th>
-            <th scope="col">Phone</th>
-            <th scope="col">Endereço</th>
-            <th scope="col">Região</th>
-            <th scope="col">Cesta</th>
-            <th scope="col">Preço Cesta</th>
-            <th scope="col">Qtd. Cesta</th>
-            <th scope="col">Subtotal</th>
-            <th scope="col">Produtos</th>
-            <th scope="col">Qtd. Produtos</th>
-            <th scope="col">Preço Produto</th>
-            <th scope="col">Anotações</th>
-            <th scope="col">Ecobag</th>
-            <th scope="col">Retirada</th>
-            <th scope="col">Frete</th>
-            <th scope="col">Total</th>
+      <a style="text-decoration: none; cursor: pointer; padding-left: 2vw; font-size: 16px; font-weight: 500; color: darkgreen;"
+      id="btn-export">
+      <i class="far fa-file-excel"></i>
+      Exportar
+    </a>
+  </h6>
+</div>
+
+<ul class="nav nav-tabs" id="tabb" role="tablist">
+  <li class="nav-item" onclick="location.href='/admin/relatorio-produtos'">
+    <a class="nav-link active" id="relatorio-produtos" data-toggle="tab" href="/admin/relatorio-produtos" role="tab"
+    aria-controls="relatorio-produtos" aria-selected="true">Detalhes de Pedidos</a>
+  </li>
+  <li class="nav-item" onclick="location.href='/admin/relatorio-entregas'">
+    <a class="nav-link" id="relatorio-entregas" data-toggle="tab" href="/admin/relatorio-entregas" role="tab"
+    aria-controls="relatorio-entregas" aria-selected="false">Produtos em Pedidos</a>
+  </li>
+  <li class="nav-item" onclick="location.href='/admin/relatorio-assinantes'">
+    <a class="nav-link" id="relatorio-assinantes" data-toggle="tab" href="/admin/relatorio-assinantes"
+    role="tab" aria-controls="relatorio-assinantes" aria-selected="false">Assinantes</a>
+  </li>
+</ul>
+<div class="tab-content" id="conteudo" style="width: 97.5vw; overflow: scroll; height: 76vh;">
+  <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="home-tab">
+    <table class="table table-bordered" style="max-height: 100vh; width: 150vw;" id="pedidos-table">
+      <thead>
+        <tr>
+          <th scope="col">Pedido</th>
+          <th scope="col">Tipo</th>
+          <th scope="col">Nome</th>
+          <th scope="col">Phone</th>
+          <th scope="col">Endereço</th>
+          <th scope="col">Região</th>
+          <th scope="col">Cesta</th>
+          <th scope="col">Preço Cesta</th>
+          <th scope="col">Qtd. Cesta</th>
+          <th scope="col">Subtotal</th>
+          <th scope="col">Produtos</th>
+          <th scope="col">Qtd. Produtos</th>
+          <th scope="col">Preço Produto</th>
+          <th scope="col">Anotações</th>
+          <th scope="col">Ecobag</th>
+          <th scope="col">Retirada</th>
+          <th scope="col">Frete</th>
+          <th scope="col">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for(let pedido of pedidos){%>
+          
+          <tr onclick="location.href='/admin/pedido-selecionado/<%=pedido.pedido%>'">
+            <th scope="row"><%=pedido.pedido%></th>
+            <th><%if(pedido.item_extra == 1){%>Produto Adicional<%}else{%>Cesta<%}%></th>
+            <td><%=pedido.nome%></td>
+            <td><%=pedido.phone%></td>
+            <td><%=pedido.endereco%> - <%=pedido.bairro%></td>
+            <td><%=pedido.regiao%></td>
+            <td><%=pedido.cesta%> - <%=pedido.categoria%></td>
+            <td>R$ <%=pedido.preco_unitario%></td>
+            <td>0<%=pedido.quantidade_cesta%></td>
+            <td>R$ <%=pedido.subtotal%></td>
+            <td><%=pedido.produto%></td>
+            <td>0<%=pedido.quantidade_produto%></td>
+            <td>R$ <%=pedido.preco_item_extra%></td>
+            <td><%=pedido.anotacoes%></td>
+            <td><% if(pedido.ecobag_adicional ==1){%>Sim<%}else{%>Não<%}%></td>
+            <td><% if(pedido.retirar_na_loja ==1){%>Sim<%}else{%>Não<%}%></td>
+            <td class="btn-edit" style="text-align: center;">
+              <%if(pedido.retirar_na_loja == 0){%>R$ <%=pedido.frete%><%}else{%>R$ 0.00<%}%>
+            </td>
+            <td>R$ <%=pedido.total%></td>
           </tr>
-        </thead>
-        <tbody>
-          <% for(let pedido of pedidos){%>
-            
-            <tr onclick="location.href='/admin/pedido-selecionado/<%=pedido.pedido%>'">
-              <th scope="row"><%=pedido.pedido%></th>
-              <th><%if(pedido.item_extra == 1){%>Produto Adicional<%}else{%>Cesta<%}%></th>
-              <td><%=pedido.nome%></td>
-              <td><%=pedido.phone%></td>
-              <td><%=pedido.endereco%> - <%=pedido.bairro%></td>
-              <td><%=pedido.regiao%></td>
-              <td><%=pedido.cesta%> - <%=pedido.categoria%></td>
-              <td>R$ <%=pedido.preco_unitario%></td>
-              <td>0<%=pedido.quantidade_cesta%></td>
-              <td>R$ <%=pedido.subtotal%></td>
-              <td><%=pedido.produto%></td>
-              <td>0<%=pedido.quantidade_produto%></td>
-              <td>R$ <%=pedido.preco_item_extra%></td>
-              <td><%=pedido.anotacoes%></td>
-              <td><% if(pedido.ecobag_adicional ==1){%>Sim<%}else{%>Não<%}%></td>
-              <td><% if(pedido.retirar_na_loja ==1){%>Sim<%}else{%>Não<%}%></td>
-              <td class="btn-edit" style="text-align: center;">
-                <%if(pedido.retirar_na_loja == 0){%>R$ <%=pedido.frete%><%}else{%>R$ 0.00<%}%>
-              </td>
-              <td>R$ <%=pedido.total%></td>
-            </tr>
-            
-            <% } %>
-          </tbody>
-        </table>
-      </div>
+          
+          <% } %>
+        </tbody>
+      </table>
     </div>
-  </section>
+  </div>
+</section>
+
+<script>
+  const BTNEXPORT = document.querySelector("#btn-export");
+  
+  BTNEXPORT.addEventListener('click', function () {
+    exportarParaExcel('pedidos-table', 'Pedidos');
+  });
+  
+  var exportarParaExcel = (function () {
+    var uri = 'data:application/vnd.ms-excel;charset=UTF-8;base64,',
+    template =
+    '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8" /><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>',
+    base64 = function (s) {
+      return window.btoa(unescape(encodeURIComponent(s)))
+    },
+    format = function (s, c) {
+      return s.replace(/{(\w+)}/g, function (m, p) {
+        return c[p];
+      })
+    }
+    return function (table, name) {
+      if (!table.nodeType) table = document.getElementById(table)
+      var ctx = {
+        worksheet: name || 'Worksheet',
+        table: table.innerHTML
+      }
+      window.location.href = uri + base64(format(template, ctx))
+    }
+  })()
+</script>
