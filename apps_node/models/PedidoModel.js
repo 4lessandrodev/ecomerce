@@ -343,7 +343,7 @@ class PedidoModel {
       LEFT JOIN tb_produtos_compra produtos ON compra.id = produtos.id_compra AND produto.id = produtos.id_produto
       INNER JOIN tb_regioes regiao ON regiao.id = cliente.id_regiao
       INNER JOIN tb_fretes frete ON frete.id_destino = cliente.id_regiao
-      WHERE pedido.status = 1 AND compra.pedido_aberto = 0
+      WHERE compra.pedido_aberto = 0 AND (pedido.status = 1 OR pedido.status = 2)
       GROUP BY produto.id, pedido.id
       ORDER BY pedido.id ASC`, (err, result) => {
         if (err) {
@@ -371,7 +371,7 @@ class PedidoModel {
       LEFT JOIN tb_produtos_compra produtos ON compra.id = produtos.id_compra AND produto.id = produtos.id_produto
       INNER JOIN tb_regioes regiao ON regiao.id = cliente.id_regiao
       INNER JOIN tb_fretes frete ON frete.id_destino = cliente.id_regiao
-      WHERE pedido.status = 1 AND compra.pedido_aberto = 0
+      WHERE compra.pedido_aberto = 0 AND (pedido.status = 1 OR pedido.status = 2)
       GROUP BY produto.id
       ORDER BY quantidade_produto DESC`, (err, result) => {
         if (err) {

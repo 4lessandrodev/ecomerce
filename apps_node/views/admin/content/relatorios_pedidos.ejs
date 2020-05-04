@@ -40,7 +40,6 @@
           <th scope="col">Qtd. Cesta</th>
           <th scope="col">Subtotal</th>
           <th scope="col">Produtos</th>
-          <th scope="col">Qtd. Produtos</th>
           <th scope="col">Preço Produto</th>
           <th scope="col">Anotações</th>
           <th scope="col">Ecobag</th>
@@ -63,8 +62,17 @@
             <td>R$ <%=pedido.preco_unitario%></td>
             <td>0<%=pedido.quantidade_cesta%></td>
             <td>R$ <%=pedido.subtotal%></td>
-            <td><%=pedido.produto%></td>
-            <td>0<%=pedido.quantidade_produto%></td>
+
+            <td style="width: 11vw;">
+              <ul style="margin: 0; list-style: none; padding: 0;">
+              <%for(let item of pedido.itens){%>
+
+                <li> <%=item%>  </li>
+
+              <% } %> 
+              </ul>
+            </td>
+
             <td>R$ <%=pedido.preco_item_extra%></td>
             <td><%=pedido.anotacoes%></td>
             <td><% if(pedido.ecobag_adicional ==1){%>Sim<%}else{%>Não<%}%></td>

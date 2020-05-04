@@ -98,6 +98,33 @@ const relatorioPedidos = (req, res, next) => {
     try {
       let pedido = new Pedido();
       let pedidos = await pedido.listarRelatorioDePedidos(pedido);
+      
+      let itens = [];
+      for (let pedi of pedidos) {
+        pedi.itens = [];
+        for (let i = 0; i < pedidos.length; i++) {
+          if (pedi.pedido == pedidos[i].pedido) {
+            pedi.itens.push(`0${pedidos[i].quantidade_produto} - ${pedidos[i].produto}`);
+          }
+        }
+        
+        itens.push(pedi);
+        
+      }
+      
+      let listaDePedidosUnicos = [];
+      for (let i = 1; i < itens.length; i++) {
+        if (i == 1) {
+          listaDePedidosUnicos.push(itens[i]);
+        }else if (itens[i].pedido != itens[i - 1].pedido) {
+          listaDePedidosUnicos.push(itens[i]);
+        }
+      }
+      pedidos = listaDePedidosUnicos;
+      
+      
+     
+      
       res.render('admin/relatorio_pedidos', {
         data: '',
         navbar: true,

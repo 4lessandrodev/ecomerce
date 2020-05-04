@@ -118,5 +118,17 @@ router.post('/assinar-plano', (req, res, next) => {
 });
 
 
+router.get('/perfil', (req, res) => {
+  res.render('user-perfil',{logado:true});
+});
+
+router.get('/dados', (req, res) => {
+  res.render('dados-usuario',{logado:true});
+});
+
+router.get('/meus-pedidos', (req, res) => {
+  res.render('meus-pedidos',{logado:true});
+});
+
 
 module.exports = router;
