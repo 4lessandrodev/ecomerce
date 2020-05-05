@@ -7,57 +7,95 @@
   <div style="max-width: 18rem; width: 100vw; ">
     <div class="card-header">Perfil</div>
     <div class="card-body text-dark">
-      <form action="">
+      <form action="/dados" method="POST">
         <div class="form-group" style="width: 80vw;">
           <label for="">Nome</label>
-          <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
+          <input type="text" class="form-control" name="nome" id="nome" aria-describedby="helpId" placeholder=""
+          value="<%= user.nome %>">
         </div>
+        
+        <input type="hidden" name="codigo_ibge" id="codigo_ibge" value="<%=user.codigo_ibge %> ">
         
         <div class="form-group" style="width: 80vw;">
           <label for="">Telefone</label>
-          <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
+          <input type="text" class="form-control" name="phone" id="phone" aria-describedby="helpId" placeholder=""
+          value="<%= user.phone %>">
         </div>
         
         <div class="form-group" style="width: 80vw;">
           <label for="">Cep</label>
-          <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
+          <input type="text" class="form-control" name="cep" id="cep" aria-describedby="helpId" placeholder="75520140"
+          onchange="Utils.retornarEndereco(this)" autocomplete="off" value="<%= user.cep %>">
         </div>
-
+        
         <div class="form-group" style="width: 80vw;">
           <label for="">Endereço/Complemento</label>
-          <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="Rua vai quem quer, 50, Ap10 Bloco 8">
+          <input type="text" class="form-control" name="endereco" id="endereco" aria-describedby="helpId"
+          placeholder="Rua vai quem quer, 50, Ap10 Bloco 8" value="<%= user.endereco %>">
         </div>
         
         <div class="form-group" style="width: 80vw;">
           <label for="">Cidade</label>
-          <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
+          <input type="text" class="form-control" name="cidade" id="cidade" aria-describedby="helpId" placeholder=""
+          value="<%= user.cidade %>">
         </div>
         
         <div class="form-group" style="width: 80vw;">
           <label for="">Bairro</label>
-          <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
+          <input type="text" class="form-control" name="bairro" id="bairro" aria-describedby="helpId" placeholder=""
+          value="<%= user.bairro %>">
         </div>
-
+        
         <div class="form-group" style="width: 80vw;">
           <label for="">Estado</label>
-          <select class="form-control" name="" id="">
-            <option>GO</option>
-            <option>SP</option>
-            <option>DF</option>
+          <select class="form-control" name="estado" id="estado">
+            <option value="GO" <%if(user.estado == 'GO'){%>selected<%}%>>GO</option>
+            <option value="SP" <%if(user.estado == 'SP'){%>selected<%}%>>SP</option>
+            <option value="RJ" <%if(user.estado == 'RJ'){%>selected<%}%>>RJ</option>
           </select>
         </div>
-
+        
         <div class="form-group" style="width: 80vw;">
           <label for="">Região</label>
-          <select class="form-control" name="" id="">
-            <option>GO</option>
-            <option>SP</option>
-            <option>DF</option>
-          </select>
+          <select class="form-control" name="id_regiao" id="id_regiao">
+            <% for(let regiao of regioes){ %>
+              <option value="<%= regiao.id %>"
+                <% if(regiao.id == user.id_regiao){%>selected<%}%> ><%= regiao.descricao %></option> <% } %>
+              </select>
+            </div>
+            <input type="submit" class="btn btn-primary" value="Salvar" style="width: 80vw;" id="btn-salvar">
+            <input type="button" class="btn btn-warning" value="Editar" style="width: 80vw;" id="btn-editar"
+            onclick="alterarInputs()">
+          </form>
         </div>
-        <input type="submit" class="btn btn-primary" value="Salvar" style="width: 80vw;">
-      </form>
+      </div>
     </div>
-  </div>
-</div>
-</section>
+  </section>
+  <script>
+    const BTN_SALVAR = document.querySelector('#btn-salvar');
+    const BTN_EDITAR = document.querySelector('#btn-editar');
+    
+    
+    const desabilitarBtn = (btn) => btn.style.display = 'none';
+    const habilitarBtn = (btn) => btn.style.display = 'block';
+    
+    desabilitarBtn(BTN_SALVAR);
+    BTN_EDITAR.addEventListener('click', function(){
+      desabilitarBtn(BTN_EDITAR);
+      habilitarBtn(BTN_SALVAR);
+    });
+    
+    
+    const alterarInputs = () =>{
+      const Inputs = document.querySelectorAll('input[type=text], select');
+      for(let input of Inputs){
+        
+        input.readOnly = !input.readOnly;
+        //input.setAttribute(readonly)
+        
+      }
+    }
+    
+    alterarInputs();
+    
+  </script>

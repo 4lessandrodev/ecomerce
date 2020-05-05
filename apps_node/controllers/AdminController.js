@@ -12,7 +12,7 @@ const autenticar = (req, res, next) => {
   let logado = (req.session.user != undefined);
   if (logado) {
     if (req.session.user.admin == 0) {
-      res.redirect('/');
+      res.redirect('/perfil');
     } else {
       return true;
     }

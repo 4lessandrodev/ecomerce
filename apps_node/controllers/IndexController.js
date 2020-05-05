@@ -17,7 +17,7 @@ const enviarEmail = require('./../services/enviarEmail');
 const Estoque = require('./../models/EstoqueProdutoModel');
 const PlanoModel = require('./../models/PacotesPlanosModel');
 const PlanoCompraModel = require('./../models/PlanoCompraModel');
-
+const UsuarioModel = require('./../models/UsuarioModel');
 
 //------------------------------------------------------------------------------------------------------
 const renderizar = (req, res, next, produtos = [], cestas = [], planos = []) => {
@@ -174,6 +174,41 @@ const carregarCadastro = (req, res, next) => {
   let regiao = new Regioes();
   regiao.listarRegioesAtivas(regiao).then(regioes => {
     renderizarPaginaCadastroUsuario(req, res, next, regioes);
+  }).catch(err => {
+    console.log(err);
+    res.send(err.message);
+  });
+};
+//------------------------------------------------------------------------------------------------------
+const carregarPerfil = (req, res, next) => {
+  let regiao = new Regioes();
+  let cliente = new Cliente();
+
+  cliente.id_usuario = req.session.user.id;
+
+  regiao.listarRegioesAtivas(regiao).then(regioes => {
+    cliente.selecionarClienteParaCarrinho(cliente).then(user => {
+      
+      res.render('dados-usuario', { logado: true, user:user[0], regioes });
+
+    }).catch(err => {
+      console.log(err);
+      res.send(err.message);
+    })
+  }).catch(err => {
+    console.log(err);
+    res.send(err.message);
+  });
+};
+//------------------------------------------------------------------------------------------------------
+const atualizarPerfil = (req, res, next) => {
+  let cliente = new Cliente(req.session.user.id, req.body.phone, req.body.nome, req.body.cep,
+    req.body.cidade, req.body.estado, req.body.endereco, req.body.codigo_ibge, req.body.id_regiao, req.body.bairro);
+
+    cliente.atualizarCliente(cliente).then(user => {
+      
+      res.redirect('/perfil');
+
   }).catch(err => {
     console.log(err);
     res.send(err.message);
@@ -524,5 +559,7 @@ module.exports = {
   salvarPedido,
   limparCarrinho,
   verPlano,
-  assinarPlano
+  assinarPlano,
+  carregarPerfil,
+  atualizarPerfil
 };

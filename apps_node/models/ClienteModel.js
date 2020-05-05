@@ -132,9 +132,9 @@ WHERE u.id = c.id_usuario AND r.id = c.id_regiao AND c.cliente_excluido = ?;`, [
   atualizarCliente(cliente) {
     return new Promise((resolve, reject) => {
       conect.query(`UPDATE tb_clientes SET phone =?, nome =?, cep =?, cidade =?, endereco =?, codigo_ibge =?,
-        estado =?, id_regiao =?, regiao_atendida =?, cliente_excluido =?, bairro =?) WHERE id = ?`, [
+        estado =?, id_regiao =?, bairro =? WHERE id_usuario = ?`, [
         cliente._phone, cliente._nome, cliente._cep, cliente._cidade, cliente._endereco, cliente._codigo_ibge,
-        cliente._estado, cliente._id_regiao, cliente._regiao_atendida, cliente._cliente_excluido, cliente._bairro, cliente._id
+        cliente._estado, cliente._id_regiao, cliente._bairro, cliente._id_usuario
       ], (err, result) => {
         if (err) {
           console.log(err.message);
@@ -150,7 +150,7 @@ WHERE u.id = c.id_usuario AND r.id = c.id_regiao AND c.cliente_excluido = ?;`, [
 
   selecionarClienteParaCarrinho(cliente) {
     return new Promise((resolve, reject) => {
-      conect.query(`SELECT c.id, c.nome, c.endereco, c.bairro, c.cidade, c.estado, c.id_regiao
+      conect.query(`SELECT c.id, c.nome, c.endereco, c.bairro, c.cidade, c.estado, c.id_regiao, c.phone, c.cep
       FROM tb_clientes AS c
       WHERE c.id_usuario = ?`, [cliente._id_usuario], (err, result) => {
         if (err) {
@@ -162,7 +162,6 @@ WHERE u.id = c.id_usuario AND r.id = c.id_regiao AND c.cliente_excluido = ?;`, [
       });
     });
   }
-
   
   desabilitarCliente(cliente) {
     return new Promise((resolve, reject) => {

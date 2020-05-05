@@ -121,9 +121,15 @@ router.post('/assinar-plano', (req, res, next) => {
 router.get('/perfil', (req, res) => {
   res.render('user-perfil',{logado:true});
 });
-
-router.get('/dados', (req, res) => {
-  res.render('dados-usuario',{logado:true});
+//------------------------------------------------------------------------------------------------------
+//Acessar o perfil de usuario
+router.get('/dados', (req, res, next) => {
+  indexController.carregarPerfil(req, res, next);
+});
+//------------------------------------------------------------------------------------------------------
+//Alterar os dados do perfil
+router.post('/dados', (req, res, next) => {
+  indexController.atualizarPerfil(req, res, next);
 });
 
 router.get('/meus-pedidos', (req, res) => {
