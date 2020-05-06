@@ -375,7 +375,7 @@ router.get('/pedido/:status_pedido?/:data_inicial?/:data_final?/:numero_pedido?'
 //------------------------------------------------------------------------------------------------------
 //Listar pedido selecionado
 router.get('/pedido-selecionado/:id', (req, res, next) => {
-  (adminController.autenticar(req, res, next)) ? pedidoController.listarPedidoEspecifico(req, res, next) : '';
+  (adminController.autenticar(req, res, next)) ? pedidoController.listarPedidoEspecificoAdmin(req, res, next) : '';
 });
 //------------------------------------------------------------------------------------------------------
 //Alterar status do pedido
@@ -462,6 +462,13 @@ router.post('/cesta-entregue', (req, res, next) => {
 //Alterar status do plano
 router.post('/status-plano', (req, res, next) => {
   (adminController.autenticar(req, res, next)) ? adminController.alterarStatusPlano(req, res, next) : '';
+});
+//------------------------------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------------------------------
+//Salvar mensagem para o plano selecionado
+router.post('/assinatura-selecionada/:id', (req, res, next) => {
+  adminController.salvarObservacao(req, res, next);
 });
 //------------------------------------------------------------------------------------------------------
 

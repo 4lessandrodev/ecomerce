@@ -1,0 +1,63 @@
+<section style="width: 100vw; height: 10vh; background-color:rgb(100, 143, 101) ;">
+  
+</section>
+<section class="container-fluid" style="background-color: #ededed;" id="sessao-perfil">
+  <ul class="perfil-user-ul" style="list-style: none; width: 100vw; margin: 0; padding: 0;">
+    
+    <li class="perfil-user-ul-li" style="width: 90vw;border: 2px solid darkolivegreen; 
+    padding: 2vh; margin: 2vh 0; border-radius: 7px; background-color: white;"
+    onclick="location.href='/minhas-assinaturas/<%=assinatura.id%>'">
+    
+    <div style="max-width: 18rem; width: 100vw; ">
+      <div class="card-header" style="width: 80vw; font-weight: bold; text-transform: uppercase;">Assinatura
+        00<%=assinatura.id%></div>
+        <div class="card-body text-dark" style="width: 80vw;">
+          <h4 class="card-title" style="padding: 0; margin: 0; color: darkgreen;"><%=assinatura.titulo%>
+          </h4>
+          <hr>
+          <p style="padding: 0; margin: 0; font-size: 13px;"><%=assinatura.data_compra%></p>
+          <p style="padding: 0; margin: 0; font-size: 13px;"><%=assinatura.descricao_plano%></p>
+          <p style="padding: 0; margin: 0; font-size: 13px;">
+            <%=assinatura.cesta%>-<%=assinatura.categoria%>, <%=assinatura.entregas%>/<%=assinatura.quantidade_total_cestas%>
+          </p>
+          <p style="padding: 0; margin: 0; font-size: 13px;">
+            <%=assinatura.plano_descricao%></p>
+            <p style="padding: 0; margin: 0; font-size: 13px;">R$ <%=assinatura.preco_total%></p>
+            <div style="margin-top: 2vh;">
+              <h4>Entregas realizadas:</h4>
+              <ul>
+                <% for(let entrega of entregas){ %>
+                  <li style="font-size: 14px;">
+                    01 Entraga feita em: <%=entrega.data_entrega%>
+                  </li>
+                  <hr>
+                  <% } %>
+                </ul>
+              </div>
+              <p style="padding: 0; margin: 0; text-align: right;"><%=assinatura.status%></p>
+            </div>
+          </div>
+        </li>
+        
+        
+        
+        <h3>Observações para este plano</h3>
+        <ul style="list-style: none; margin: 0; padding: 0;">
+          <% for(let observacao of observacoes){ %>
+            <li style="background-color: white; padding: 2vh; border-radius: 14px; border: 1px solid darkolivegreen; max-width: 90vw; margin: 1vh 0;">
+              <cite><strong><%=observacao.observacao%></strong></cite> <p style="font-size: 14px;">Por: <%=observacao.nome%> em
+                <%=observacao.hora%></p>
+              </li>
+              <% } %>
+            </ul>
+            <form action="/minhas-assinaturas/<%=assinatura.id%>" method="POST">
+              <input type="hidden" name="id_plano_compra" value="<%=assinatura.id%>" id="id_plano_compra">
+              <div>
+                <textarea name="observacao" id="observacao" rows="7" placeholder="Sua observação aqui" style="width: 90%;
+                padding: 2vw;border-radius: 7px;"></textarea>
+              </div>
+              <div style="text-align: right; width: 90vw;">
+                <input type="submit" value="Enviar" class="btn btn-primary">
+              </div>
+            </form>
+          </section>

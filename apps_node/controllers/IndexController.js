@@ -18,6 +18,7 @@ const Estoque = require('./../models/EstoqueProdutoModel');
 const PlanoModel = require('./../models/PacotesPlanosModel');
 const PlanoCompraModel = require('./../models/PlanoCompraModel');
 const UsuarioModel = require('./../models/UsuarioModel');
+const ObservacoesModel = require('./../models/ObservacaoModel');
 
 //------------------------------------------------------------------------------------------------------
 const renderizar = (req, res, next, produtos = [], cestas = [], planos = []) => {
@@ -34,6 +35,40 @@ const renderizar = (req, res, next, produtos = [], cestas = [], planos = []) => 
       classe2: '',
       caminho: '/admin'
     }
+  });
+};
+//------------------------------------------------------------------------------------------------------
+const renderizarPaginaDeAssinaturasDoCliente = (req, res, next, assinaturas = []) => {
+  let logado = (req.session.user != undefined);
+  res.render('minhas-assinaturas', {
+    logado,
+    assinaturas
+  });
+};
+//------------------------------------------------------------------------------------------------------
+const renderizarAssinaturaSelecionada = (req, res, next, assinatura = [], entregas = [], observacoes = []) => {
+  let logado = (req.session.user != undefined);
+  res.render('minha-assinatura-selecionada', {
+    logado,
+    assinatura:assinatura[0],
+    entregas,
+    observacoes
+  });
+};
+//------------------------------------------------------------------------------------------------------
+const renderizarPaginaDePedidosDoCliente = (req, res, pedidos = []) => {
+  let logado = (req.session.user != undefined);
+  res.render('meus-pedidos', {
+    logado,
+    pedidos
+  });
+};
+//------------------------------------------------------------------------------------------------------
+const renderizarPaginaDePedidoSelecionado = (req, res, pedidos = []) => {
+  let logado = (req.session.user != undefined);
+  res.render('meu-pedido-selecionado', {
+    logado,
+    pedidos
   });
 };
 //------------------------------------------------------------------------------------------------------
@@ -543,6 +578,104 @@ const assinarPlano = (req, res, next) => {
   assinar();
 };
 //---------------------------------------------------------------------------------------------------------------------
+const listarPedidosDeCliente = (req, res, next) => {
+  async function assinar() {
+    try {
+
+      const cliente = new Cliente();
+      cliente.id_usuario = req.session.user.id;
+      const pedido = new Pedido();
+      const pedidos = await pedido.listarPedidosPeloCliente(cliente);
+
+      renderizarPaginaDePedidosDoCliente(req, res, pedidos);
+
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(400);
+    }
+  }
+  assinar();
+};
+//---------------------------------------------------------------------------------------------------------------------
+const verPedidoDoCliente = (req, res, next) => {
+  async function assinar() {
+    try {
+
+      const cliente = new Cliente();
+      cliente.id_usuario = req.session.user.id;
+      const pedido = new Pedido();
+      pedido.id = req.params.id;
+      const pedidos = await pedido.pedidoSelecionadoPeloCliente(pedido, cliente);
+
+      renderizarPaginaDePedidoSelecionado(req, res, pedidos);
+
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(400);
+    }
+  }
+  assinar();
+};
+//---------------------------------------------------------------------------------------------------------------------
+const listarPlanosDoCliente = (req, res, next) => {
+  async function listar() {
+    try {
+      const cliente = new Cliente();
+      const assinatura = new PlanoCompraModel();
+      cliente.id_usuario = req.session.user.id;
+      const assinaturas = await assinatura.listarPlanoCompraCliente(cliente);
+
+      renderizarPaginaDeAssinaturasDoCliente(req, res, next, assinaturas);
+
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(400);
+    }
+  }
+  listar();
+};
+//---------------------------------------------------------------------------------------------------------------------
+const listarEntregasDoPlanosDoCliente = (req, res, next) => {
+  async function listar() {
+    try {
+      const cliente = new Cliente();
+      const assinatura = new PlanoCompraModel();
+      const observacao = new ObservacoesModel();
+      assinatura.id = req.params.id;
+      observacao.id_plano_compra = req.params.id;
+
+      cliente.id_usuario = req.session.user.id;
+      const plano = await assinatura.selecionarPlanoCompra(assinatura);
+      const entregas = await assinatura.listarCestasDoPlano(assinatura);
+      const observacoes = await observacao.listar(observacao);
+
+      renderizarAssinaturaSelecionada(req, res, next, plano, entregas, observacoes);
+
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(400);
+    }
+  }
+  listar();
+};
+//---------------------------------------------------------------------------------------------------------------------
+const salvarObservacao = (req, res, next) => {
+  async function salvar() {
+    try {
+      const observacao = new ObservacoesModel(req.body.observacao, req.body.id_plano_compra, req.session.user.id);
+
+      const observacoes = await observacao.salvar(observacao);
+
+      res.redirect(`/minhas-assinaturas/${observacao.id_plano_compra}`);
+
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(400);
+    }
+  }
+  salvar();
+};
+//---------------------------------------------------------------------------------------------------------------------
 module.exports = {
   inscrever,
   carregarIndex,
@@ -561,5 +694,10 @@ module.exports = {
   verPlano,
   assinarPlano,
   carregarPerfil,
-  atualizarPerfil
+  atualizarPerfil,
+  listarPedidosDeCliente,
+  verPedidoDoCliente,
+  listarPlanosDoCliente,
+  listarEntregasDoPlanosDoCliente,
+  salvarObservacao
 };

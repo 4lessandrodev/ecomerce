@@ -131,10 +131,31 @@ router.get('/dados', (req, res, next) => {
 router.post('/dados', (req, res, next) => {
   indexController.atualizarPerfil(req, res, next);
 });
-
+//------------------------------------------------------------------------------------------------------
+//Listar pedidos do cliente logado
 router.get('/meus-pedidos', (req, res) => {
-  res.render('meus-pedidos',{logado:true});
+  indexController.listarPedidosDeCliente(req, res);
 });
-
+//------------------------------------------------------------------------------------------------------
+//Listar pedido selecionado do cliente logado
+router.get('/meus-pedidos/:id', (req, res) => {
+  indexController.verPedidoDoCliente(req, res);
+});
+//------------------------------------------------------------------------------------------------------
+//Listar planos contratados pelo cliente logado
+router.get('/minhas-assinaturas', (req, res) => {
+  indexController.listarPlanosDoCliente(req, res);
+});
+//------------------------------------------------------------------------------------------------------
+//Exibir plano contratados pelo cliente selecionado desde que esteja logado
+router.get('/minhas-assinaturas/:id', (req, res, next) => {
+  indexController.listarEntregasDoPlanosDoCliente(req, res, next);
+});
+//------------------------------------------------------------------------------------------------------
+//Exibir plano contratados pelo cliente selecionado desde que esteja logado
+router.post('/minhas-assinaturas/:id', (req, res, next) => {
+  indexController.salvarObservacao(req, res, next);
+});
+//------------------------------------------------------------------------------------------------------
 
 module.exports = router;

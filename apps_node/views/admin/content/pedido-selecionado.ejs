@@ -46,13 +46,13 @@
     <section class="container">
       <div class="breadcrumb d-flex bd-highlight mb-3">
         <div class="p-2 bd-highlight">
-          <h4>Detalhes do pedido: <span class="badge badge-secondary">000<%=pedido%></span></h4>
+          <h4>Detalhes do pedido: <span class="badge badge-secondary">000<%=pedidos[0].pedido%></span></h4>
         </div>
         <div class="ml-auto p-2 bd-highlight">
           <a name="imprimir" id="imprimir" class="btn btn-outline-primary" role="button" onclick="window.print();">Imprimir</a>
           <button name="alterar-status" id="alterar-status"
           class="btn
-          <%if(dadosGerais.status == 1){%>btn-warning<%}else{%>btn-success<%}%> mr" role="button"><%=dadosGerais.status_pedido%>....<i
+          <%if(pedidos[0].status == 1){%>btn-warning<%}else{%>btn-success<%}%> mr" role="button"><%=pedidos[0].status_pedido%>....<i
           class="fas fa-edit"></i></button>
         </div>
       </div>
@@ -73,19 +73,19 @@
           </thead>
           
           <tbody id="listagem-cestas">                
-            <tr data-dados="<%=JSON.stringify(dadosGerais)%>%>">
-              <td scope="row"><strong><%=dadosGerais.nome%></strong></td>
-              <td><%if(dadosGerais.retirar_na_loja == 0){%>Entregar-<%=dadosGerais.regiao%><%}else{%>Retirada<%}%></td>
+            <tr data-dados="<%=JSON.stringify(pedidos)%>%>">
+              <td scope="row"><strong><%=pedidos[0].nome%></strong></td>
+              <td><%if(pedidos[0].retirar_na_loja == 0){%>Entregar-<%=pedidos[0].regiao%><%}else{%>Retirada<%}%></td>
               <td>
-                <%if(dadosGerais.retirar_na_loja == 0){%><%=dadosGerais.frete%><%}else{%>0.00<%}%>
+                <%if(pedidos[0].retirar_na_loja == 0){%><%=pedidos[0].frete%><%}else{%>0.00<%}%>
               </td>
-              <td><%if(dadosGerais.ecobag_adicional == 1){%>Sim<%}else{%>Não<%}%></td>
-              <td><%=dadosGerais.pagamento%></td>
-              <td><%=dadosGerais.phone%></td>
+              <td><%if(pedidos[0].ecobag_adicional == 1){%>Sim<%}else{%>Não<%}%></td>
+              <td><%=pedidos[0].pagamento%></td>
+              <td><%=pedidos[0].phone%></td>
               <td>
-                <%=dadosGerais.data%>
+                <%=pedidos[0].data_pedido%>
               </td>
-              <td>R$ <strong><%=total%></strong></td>
+              <td>R$ <strong><%=pedidos[0].total%></strong></td>
             </tr>
             
           </tbody>
@@ -104,9 +104,8 @@
             </thead>
             <tbody>
               <tr>
-                <td scope="row"><strong><%=dadosGerais.anotacoes%></strong></td>
-                <td><%=dadosGerais.endereco%>, <%=dadosGerais.cidade%>-<%=dadosGerais.estado%>, <%=dadosGerais.cep%> Região:
-                  <%=dadosGerais.regiao%></td>
+                <td scope="row"><strong><%=pedidos[0].anotacoes%></strong></td>
+                <td><%=pedidos[0].endereco%>, <%=pedidos[0].bairro%>-<%=pedidos[0].regiao%>
                 </tr>
               </tbody>
             </table>
@@ -130,57 +129,41 @@
               <th scope="col">Codigo</th>
               <th scope="col">Descrição</th>
               <th scope="col">Categoria</th>
-              <th scope="col" class="col-small">Qtd.</th>
+              <th scope="col">Qtd. Total</th>
+              <th scope="col">Qtd. Itens Extras</th>
               <th scope="col">Preço und.</th>
-              <th scope="col">Subtotal</th>
               <th scope="col">Tipo</th>
-              <th scope="col" class="col-small">Detalhes</th>
             </tr>
           </thead>
           
           <tbody id="listagem-cestas">
             
-            <% produtosDaCesta.forEach(function(produtoCesta){ %>
+            <% pedidos.forEach(function(produtoCesta){ %>
               <tr>
-                <td scope="row"><strong><%=produtoCesta.id%></strong></td>
-                <td><%=produtoCesta.descricao%></td>
-                <td><%=produtoCesta.categoria%></td>
-                <td><%=produtoCesta.qtd_venda%></td>
-                <td>R$ <%=produtoCesta.preco_unitario%></td>
-                <td>R$ <%=produtoCesta.subtotal%></td>
-                <td>Item de Cesta</td>
-                <td><button class=" btn btn-excluir" onclick="excluirItem(this)"> <input type="hidden"
-                  value="<%=produtoCesta.id%>"><i class="fas fa-eye"></i></button></td>
-                </tr>
-                <% }); %>
-                
-                <% produtos.forEach(function(produto){ %>
-                  <tr>
-                    <td scope="row"><strong><%=produto.id%></strong></td>
-                    <td><%=produto.descricao%></td>
-                    <td><%=produto.categoria%></td>
-                    <td><%=produto.qtd_venda%></td>
-                    <td>R$ <%=produto.preco_unitario%></td>
-                    <td>R$ <%=produto.subtotal%></td>
-                    <td>Adicional</td>
-                    <td><button class=" btn btn-excluir" onclick="excluirItem(this)"> <input type="hidden"
-                      value="<%=produto.id%>"><i class="fas fa-eye"></i></button></td>
-                    </tr>
-                    <% }); %>
-                  </tbody>
-                </table>
-              </section>
-              <!------------------------------------------------------------------------------------------------------------>
-            </div>
-          </main>
-          
-          <script>
-            
-            let btn = document.querySelector('#alterar-status');
-            let modal = document.querySelector('#lista-produtos');
-            btn.addEventListener('click', function(){
-              modal.classList.toggle('display-none');
-            });
-          </script>
-          
-          
+                <td scope="row"><strong><%=produtoCesta.cod_produto%></strong></td>
+                <td><%=produtoCesta.produto%></td>
+                <td><%=produtoCesta.categoria_produto%></td>
+                <td><%=produtoCesta.quantidade_produto%></td>
+                <td><%=produtoCesta.item_extra%></td>
+                <td>R$ <%=produtoCesta.preco_item_extra%></td>
+                <td><% if(produtoCesta.item_extra != 0){%>Item Extra<%}else{%>Cesta<%}%></td>
+              </tr>
+              <% }); %>
+              
+            </tbody>
+          </table>
+        </section>
+        <!------------------------------------------------------------------------------------------------------------>
+      </div>
+    </main>
+    
+    <script>
+      
+      let btn = document.querySelector('#alterar-status');
+      let modal = document.querySelector('#lista-produtos');
+      btn.addEventListener('click', function(){
+        modal.classList.toggle('display-none');
+      });
+    </script>
+    
+    

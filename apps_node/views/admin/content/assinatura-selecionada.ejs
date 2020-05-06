@@ -79,7 +79,7 @@
               <td>
                 <%=plano.entregas%>
               </td>
-               <td><%=plano.quantidade_total_cestas%></td>
+              <td><%=plano.quantidade_total_cestas%></td>
               <td><%=plano.titulo%></td>
               <td><%=plano.plano_descricao%></td>
               <td><%=plano.phone%></td>
@@ -154,38 +154,68 @@
       </section>
       <!------------------------------------------------------------------------------------------------------------>
     </div>
-  </main>
-  
-  <script>
-    const lancarEntrega = () =>{
-      let id = JSON.parse(document.querySelector('tbody .dados-plano').dataset.plano);
-      async function lancar(){
-        try{
-          let promise = await fetch('/admin/cesta-entregue', {
-            headers: { "Content-Type": "application/json" },
-            method:'POST',
-            body:JSON.stringify({id})
-          })
-          
-          if(!promise.ok){
+    
+    
+    
+    <div class="container" style="margin-bottom: 10vh;">
+      <h3>Observações para este plano</h3>
+      <ul style="list-style: none; margin: 0; padding: 0;">
+        <% for(let observacao of observacoes){ %>
+          <li
+          style="background-color: white; padding: 2vh; border-radius: 14px; border: 1px solid darkolivegreen; max-width: 90vw; margin: 1vh 0;">
+          <cite><strong><%=observacao.observacao%></strong></cite>
+          <p style="font-size: 14px;">Por: <%=observacao.nome%> em
+            <%=observacao.hora%></p>
+          </li>
+          <% } %>
+        </ul>
+        
+        <form action="/admin/assinatura-selecionada/<%=plano.id%>" method="POST">
+          <input type="hidden" name="id_plano_compra" value="<%=plano.id%>" id="id_plano_compra">
+          <div>
+            <textarea name="observacao" id="observacao" rows="7" placeholder="Sua observação aqui" style="width: 100%;
+            padding: 2vw;border-radius: 7px;"></textarea>
+          </div>
+          <div style="text-align: right;">
+            <input type="submit" value="Enviar" class="btn btn-primary">
+          </div>
+        </form>
+      </div>
+      
+      
+      
+    </main>
+    
+    <script>
+      const lancarEntrega = () =>{
+        let id = JSON.parse(document.querySelector('tbody .dados-plano').dataset.plano);
+        async function lancar(){
+          try{
+            let promise = await fetch('/admin/cesta-entregue', {
+              headers: { "Content-Type": "application/json" },
+              method:'POST',
+              body:JSON.stringify({id})
+            })
+            
+            if(!promise.ok){
+              throw new Error('Não foi possível realizar o lançamento');
+            }
+            
+            let resposta = await promise.json();
+            location.reload();
+            
+          }catch(err){
             throw new Error('Não foi possível realizar o lançamento');
           }
-          
-          let resposta = await promise.json();
-          location.reload();
-          
-        }catch(err){
-          throw new Error('Não foi possível realizar o lançamento');
         }
-      }
-      lancar();
-    };
-  </script>
-  
-  <script>
-    let btn = document.querySelector('#alterar-status');
-    let modal = document.querySelector('#lista-produtos');
-    btn.addEventListener('click', function () {
-      modal.classList.toggle('display-none');
-    });
-  </script>
+        lancar();
+      };
+    </script>
+    
+    <script>
+      let btn = document.querySelector('#alterar-status');
+      let modal = document.querySelector('#lista-produtos');
+      btn.addEventListener('click', function () {
+        modal.classList.toggle('display-none');
+      });
+    </script>

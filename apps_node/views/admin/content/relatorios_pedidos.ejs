@@ -40,7 +40,6 @@
           <th scope="col">Qtd. Cesta</th>
           <th scope="col">Subtotal</th>
           <th scope="col">Produtos</th>
-          <th scope="col">Preço Produto</th>
           <th scope="col">Anotações</th>
           <th scope="col">Ecobag</th>
           <th scope="col">Retirada</th>
@@ -73,7 +72,6 @@
               </ul>
             </td>
 
-            <td>R$ <%=pedido.preco_item_extra%></td>
             <td><%=pedido.anotacoes%></td>
             <td><% if(pedido.ecobag_adicional ==1){%>Sim<%}else{%>Não<%}%></td>
             <td><% if(pedido.retirar_na_loja ==1){%>Sim<%}else{%>Não<%}%></td>

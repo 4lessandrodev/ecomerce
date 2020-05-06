@@ -1,0 +1,49 @@
+<section style="width: 100vw; height: 10vh; background-color:rgb(100, 143, 101) ;">
+  
+</section>
+<section class="container-fluid" style="background-color: #ededed;" id="sessao-perfil">
+  <div class="perfil-user-ul" style="list-style: none; width: 100vw; margin: 0; padding: 0;">
+    <div class="perfil-user-ul-li" style="width: 90vw;border: 2px solid darkolivegreen; 
+    padding: 2vh; margin: 2vh 0; border-radius: 7px; background-color: white;">
+    
+    <div style="max-width: 18rem; width: 100vw; ">
+      <div class="card-header" style="width: 80vw; font-weight: bold; text-transform: uppercase;">Pedido
+        00<%=pedidos[0].pedido%></div>
+        <div class="card-body text-dark" style="width: 80vw;">
+          <h4 class="card-title" style="padding: 0; margin: 0; color: darkgreen;">
+            0<%=pedidos[0].quantidade_cesta%> - <%=pedidos[0].cesta%>, <%=pedidos[0].categoria%></h4>
+            <p style="padding: 0; margin: 0; font-size: 13px;"><%=pedidos[0].pagamento%></p>
+            <p style="padding: 0; margin: 0; font-size: 13px;"><%=pedidos[0].endereco%>, <%=pedidos[0].bairro%>,
+              <%=pedidos[0].regiao%></p>
+              <p style="padding: 0; margin: 0; font-size: 13px;"><%=pedidos[0].data_pedido%></p>
+              <p style="padding: 0; margin: 0; text-align: right;"><%=pedidos[0].status_pedido%></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Produto</th>
+            <th scope="col">Quantidade</th>
+            <th scope="col">Categoria</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for(let pedido of pedidos){ %>
+            <tr>
+              <th scope="row"><%=pedido.produto%></th>
+              <td><%=pedido.quantidade_produto%></td>
+              <td><%=pedido.categoria_produto%></td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+        
+                
+        
+        <p><%=pedidos[0].anotacoes%></p>
+        <h2>Total: R$ <%=pedidos[0].total%></h2>
+      </section>

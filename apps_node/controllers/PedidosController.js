@@ -65,6 +65,31 @@ const renderizarPaginaDePedidoSelecionado = (req, res, next, pedido, total = 0, 
   
 };
 //-------------------------------------------------------------------------------------
+//Renderizar pedido selecionado 
+//renderizarPaginaDePedidoSelecionadoAdmin(req, res, next, numeroPedido, pedidos, status);
+const renderizarPaginaDePedidoSelecionadoAdmin = (req, res, next, numeroPedido, pedidos, status) => {
+  let logado = (req.session.user != undefined);
+  
+  res.render('admin/pedido-selecionado', {
+    logado,
+    data: '',
+    navbar: true,
+    pagina: 'Pedidos',
+    btnLabel: 'Exportar',
+    local: 'http://localhost:3000',
+    pedidos,
+    pedido: numeroPedido,
+    statusPedido: status,
+    btn: {
+      label: 'Voltar',
+      classe: '',
+      classe2: 'display-none',
+      caminho: '/admin/pedido'
+    }
+  });
+  
+};
+//-------------------------------------------------------------------------------------
 //id_compras, ecobag_adicional, id_tipo_pagamento, anotacoes, retirar_na_loja = 0, status = 1
 const salvarPedido = (req, res, next) => {
   let pedido = new Pedido(req.body.id_compras, req.body.ecobag_adicional, req.body.id_tipo_pagamento, req.body.anotacoes, req.body.retirar_na_loja, req.body._status, req.body._total);
@@ -287,6 +312,39 @@ const listarPedidoEspecifico = (req, res, next) => {
     };
     
     //-------------------------------------------------------------------------------------
+    const listarPedidoEspecificoAdmin = (req, res, next) => {
+      
+      let pedido = new Pedido();
+      let statusPedido = new StatusPedido();
+      let numeroPedido = req.params.id;
+      
+      pedido.id = req.params.id;
+      
+      async function listarPedidos(){
+        
+        try {
+          const pedidos = await pedido.pedidoSelecionadoPeloAdmin(pedido);
+          const status = await statusPedido.listarStatus();
+          
+          
+          //res.send(produtosDaCesta);
+          renderizarPaginaDePedidoSelecionadoAdmin(req, res, next, numeroPedido, pedidos, status);
+          //----------------------------------------------------------------------------
+        } catch (error) {
+          console.log(error);
+          res.send(error);
+        }
+        
+        
+        //----------------------------------------------------------------------------
+        //Renderizar pagina sem os produtos da cesta                
+        //res.send('Vazio');
+      }
+      listarPedidos();
+      
+    };
+    
+    //-------------------------------------------------------------------------------------
     const alterarStatusPedido = (req, res, next) => {
       let pedido = new Pedido();
       pedido.id = req.params.id;
@@ -319,4 +377,8 @@ const listarPedidoEspecifico = (req, res, next) => {
     //-------------------------------------------------------------------------------------
     
     
-    module.exports = { listarPedidoEspecifico, salvarPedido, editarPedido, excluirPedido, listarPedidos, alterarStatusPedido, alterarStatusPedidos };
+module.exports = {
+  listarPedidoEspecifico,
+  salvarPedido, editarPedido, excluirPedido, listarPedidos, alterarStatusPedido, alterarStatusPedidos,
+  listarPedidoEspecificoAdmin
+};

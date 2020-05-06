@@ -4,6 +4,7 @@ const DashBoard = require('../models/DashboardModel');
 const Assinaturas = require('../models/PlanoCompraModel');
 const Status = require('../models/StatusPedidoModel');
 const Pedido = require('../models/PedidoModel');
+const Observacao = require('./../models/ObservacaoModel');
 
 
 //AUTENTICAÇÃO DO USUÁRIO COMO ADMINISTRADOR 
@@ -216,9 +217,12 @@ const assinaturaSelecionada = (req, res, next) => {
       let plan = new Assinaturas();
       let status = new Status();
       plan.id = req.params.id;
+      let observacao = new Observacao();
       let plano = await plan.selecionarPlanoCompra(plan);
       let cestas = await plan.listarCestasDoPlano(plan);
       let statusPedido = await status.listarStatus();
+      observacao.id_plano_compra = plan.id;
+      let observacoes = await observacao.listar(observacao);
       res.render('admin/assinatura-selecionada', {
         data: '',
         navbar: true,
@@ -233,7 +237,8 @@ const assinaturaSelecionada = (req, res, next) => {
         logado,
         plano:plano[0],
         cestas,
-        statusPedido
+        statusPedido,
+        observacoes
       }); 
     } catch (error) {
       console.log(error);
@@ -273,7 +278,23 @@ const alterarStatusPlano = (req, res, next) => {
   alterar();
 };
 //------------------------------------------------------------------------------------------------------
+const salvarObservacao = (req, res, next) => {
+  async function salvar() {
+    try {
+      const observacao = new Observacao(req.body.observacao, req.body.id_plano_compra, req.session.user.id);
 
+      const observacoes = await observacao.salvar(observacao);
+
+      res.redirect(`/admin/assinatura-selecionada/${observacao.id_plano_compra}`);
+
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(400);
+    }
+  }
+  salvar();
+};
+//---------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -288,5 +309,6 @@ module.exports = {
   relatorioPedidos,
   assinaturaSelecionada,
   lancarCestaEntregue,
-  alterarStatusPlano
+  alterarStatusPlano,
+  salvarObservacao
 };

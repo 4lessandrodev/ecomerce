@@ -384,6 +384,104 @@ class PedidoModel {
     });
   }
   
+  pedidoSelecionadoPeloAdmin(pedido) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT pedido.id AS pedido,stat.id AS status, stat.descricao AS status_pedido, cliente.nome, cliente.phone, cliente.endereco, cliente.bairro, regiao.descricao AS regiao, 
+      cesta.descricao AS cesta, categoria.descricao AS categoria, ccompra.quantidade AS quantidade_cesta, ccompra.preco_unitario, 
+      (ccompra.quantidade * ccompra.preco_unitario) AS subtotal, produto.id AS cod_produto, produto.descricao AS produto, categoria_p.descricao AS categoria_produto, SUM(estoque.quantidade) AS quantidade_produto, 
+      frete.preco AS frete, pedido.anotacoes, pedido.ecobag_adicional, pedido.retirar_na_loja, SUM(COALESCE(produtos.quantidade, 0)) AS item_extra, 
+      COALESCE(produto.preco_venda , 0) AS preco_item_extra, DATE_FORMAT(compra.data_compra, '%d/%m/%Y %H:%m') AS data_pedido, pagamento.descricao AS pagamento , pedido.total
+      FROM tb_pedidos AS pedido 
+      INNER JOIN tb_cestas_compra ccompra ON pedido.id_compras = ccompra.id_compra
+      INNER JOIN tb_cestas cesta ON cesta.id = ccompra.id_cesta 
+      INNER JOIN tb_categoria_cestas categoria ON categoria.id = cesta.id_categoria_cesta
+      INNER JOIN tb_estoque estoque ON estoque.id_compra = pedido.id_compras
+      INNER JOIN tb_produtos produto ON produto.id = estoque.id_produto
+      INNER JOIN tb_compras compra ON compra.id = pedido.id_compras
+      INNER JOIN tb_clientes cliente ON cliente.id_usuario = compra.id_usuario
+      LEFT JOIN tb_produtos_compra produtos ON compra.id = produtos.id_compra AND produto.id = produtos.id_produto
+      INNER JOIN tb_regioes regiao ON regiao.id = cliente.id_regiao
+      INNER JOIN tb_fretes frete ON frete.id_destino = cliente.id_regiao
+      INNER JOIN tb_status_pedido stat ON pedido.status = stat.id
+      INNER JOIN tb_tipos_pagamento pagamento ON pagamento.id = pedido.id_tipo_de_pagamento
+      INNER JOIN tb_categoria_produtos categoria_p ON categoria_p.id = produto.id_categoria_produto
+      WHERE pedido.id = ?
+      GROUP BY produto.id, pedido.id
+      ORDER BY pedido.id ASC`, [pedido._id], (err, result) => {
+        if (err) {
+          console.log(err);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+  pedidoSelecionadoPeloCliente(pedido, cliente) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT pedido.id AS pedido,stat.id AS status, stat.descricao AS status_pedido, cliente.nome, cliente.phone, cliente.endereco, cliente.bairro, regiao.descricao AS regiao, 
+      cesta.descricao AS cesta, categoria.descricao AS categoria, ccompra.quantidade AS quantidade_cesta, ccompra.preco_unitario, 
+      (ccompra.quantidade * ccompra.preco_unitario) AS subtotal, produto.id AS cod_produto, produto.descricao AS produto, categoria_p.descricao AS categoria_produto, SUM(estoque.quantidade) AS quantidade_produto, 
+      frete.preco AS frete, pedido.anotacoes, pedido.ecobag_adicional, pedido.retirar_na_loja, SUM(COALESCE(produtos.quantidade, 0)) AS item_extra, 
+      COALESCE(produto.preco_venda , 0) AS preco_item_extra, DATE_FORMAT(compra.data_compra, '%d/%m/%Y %H:%m') AS data_pedido, pagamento.descricao AS pagamento , pedido.total
+      FROM tb_pedidos AS pedido 
+      INNER JOIN tb_cestas_compra ccompra ON pedido.id_compras = ccompra.id_compra
+      INNER JOIN tb_cestas cesta ON cesta.id = ccompra.id_cesta 
+      INNER JOIN tb_categoria_cestas categoria ON categoria.id = cesta.id_categoria_cesta
+      INNER JOIN tb_estoque estoque ON estoque.id_compra = pedido.id_compras
+      INNER JOIN tb_produtos produto ON produto.id = estoque.id_produto
+      INNER JOIN tb_compras compra ON compra.id = pedido.id_compras
+      INNER JOIN tb_clientes cliente ON cliente.id_usuario = compra.id_usuario
+      LEFT JOIN tb_produtos_compra produtos ON compra.id = produtos.id_compra AND produto.id = produtos.id_produto
+      INNER JOIN tb_regioes regiao ON regiao.id = cliente.id_regiao
+      INNER JOIN tb_fretes frete ON frete.id_destino = cliente.id_regiao
+      INNER JOIN tb_status_pedido stat ON pedido.status = stat.id
+      INNER JOIN tb_tipos_pagamento pagamento ON pagamento.id = pedido.id_tipo_de_pagamento
+      INNER JOIN tb_categoria_produtos categoria_p ON categoria_p.id = produto.id_categoria_produto
+      WHERE pedido.id = ? AND cliente.id_usuario = ?
+      GROUP BY produto.id
+      ORDER BY pedido.id DESC LIMIT 7`, [pedido._id, cliente._id_usuario], (err, result) => {
+        if (err) {
+          console.log(err);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+  listarPedidosPeloCliente(cliente) {
+    return new Promise((resolve, reject) => {
+      conect.query(`SELECT pedido.id AS pedido,stat.id AS status, stat.descricao AS status_pedido, cliente.nome, cliente.phone, cliente.endereco, cliente.bairro, regiao.descricao AS regiao, 
+      cesta.descricao AS cesta, categoria.descricao AS categoria, ccompra.quantidade AS quantidade_cesta, ccompra.preco_unitario, 
+      (ccompra.quantidade * ccompra.preco_unitario) AS subtotal,  
+      frete.preco AS frete, pedido.anotacoes, pedido.ecobag_adicional, pedido.retirar_na_loja, DATE_FORMAT(compra.data_compra, '%d/%m/%Y %H:%m') AS data_pedido, pagamento.descricao AS pagamento , pedido.total
+      FROM tb_pedidos AS pedido 
+      INNER JOIN tb_cestas_compra ccompra ON pedido.id_compras = ccompra.id_compra
+      INNER JOIN tb_cestas cesta ON cesta.id = ccompra.id_cesta 
+      INNER JOIN tb_categoria_cestas categoria ON categoria.id = cesta.id_categoria_cesta
+      INNER JOIN tb_estoque estoque ON estoque.id_compra = pedido.id_compras
+      INNER JOIN tb_produtos produto ON produto.id = estoque.id_produto
+      INNER JOIN tb_compras compra ON compra.id = pedido.id_compras
+      INNER JOIN tb_clientes cliente ON cliente.id_usuario = compra.id_usuario
+      LEFT JOIN tb_produtos_compra produtos ON compra.id = produtos.id_compra AND produto.id = produtos.id_produto
+      INNER JOIN tb_regioes regiao ON regiao.id = cliente.id_regiao
+      INNER JOIN tb_fretes frete ON frete.id_destino = cliente.id_regiao
+      INNER JOIN tb_status_pedido stat ON pedido.status = stat.id
+      INNER JOIN tb_tipos_pagamento pagamento ON pagamento.id = pedido.id_tipo_de_pagamento
+      WHERE cliente.id_usuario = ?
+      GROUP BY pedido.id
+      ORDER BY pedido.id DESC LIMIT 7`, [cliente._id_usuario], (err, result) => {
+        if (err) {
+          console.log(err);
+          reject(err.message);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+  
   
 }
 
