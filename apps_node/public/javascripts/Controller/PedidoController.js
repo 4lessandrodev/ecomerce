@@ -56,8 +56,10 @@ export class PedidoController {
     <p style="line-height:1; margin-top:0; padding-top:0">${forma_pagamento}</p>
     <h3 style="padding:0px; margin:1px; color:#245725">Endereço de entrega</h3>
     <p style="line-height:1; margin-top:0; padding-top:0">${endereco_de_entrega}</p>
+    <p style="line-height:1; margin-top:0; padding-top:0">Consulte mais detalhes de seus pedidos no perfil de cliente</p>
+    <a href="http://fazendautopia.com.br/perfil" style="padding-bottom:1px; margin-bottom:1px">Seu perfil</a><br>
     <p style="padding-bottom:1px; margin-bottom:1px">Em caso de dúvidas entre em contato conosco</p>
-    <a href="mailto:contato@fazendautopia.com.br" style="padding-bottom:1px; margin-bottom:1px">contato@fazendautopia.com.br</a><br>
+    <a href="mailto:fazendautopia@outlook.com" style="padding-bottom:1px; margin-bottom:1px">fazendautopia@outlook.com</a><br>
     <a href="tel:021999018668" style="padding-bottom:1px; margin-bottom:1px">(21) 9.9901-8668</a>
     
     <p>Atenciosamente:<br>Equipe Fazendautopia</p>
