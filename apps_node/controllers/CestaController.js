@@ -16,7 +16,7 @@ const renderizar = (req, res, next, cestas, categorias, produtos, produtos_de_ce
     produtos,
     cestas,
     produtos_de_cestas,
-    local: 'http://localhost:3000',
+    local: '/',
     descricao,
     status,
     
@@ -29,6 +29,7 @@ const renderizar = (req, res, next, cestas, categorias, produtos, produtos_de_ce
   });
 };
 //---------------------------------------------------------------------------------------------
+//renderizarPaginaEditar(req, res, next, cesta[0], categorias, produtos, produtos_da_cesta);
 const renderizarPaginaEditar = (req, res, next, cesta, categorias, produtos, produtos_da_cesta) => {
   let logado = (req.session.user != undefined);
   res.render('admin/editar-cesta', {
@@ -41,7 +42,7 @@ const renderizarPaginaEditar = (req, res, next, cesta, categorias, produtos, pro
     produtos,
     cesta,
     produtos_da_cesta,
-    local: 'http://localhost:3000',
+    local: '/',
     
     btn: {
       label: 'Voltar',

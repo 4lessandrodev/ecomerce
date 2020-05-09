@@ -108,21 +108,22 @@ class ProdutoModel {
     
     
     
-    listarTodosProdutos(produto) {
+  listarTodosProdutos(produto) {
       return new Promise((resolve, reject) => {
         conect.query(`
         SELECT p.id, p.imagem, p.descricao, p.info_nutricional, c.descricao AS categoria, p.status, p.produto_especial, p.fator_multiplicador, p.preco_venda, p.data_cadastro, p.id_unidade_medida, p.id_categoria_produto, u.descricao AS unidade_medida, (entrada.total - saida.total) AS estoque_disponivel 
         FROM tb_produtos AS p
         INNER JOIN tb_categoria_produtos AS c ON c.id = p.id_categoria_produto
         INNER JOIN tb_und_medidas AS u ON u.id = p.id_unidade_medida
-        INNER JOIN estoque_saida saida ON saida.id_produto = p.id
-        INNER JOIN estoque_entrada entrada ON entrada.id_produto = p.id
+        LEFT JOIN estoque_saida saida ON saida.id_produto = p.id
+        LEFT JOIN estoque_entrada entrada ON entrada.id_produto = p.id
         WHERE p.produto_excluido = ? AND p.status = ?`, [
           produto._produto_excluido, produto._status], (err, result) => {
             if (err) {
               console.log(err.message);
               reject(err.message);
             } else {
+              console.log(result);
               resolve(result);
             }
           });
