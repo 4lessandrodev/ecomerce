@@ -123,126 +123,133 @@
               onclick="Utils.exibirFormulario('#lista-status','display-none')">Alterar Status</button>
             </div>
             
-            <div style="margin-right: 1vh; min-width: 450px;">
+            <div style="margin: 0 0.5vw; min-width: 280px; max-width: 280px; width: 300px;">
               <input type="text" class="btn btn-outline-success my-2 my-sm-0"
               placeholder="Descrição do produto" value="<%=descricao%>" min="1"
-              id="descricao-produto" style="width: 440px;">
+              id="descricao-produto" style="width: 300px;">
             </div>
-            
-            
-            <select class="custom-select btn btn-outline-success my-2 my-sm-0" id="status_produtos"
-            title="Escolha um status para aplicar filtro" style="max-width: 250px;">
-            <option disabled>Escolha o Status</option>
-            <option value="1" <% if(status == 1){%>selected<%}%>>Ativo</option>
-            <option value="0" <% if(status == 0){%>selected<%}%>>Bloqueado</option>
-          </select>
           
-          <button class="btn btn-outline-success my-2 my-sm-0" onclick="Utils.filtrarProduto()"><span><i
-            class="fas fa-search"></i></span>
-            Aplicar</button>
-          </button>
-          
-          
-        </div>
+            <div style="margin: 0 0.5vw;">
+              <select class="custom-select btn btn-outline-success my-2 my-sm-0" id="especial"
+              title="Escolha um tipo" style="max-width: 200px;">
+              <option value="0" <% if(especial == 0){%>selected<%}%>>Normal</option>
+              <option value="1" <% if(especial == 1){%>selected<%}%>>Especiais</option>
+            </select>
+          </div>
+
+          <select class="custom-select btn btn-outline-success my-2 my-sm-0" id="status_produtos"
+          title="Escolha um status para aplicar filtro" style="max-width: 120px;">
+          <option disabled>Escolha o Status</option>
+          <option value="1" <% if(status == 1){%>selected<%}%>>Ativo</option>
+          <option value="0" <% if(status == 0){%>selected<%}%>>Bloqueado</option>
+        </select>
         
-        <table class="table table-hover table-bordered">
-          <thead>
-            <tr>
-              <th scope="col">Imagem</th>
-              <th scope="col">Descrição</th>
-              <th scope="col">Preço</th>
-              <th scope="col">Tipo</th>
-              <th scope="col">Status</th>
-              <th scope="col" class="col-small">Excluir</th>
-              <th scope="col" class="col-small">Editar</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% produtos.forEach(function(produto){ %>
-              <tr data-produto="<%=produto.id%>%>" class="trs">
-                <th scope="row"><img
-                  src="<%if(produto.imagem.length > 50){%><%=produto.imagem%><%}else{%><%=local%><%=produto.imagem%><% }; %>"
-                  style="width: 4em; height: 4em" alt="Sem imagem"></th>
-                  <td><%=produto.descricao %></td>
-                  <td><%=produto.preco_venda %></td>
-                  <td><% if(produto.produto_especial){ %>Especial<% }else{ %>Normal<% }; %></td>
-                  <td><% if(produto.status){ %>Ativo<% }else{ %>Bloqueado<% }; %></td>
-                  <td>
-                    <button class=" btn btn-excluir" onclick="excluirItem(this)"> <input type="hidden"
-                      value="<%=produto.id%>"><i class="fas fa-trash-alt"></i></button>
-                    </td>
-                    <td><a href="/admin/editar-produto/<%=produto.id%>">
-                      <button class="btn btn-editar"><i class="fa fa-pencil-alt"></i></button></a>
-                    </td>
-                  </tr>
-                  <% }); %>
-                </tbody>
-              </table>
-            </section>
-            
-            
-            
-            
-            <!-- MODAL COM A LISTA DE STATUS DE PEDIDO DISPONÍVEIS  -->
-            <!----------------------------------------------------------------------->
-            <section id="sessao-lista-status" style="position: fixed; top: 10%; right: 40%;">
-              <div class="display-none fade show" id="lista-status" tabindex="10" role="dialog"
-              aria-labelledby="lista-status" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-scrollable" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id=lista-produtos-titulo">Alterar Status dos Produtos</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                    onclick="Utils.ocultarFormulario('#lista-status','display-none')">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <!--LISTAR STATUS AQUI -->
-                  <!----------------------------------------------------------------------->
-                  <div class="list-group">
-                      
+        <button class="btn btn-outline-success my-2 my-sm-0" onclick="Utils.filtrarProduto()"><span><i
+          class="fas fa-search"></i></span>
+          Aplicar</button>
+        </button>
+        
+        
+      </div>
+      
+      <table class="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Imagem</th>
+            <th scope="col">Descrição</th>
+            <th scope="col">Preço</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Status</th>
+            <th scope="col" class="col-small">Excluir</th>
+            <th scope="col" class="col-small">Editar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% produtos.forEach(function(produto){ %>
+            <tr data-produto="<%=produto.id%>%>" class="trs">
+              <th scope="row"><img
+                src="<%if(produto.imagem.length > 50){%><%=produto.imagem%><%}else{%><%=local%><%=produto.imagem%><% }; %>"
+                style="width: 4em; height: 4em" alt="Sem imagem"></th>
+                <td><%=produto.descricao %></td>
+                <td><%=produto.preco_venda %></td>
+                <td><% if(produto.produto_especial){ %>Especial<% }else{ %>Normal<% }; %></td>
+                <td><% if(produto.status){ %>Ativo<% }else{ %>Bloqueado<% }; %></td>
+                <td>
+                  <button class=" btn btn-excluir" onclick="excluirItem(this)"> <input type="hidden"
+                    value="<%=produto.id%>"><i class="fas fa-trash-alt"></i></button>
+                  </td>
+                  <td><a href="/admin/editar-produto/<%=produto.id%>">
+                    <button class="btn btn-editar"><i class="fa fa-pencil-alt"></i></button></a>
+                  </td>
+                </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </section>
+          
+          
+          
+          
+          <!-- MODAL COM A LISTA DE STATUS DE PEDIDO DISPONÍVEIS  -->
+          <!----------------------------------------------------------------------->
+          <section id="sessao-lista-status" style="position: fixed; top: 10%; right: 40%;">
+            <div class="display-none fade show" id="lista-status" tabindex="10" role="dialog"
+            aria-labelledby="lista-status" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id=lista-produtos-titulo">Alterar Status dos Produtos</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                  onclick="Utils.ocultarFormulario('#lista-status','display-none')">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <!--LISTAR STATUS AQUI -->
+                <!----------------------------------------------------------------------->
+                <div class="list-group">
+                  
                   <button type="button" class="list-group-item list-group-item-action"
                   onclick="Utils.alterarStatusDosProdutosListados(this)">
                   <div src="" style="width: 100%; margin: 0 0.5em; font-size: 1.2em; color: rgb(119, 4, 4)" alt="imagem"><i class="fas fa-clipboard-check"></i> Ativo</div>
-                    <input type="hidden" class="code_status" value="1">
-                  </button>
-
-                  <button type="button" class="list-group-item list-group-item-action"
-                    onclick="Utils.alterarStatusDosProdutosListados(this)">
-                    <div src="" style="width: 100%; margin: 0 0.5em; font-size: 1.2em; color: rgb(119, 4, 4)"
-                      alt="imagem"><i class="fas fa-clipboard-check"></i> Bloqueado
-                    </div>
-                    <input type="hidden" class="code_status" value="0">
-                  </button>
-                  
+                  <input type="hidden" class="code_status" value="1">
+                </button>
+                
+                <button type="button" class="list-group-item list-group-item-action"
+                onclick="Utils.alterarStatusDosProdutosListados(this)">
+                <div src="" style="width: 100%; margin: 0 0.5em; font-size: 1.2em; color: rgb(119, 4, 4)"
+                alt="imagem"><i class="fas fa-clipboard-check"></i> Bloqueado
+              </div>
+              <input type="hidden" class="code_status" value="0">
+            </button>
             
-                  
-                </div>
-                <!----------------------------------------------------------------------->
-              </div>
-              <div class="modal-footer">
-              </div>
-            </div>
+            
+            
           </div>
+          <!----------------------------------------------------------------------->
         </div>
-      </section>
-      <!----------------------------------------------------------------------->
-      
-      
-      
-      
-    </main>
-    <!--------------------------------------------------------------------------------------------------------------------->
-    
-    <script>
-      const excluirItem = (e) => {
-        let id = e.querySelector('input[type=hidden]').value
-        fetch(`/admin/produto/${id}`, {
-          method: 'DELETE'
-        }).then(response => response.json())
-        .then(json => {
-          window.location.reload();
-        });
-      };
-    </script>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!----------------------------------------------------------------------->
+
+
+
+
+</main>
+<!--------------------------------------------------------------------------------------------------------------------->
+
+<script>
+  const excluirItem = (e) => {
+    let id = e.querySelector('input[type=hidden]').value
+    fetch(`/admin/produto/${id}`, {
+      method: 'DELETE'
+    }).then(response => response.json())
+    .then(json => {
+      window.location.reload();
+    });
+  };
+</script>

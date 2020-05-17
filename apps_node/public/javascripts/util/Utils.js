@@ -499,12 +499,13 @@ class Utils {
     
     
     const descricao_produto = document.querySelector('#descricao-produto').value;
-    const status_produto = document.querySelector('#status_produtos').value;  
+    const status_produto = document.querySelector('#status_produtos').value;
+    const especial = document.querySelector('#especial').value;
     
     if (descricao_produto.trim() == '') {
-      location.href = `/admin/produto?status=${status_produto}`;
+      location.href = `/admin/produto?especial=${especial}&status=${status_produto}`;
     } else {
-      location.href = `/admin/produto?status=${status_produto}&descricao=${descricao_produto}`;
+      location.href = `/admin/produto?especial=${especial}&status=${status_produto}&descricao=${descricao_produto}`;
     }
   }
   static filtrarProdutoEstoque() {

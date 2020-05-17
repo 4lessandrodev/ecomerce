@@ -41,7 +41,7 @@
         </thead>
         <tbody>
           <% for(let ass of assinaturas){%>
-            <tr>
+            <tr onclick="location.href='/admin/assinatura-selecionada/<%=ass.id%>'">
               <th scope="row"><%=ass.id%></th>
               <td><%=ass.titulo%></td>
               <td><%=ass.cliente%></td>

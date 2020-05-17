@@ -4,7 +4,7 @@ const UndMedida = require('./../models/UnidadeMedidaModel');
 const Estoque = require('./../models/EstoqueProdutoModel');
 
 //--------------------------------------------------------------------------------
-const renderizar = (req, res, next, produtos, categorias, unidade, status = 1, descricao = '') => {
+const renderizar = (req, res, next, produtos, categorias, unidade, status = 1, descricao = '', especial=0) => {
   let logado = (req.session.user != undefined);
   res.render('admin/produtos', {
     logado,
@@ -19,6 +19,7 @@ const renderizar = (req, res, next, produtos, categorias, unidade, status = 1, d
     local: 'http://localhost:3000',
     status,
     descricao,
+    especial,
     
     btn: {
       label: 'Voltar',
@@ -153,17 +154,19 @@ const salvarProduto = (req, res, next) => {
     };
     //-----------------------------------------------------------------------------------
     const listarTodosProdutos = (req, res, next) => {
-      let { descricao, status } = req.query;
+      let { descricao, status, especial } = req.query;
       let produto = new Produto();
       let categoria = new Categoria();
       let unidade = new UndMedida();
+
       produto.descricao = (descricao == undefined) ? '' : descricao;
       produto.status = (status == undefined) ? '1' : status;
+      produto.produto_especial = (especial == undefined) ? '0' : especial;
       
       produto.listarTodosProdutosParaAdmin(produto).then(produtos => {
         categoria.listarCategoriasAtivas(categoria).then(categorias => {
           unidade.listarUnidadesMedidaAtivas(unidade).then(unidades => {
-            renderizar(req, res, next, produtos, categorias, unidades, status, descricao);
+            renderizar(req, res, next, produtos, categorias, unidades, status, descricao, especial);
           }).catch(err => {
             console.log(err.message);
             res.send(err.message);
