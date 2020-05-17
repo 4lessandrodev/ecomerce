@@ -167,7 +167,7 @@ class ProdutoModel {
             GROUP BY p.id
             ORDER BY p.descricao
             `, [
-                produto._produto_excluido, produto._status, produto._produto_especial], (err, result) => {
+              produto._produto_excluido, produto._status, produto._produto_especial], (err, result) => {
                 if (err) {
                   console.log(err.message);
                   reject(err.message);
@@ -315,6 +315,18 @@ class ProdutoModel {
                         });
                       }
                       
+                      bloquearDesbloquearProduto(produto) {
+                        return new Promise((resolve, reject) => {
+                          conect.query(`UPDATE tb_produtos SET status = ? WHERE id = ?`, [produto._status, produto._id], (err, result) => {
+                            if (err) {
+                              console.log(err);
+                              reject(err);
+                            } else {
+                              resolve(result);
+                            }
+                          });
+                        });
+                      }
                       
                       
                     }

@@ -158,7 +158,7 @@ const salvarProduto = (req, res, next) => {
       let produto = new Produto();
       let categoria = new Categoria();
       let unidade = new UndMedida();
-
+      
       produto.descricao = (descricao == undefined) ? '' : descricao;
       produto.status = (status == undefined) ? '1' : status;
       produto.produto_especial = (especial == undefined) ? '0' : especial;
@@ -248,6 +248,25 @@ const salvarProduto = (req, res, next) => {
       }
       lancarEstoque();
     };
+    //-----------------------------------------------------------------------------------
+    const alterarStatusProdutos = (req, res, next) => {
+      
+      let { idProduto, idStatus } = req.body;
+      let produto = new Produto();
+      
+      produto.id = idProduto;
+      produto.status = idStatus;
+
+      async function alterarStatus() {
+        try {
+          let resultado = await produto.bloquearDesbloquearProduto(produto);
+          res.send(resultado);
+        } catch (error) {
+          res.sendStatus(400);
+        }
+      }
+      alterarStatus();
+    };
     
     module.exports = {
       salvarProduto,
@@ -258,5 +277,6 @@ const salvarProduto = (req, res, next) => {
       exibirProdutoSelecionado,
       editarStatusProdutos,
       listarTodosProdutosEstoque,
-      lancarEstoque
+      lancarEstoque,
+      alterarStatusProdutos
     };

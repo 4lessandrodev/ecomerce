@@ -271,10 +271,10 @@ class Utils {
       return json;
     });
   }
-
-
-
-
+  
+  
+  
+  
   static alterarStatusDoPlano(el) {
     let id_plano = parseInt(el.querySelector('.code_plano').value);
     let id_status = parseInt(el.querySelector('.code_status').value);
@@ -340,12 +340,12 @@ class Utils {
       return json;
     });
   }
-
-
-
+  
+  
+  
   static alterarStatusDosProdutosListados(el) {
-
-
+    
+    
     let listaIds = new Set();
     let listaProdutos = [];
     let idsProdutos = document.querySelectorAll('.trs');
@@ -353,9 +353,9 @@ class Utils {
       listaIds.add(id.dataset.produto);
     }
     listaIds.forEach(e => listaProdutos.push(e));
-
+    
     let id_status = parseInt(el.querySelector('.code_status').value);
-
+    
     return fetch(`/admin/status-produtos`, {
       headers: { "Content-Type": "application/json" },
       method: 'POST',
@@ -370,20 +370,20 @@ class Utils {
       }
       return res;
     }).then(res => {
-
+      
       let json = res.json();
       swal("Status dos produtos alterado com sucesso!")
-        .then((value) => {
-          location.reload();
-        });
+      .then((value) => {
+        location.reload();
+      });
       return json;
     });
   }
-
-
+  
+  
   static alterarStatusDasCestasListadas(el) {
-
-
+    
+    
     let listaIds = new Set();
     let listaCestas = [];
     let idsCestas = document.querySelectorAll('.trs');
@@ -391,9 +391,9 @@ class Utils {
       listaIds.add(id.dataset.cesta);
     }
     listaIds.forEach(e => listaCestas.push(e));
-
+    
     let id_status = parseInt(el.querySelector('.code_status').value);
-
+    
     return fetch(`/admin/status-cestas`, {
       headers: { "Content-Type": "application/json" },
       method: 'POST',
@@ -408,16 +408,16 @@ class Utils {
       }
       return res;
     }).then(res => {
-
+      
       let json = res.json();
       swal("Status das cestas alterado com sucesso!")
-        .then((value) => {
-          location.reload();
-        });
+      .then((value) => {
+        location.reload();
+      });
       return json;
     });
   }
-
+  
   
   
   static limparCarrinho() {
@@ -432,11 +432,11 @@ class Utils {
       location.reload();
     });
   }
-
+  
   static excluirEmail(el) {
     
     let id = el.dataset.id;
-
+    
     fetch(`/admin/deletar-email`, {
       headers: { "Content-Type": "application/json" },
       method: 'DELETE',
@@ -449,12 +449,12 @@ class Utils {
       location.reload();
     });
   }
-
-
-
-
+  
+  
+  
+  
   static limparCesta(el) {  
-
+    
     let id = el.dataset.id;
     
     fetch(`/admin/limpar-cesta`, {
@@ -471,12 +471,12 @@ class Utils {
       }
       return res;
     }).then(res => {
-
+      
       let json = res.json();
       swal("Todos os produtos foram retirados com sucesso!")
-        .then((value) => {
-          location.reload();
-        });
+      .then((value) => {
+        location.reload();
+      });
       return json;
     });
   }
@@ -493,8 +493,8 @@ class Utils {
     
     location.href = `/admin/pedido/${status_pedido}/${data_inicial}/${data_final}/${numero_pedido}`;
   }
-
-
+  
+  
   static filtrarProduto() {
     
     
@@ -520,8 +520,8 @@ class Utils {
       location.href = `/admin/estoque?status=${status_produto}&descricao=${descricao_produto}`;
     }
   }
-
-
+  
+  
   static filtrarCestas() {
     
     
@@ -535,6 +535,30 @@ class Utils {
     }
   }
   
+  static bloquearProduto(el) {
+    let idProduto = el.dataset.id;
+    let idStatus = el.dataset.status;
+    (idStatus == '1') ? idStatus = 0 : idStatus = 1;
+    
+  
+    fetch(`/admin/produto-alterar-status`, {
+      headers: { "Content-Type": "application/json" },
+      method: 'PUT',
+      body: JSON.stringify({
+        idProduto, idStatus
+      })
+      
+    }).then(res => {
+      if (!res.ok) {
+        swal("Oops!", "Algo errado ocorreu!", "error");
+        throw new Error('Erro ao alterar status');
+      }
+      return res;
+    }).then(res => {
+      location.reload();
+    });
+  
+  }
   
 }
 
