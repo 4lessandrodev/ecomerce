@@ -160,6 +160,7 @@
             <th scope="col">Preço</th>
             <th scope="col">Tipo</th>
             <th scope="col">Status</th>
+            <th scope="col" style="max-width: 140px; width: 140px;">Estoque disp.</th>
             <th scope="col" class="col-small">Excluir</th>
             <th scope="col" class="col-small">Editar</th>
             <th scope="col" class="col-small">Bloq./Desbl.</th>
@@ -175,6 +176,14 @@
                 <td><%=produto.preco_venda %></td>
                 <td><% if(produto.produto_especial){ %>Especial<% }else{ %>Normal<% }; %></td>
                 <td><% if(produto.status){ %>Ativo<% }else{ %>Bloqueado<% }; %></td>
+
+                <td>
+                  <input type="text" value="<%=produto.estoque_disponivel%>" style="max-width: 50px; width: 50px;" class="quantidade">
+                  <button class="btn btn-outline-success" style="font-size: 12px; 
+                  padding: 3% 6%; margin-top: 0;position: relative;bottom: 2px;"
+                  data-id="<%=produto.id%>" onclick="Utils.atualizarEstoqueEmProduto(this)">Aplicar</button>
+                </td>
+                
                 <td>
                   <button class=" btn btn-excluir" onclick="excluirItem(this)"> <input type="hidden"
                     value="<%=produto.id%>"><i class="fas fa-trash-alt"></i></button>

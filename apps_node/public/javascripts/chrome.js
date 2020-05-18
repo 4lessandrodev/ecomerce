@@ -1,4 +1,4 @@
-
+const LOGADO = document.getElementById('login').dataset.login;
 const PRODUTOS_ADICIONAIS = document.querySelectorAll('#produtos-adicionais tr');
 const BTN_CLOSE_MODAL = document.querySelector('#close-modal');
 let BTNS_EXCLUIR = document.querySelectorAll('#produtos-cesta .opcoes');
@@ -21,6 +21,11 @@ let qtd_produtos_retirados = 0;
 
 
 const retirarItem = (El) => {
+  if (LOGADO == 'false') {
+    swal('Oops!', 'Você precisa fazer login', 'info');
+    return false;
+  }
+
   if (qtd_produtos_retirados < QUANTIDADE_ALTERACOES_PERMITIDAS && CATEGORIA_DESCRICAO == 'PERSONALIZADA') {
     ativarBotaoAdicionarItem();
     removerElemento(El);

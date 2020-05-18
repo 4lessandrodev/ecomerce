@@ -1,6 +1,6 @@
 const conect = require('./../config/CONECT_BD');
 class ProdutoModel {
-  constructor (descricao, id_categoria_produto, preco_venda, id_unidade_medida, info_nutricional, imagem = '/uploads/images/no-image.jpeg', status = 1, produto_especial = 0, fator_multiplicador = 1, data_cadastro = new Date(), produto_excluido = 0) {
+  constructor (descricao, id_categoria_produto, preco_venda, id_unidade_medida, info_nutricional, imagem = '/uploads/images/no-image.jpeg', status = 1, produto_especial = 0, fator_multiplicador = 1, data_cadastro = new Date(), produto_excluido = 0, estoque_disponivel = 0) {
     this._id = null;
     this._imagem = imagem;
     this._descricao = descricao;
@@ -13,6 +13,7 @@ class ProdutoModel {
     this._info_nutricional = info_nutricional;
     this._produto_especial = produto_especial;
     this._fator_multiplicador = fator_multiplicador;
+    this._estoque_disponivel = estoque_disponivel;
   }
   
   get id() {
@@ -47,6 +48,9 @@ class ProdutoModel {
   }
   get fator_multiplicador() {
     return this._fator_multiplicador;
+  }
+  get estoque_disponivel() {
+    return this._estoque_disponivel;
   }
   set id(value) {
     this._id = value;
@@ -86,6 +90,9 @@ class ProdutoModel {
   }
   set produto_excluido(value) {
     this._produto_excluido = value;
+  }
+  set estoque_disponivel(value) {
+    this._estoque_disponivel = value;
   }
   
   
@@ -133,7 +140,7 @@ class ProdutoModel {
       listarTodosProdutosAdicionais(produto) {
         return new Promise((resolve, reject) => {
           conect.query(`
-          SELECT p.id, p.imagem, p.descricao, p.info_nutricional, c.descricao AS categoria, p.status, p.produto_especial, p.fator_multiplicador, p.preco_venda, p.data_cadastro, p.id_unidade_medida, p.id_categoria_produto, u.descricao AS unidade_medida, (entrada.total - saida.total) AS estoque_disponivel 
+          SELECT p.id, p.imagem, p.descricao, p.info_nutricional, c.descricao AS categoria, p.status, p.produto_especial, p.fator_multiplicador, p.preco_venda, p.data_cadastro, p.id_unidade_medida, p.id_categoria_produto, u.descricao AS unidade_medida, p.estoque_disponivel 
           FROM tb_produtos AS p
           INNER JOIN tb_categoria_produtos AS c ON c.id = p.id_categoria_produto 
           INNER JOIN  tb_und_medidas AS u ON u.id = p.id_unidade_medida
@@ -141,16 +148,16 @@ class ProdutoModel {
           INNER JOIN estoque_entrada entrada ON entrada.id_produto = p.id
           WHERE p.produto_excluido = ? AND p.status = ? AND p.produto_especial = ?
           HAVING estoque_disponivel > 0`, [
-            produto._produto_excluido, produto._status, produto._produto_especial], (err, result) => {
-              if (err) {
-                console.log(err.message);
-                reject(err.message);
-              } else {
-                resolve(result);
-              }
-            });
+          produto._produto_excluido, produto._status, produto._produto_especial], (err, result) => {
+            if (err) {
+              console.log(err.message);
+              reject(err.message);
+            } else {
+              resolve(result);
+            }
           });
-        }
+        });
+      }
         
         
         listarTodosProdutosParaAdmin(produto) {
@@ -158,7 +165,7 @@ class ProdutoModel {
             conect.query(`
             SELECT p.id, p.imagem, p.descricao, p.info_nutricional, c.descricao AS categoria, 
             p.status, p.produto_especial, p.fator_multiplicador, p.preco_venda, p.data_cadastro, 
-            p.id_unidade_medida, p.id_categoria_produto, u.descricao AS unidade_medida
+            p.id_unidade_medida, p.id_categoria_produto, u.descricao AS unidade_medida, p.estoque_disponivel
             FROM tb_produtos p
             INNER JOIN tb_categoria_produtos c ON c.id = p.id_categoria_produto 
             INNER JOIN tb_und_medidas AS u ON u.id = p.id_unidade_medida
@@ -327,6 +334,20 @@ class ProdutoModel {
                           });
                         });
                       }
+                      
+                      
+                      ajustarEstoque(produto) {
+                        return new Promise((resolve, reject) => {
+                        conect.query(`UPDATE tb_produtos SET estoque_disponivel = ? WHERE id = ?`, [produto._estoque_disponivel, produto._id], (err, result) => {
+                          if (err) {
+                            console.log(err);
+                            reject(err);
+                          } else {
+                            resolve(result);
+                          }
+                        });
+                      });
+                    }
                       
                       
                     }

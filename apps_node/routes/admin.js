@@ -263,6 +263,11 @@ router.delete('/produto/:id', (req, res, next) => {
   (adminController.autenticar(req, res, next))?produtoController.desativarProduto(req, res, next):'';
 });
 //------------------------------------------------------------------------------------------------------
+//Alterar quantidade em estoque
+router.put('/produto-alterar-estoque', (req, res, next) => {
+  (adminController.autenticar(req, res, next))?produtoController.ajustarEstoque(req, res, next):'';
+});
+//------------------------------------------------------------------------------------------------------
 
 
 

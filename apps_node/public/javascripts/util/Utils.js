@@ -559,7 +559,39 @@ class Utils {
     });
   
   }
-  
+
+
+
+
+  static atualizarEstoqueEmProduto(el) {
+    let id= el.dataset.id;
+    let tr = el.parentNode;
+
+    let quantidade = tr.querySelector('.quantidade').value;
+
+    console.log(id);
+    console.log(quantidade);
+
+
+    fetch(`/admin/produto-alterar-estoque`, {
+      headers: { "Content-Type": "application/json" },
+      method: 'PUT',
+      body: JSON.stringify({
+        id, quantidade
+      })
+
+    }).then(res => {
+      if (!res.ok) {
+        swal("Oops!", "Algo errado ocorreu!", "error");
+        throw new Error('Erro ao alterar quantidade');
+      }
+      return res;
+    }).then(res => {
+      location.reload();
+    });
+
+   
+  }
 }
 
 

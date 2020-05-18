@@ -256,7 +256,7 @@ const salvarProduto = (req, res, next) => {
       
       produto.id = idProduto;
       produto.status = idStatus;
-
+      
       async function alterarStatus() {
         try {
           let resultado = await produto.bloquearDesbloquearProduto(produto);
@@ -267,6 +267,26 @@ const salvarProduto = (req, res, next) => {
       }
       alterarStatus();
     };
+    //-----------------------------------------------------------------------------------
+    const ajustarEstoque = (req, res, next) => {
+      
+      let { id, quantidade } = req.body;
+      let produto = new Produto();
+      
+      produto.id = id;
+      produto.estoque_disponivel = quantidade;
+      
+      async function alterarQuantidade() {
+        try {
+          let resultado = await produto.ajustarEstoque(produto);
+          res.send(resultado);
+        } catch (error) {
+          res.sendStatus(400);
+        }
+      }
+      alterarQuantidade();
+    };
+    //-----------------------------------------------------------------------------------
     
     module.exports = {
       salvarProduto,
@@ -278,5 +298,6 @@ const salvarProduto = (req, res, next) => {
       editarStatusProdutos,
       listarTodosProdutosEstoque,
       lancarEstoque,
-      alterarStatusProdutos
+      alterarStatusProdutos,
+      ajustarEstoque
     };
