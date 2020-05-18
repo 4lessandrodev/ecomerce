@@ -134,8 +134,8 @@ const listarPedidos = (req, res, next) => {
   let pedido = new Pedido();
   let statusPedidos = new StatusPedido();
   
-  let dataAtual = moment().format("YYYY-MM-DD HH:MM:S");
-  let dataInicial = moment().day(-1).format("YYYY-MM-DD HH:MM:S");
+  let dataAtual = moment().add(1,'day').format("YYYY-MM-DD HH:MM:S");
+  let dataInicial = moment().subtract(8, 'days').format("YYYY-MM-DD HH:MM:S");
   
   //-----------------
   //Criar filtro de status 

@@ -145,10 +145,7 @@ class ProdutoModel {
           FROM tb_produtos AS p
           INNER JOIN tb_categoria_produtos AS c ON c.id = p.id_categoria_produto 
           INNER JOIN  tb_und_medidas AS u ON u.id = p.id_unidade_medida
-          INNER JOIN estoque_saida saida ON saida.id_produto = p.id
-          INNER JOIN estoque_entrada entrada ON entrada.id_produto = p.id
-          WHERE p.produto_excluido = ? AND p.status = ? AND p.produto_especial = ?
-          HAVING estoque_disponivel > 0`, [
+          WHERE p.produto_excluido = ? AND p.status = ? AND p.produto_especial = ? AND p.estoque_disponivel > 0`, [
             produto._produto_excluido, produto._status, produto._produto_especial], (err, result) => {
               if (err) {
                 console.log(err.message);

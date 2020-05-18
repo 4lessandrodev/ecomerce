@@ -111,7 +111,8 @@ class CestaModel {
     
     listarTodasCestas(cesta) {
       return new Promise((resolve, reject) => {
-        conect.query(`SELECT c.imagem, c.id, c.descricao, cc.descricao AS 'categoria', c.preco, c.alteracoes_permitidas, c.informacoes_nutricionais, c.status, c.id_categoria_cesta
+        conect.query(`SELECT c.imagem, c.id, c.descricao, cc.descricao AS 'categoria', c.preco, c.alteracoes_permitidas, 
+        c.informacoes_nutricionais, c.status, c.id_categoria_cesta
         FROM tb_cestas AS c, tb_categoria_cestas AS cc 
         WHERE cesta_excluida = 0 AND cc.id = c.id_categoria_cesta GROUP BY c.id`, [
           cesta._cesta_excluida], (err, results) => {
@@ -145,7 +146,8 @@ class CestaModel {
         
         listarCestasAtivas(cesta) {
           return new Promise((resolve, reject) => {
-            conect.query(`SELECT c.id, c.imagem, c.descricao, cc.descricao AS 'categoria', p.descricao AS 'produtos', p.status, p.fator_multiplicador, c.preco, c.alteracoes_permitidas, c.informacoes_nutricionais, COUNT(p.descricao ) AS quantidade_itens
+            conect.query(`SELECT c.id, c.imagem, c.descricao, cc.descricao AS 'categoria', p.descricao AS 'produtos', p.status, p.fator_multiplicador, c.preco, 
+            c.alteracoes_permitidas, c.informacoes_nutricionais, COUNT(p.descricao ) AS quantidade_itens
             FROM tb_cestas AS c, tb_produtos_para_cesta AS pc, tb_produtos AS p, tb_categoria_cestas AS cc 
             WHERE c.cesta_excluida = ? AND c.id = pc.id_cesta AND p.id = pc.id_produto AND cc.id = c.id_categoria_cesta AND c.status = ? GROUP BY c.id`, [
               cesta._cesta_excluida, cesta._status], (err, results) => {
@@ -164,7 +166,8 @@ class CestaModel {
             return new Promise((resolve, reject) => {
               conect.query(`SELECT cesta.id, cesta.imagem, cesta.descricao, cesta.id_categoria_cesta, cesta.status, cesta.preco, cesta.alteracoes_permitidas,
               cesta.informacoes_nutricionais, cesta.data_cadastro, cesta.cesta_excluida, categoria_da_cesta.descricao AS descricao_categoria
-              FROM tb_cestas AS cesta, tb_categoria_cestas AS categoria_da_cesta WHERE cesta.id = ? AND cesta.cesta_excluida = ? AND categoria_da_cesta.id = cesta.id_categoria_cesta`, [
+              FROM tb_cestas AS cesta, tb_categoria_cestas AS categoria_da_cesta WHERE cesta.id = ? AND cesta.cesta_excluida = ?
+              AND categoria_da_cesta.id = cesta.id_categoria_cesta`, [
                 cesta._id, cesta._cesta_excluida], (err, results) => {
                   if (err) {
                     console.log(err.message);
@@ -180,7 +183,9 @@ class CestaModel {
             atualizarCesta(cesta) {
               return new Promise((resolve, reject) => {
                 conect.query(`UPDATE tb_cestas SET imagem = ?, descricao = ?, id_categoria_cesta = ?, status = ?, preco = ?,
-                alteracoes_permitidas = ?, informacoes_nutricionais = ?, cesta_excluida = ? WHERE id = ?`, [cesta._imagem, cesta._descricao, cesta._id_categoria_cesta, cesta._status, cesta._preco, cesta._alteracoes_permitidas, cesta.__informacoes_nutricionais, cesta._cesta_excluida, cesta._id], (err, result) => {
+                alteracoes_permitidas = ?, informacoes_nutricionais = ?, cesta_excluida = ? WHERE id = ?`,
+                  [cesta._imagem, cesta._descricao, cesta._id_categoria_cesta, cesta._status, cesta._preco, cesta._alteracoes_permitidas,
+                    cesta.__informacoes_nutricionais, cesta._cesta_excluida, cesta._id], (err, result) => {
                   if (err) {
                     console.log(err.message);
                     reject(err.message);
