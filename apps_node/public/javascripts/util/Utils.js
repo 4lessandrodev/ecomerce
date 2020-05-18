@@ -569,10 +569,6 @@ class Utils {
 
     let quantidade = tr.querySelector('.quantidade').value;
 
-    console.log(id);
-    console.log(quantidade);
-
-
     fetch(`/admin/produto-alterar-estoque`, {
       headers: { "Content-Type": "application/json" },
       method: 'PUT',
@@ -584,6 +580,28 @@ class Utils {
       if (!res.ok) {
         swal("Oops!", "Algo errado ocorreu!", "error");
         throw new Error('Erro ao alterar quantidade');
+      }
+      return res;
+    }).then(res => {
+      location.reload();
+    });
+
+   
+  }
+
+
+
+  static zerarEstoque() {
+
+    fetch(`/admin/zerar-estoque`, {
+      headers: { "Content-Type": "application/json" },
+      method: 'PUT',
+      body: JSON.stringify({})
+
+    }).then(res => {
+      if (!res.ok) {
+        swal("Oops!", "Algo errado ocorreu!", "error");
+        throw new Error('Erro ao zerar estoque');
       }
       return res;
     }).then(res => {

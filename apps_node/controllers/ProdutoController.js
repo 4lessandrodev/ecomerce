@@ -287,6 +287,25 @@ const salvarProduto = (req, res, next) => {
       alterarQuantidade();
     };
     //-----------------------------------------------------------------------------------
+    const zerarEstoque = (req, res, next) => {
+      
+      let { id, quantidade } = req.body;
+      let produto = new Produto();
+      
+      produto.id = id;
+      produto.estoque_disponivel = quantidade;
+      
+      async function zerar() {
+        try {
+          let resultado = await produto.zerarEstoque();
+          res.send(resultado);
+        } catch (error) {
+          res.sendStatus(400);
+        }
+      }
+      zerar();
+    };
+    //-----------------------------------------------------------------------------------
     
     module.exports = {
       salvarProduto,
@@ -299,5 +318,6 @@ const salvarProduto = (req, res, next) => {
       listarTodosProdutosEstoque,
       lancarEstoque,
       alterarStatusProdutos,
-      ajustarEstoque
+      ajustarEstoque,
+      zerarEstoque
     };

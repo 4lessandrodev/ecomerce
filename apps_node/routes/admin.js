@@ -268,6 +268,11 @@ router.put('/produto-alterar-estoque', (req, res, next) => {
   (adminController.autenticar(req, res, next))?produtoController.ajustarEstoque(req, res, next):'';
 });
 //------------------------------------------------------------------------------------------------------
+//Zerar toda a quantidade em estoque
+router.put('/zerar-estoque', (req, res, next) => {
+  (adminController.autenticar(req, res, next))?produtoController.zerarEstoque(req, res, next):'';
+});
+//------------------------------------------------------------------------------------------------------
 
 
 

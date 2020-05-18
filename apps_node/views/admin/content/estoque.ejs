@@ -6,9 +6,15 @@
             Lista de Produtos e estoque
           </h6>
           
-          <div style="margin-right: 1vh; min-width: 650px;">
+          <div style="margin-right: 1vh; min-width: 440px;">
             <input type="text" class="btn btn-outline-success my-2 my-sm-0" placeholder="Descrição do produto"
             value="<%=descricao%>" min="1" id="descricao-produto" style="width: 440px;">
+          </div>
+       
+       
+          <div style="min-width: 120px;">
+            <input type="button" class="btn btn-outline-danger my-2 my-sm-0"
+            value="Zerar estoque" style="width: 120px;" onclick="Utils.zerarEstoque()">
           </div>
           
           

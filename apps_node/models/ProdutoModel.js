@@ -140,7 +140,8 @@ class ProdutoModel {
       listarTodosProdutosAdicionais(produto) {
         return new Promise((resolve, reject) => {
           conect.query(`
-          SELECT p.id, p.imagem, p.descricao, p.info_nutricional, c.descricao AS categoria, p.status, p.produto_especial, p.fator_multiplicador, p.preco_venda, p.data_cadastro, p.id_unidade_medida, p.id_categoria_produto, u.descricao AS unidade_medida, p.estoque_disponivel 
+          SELECT p.id, p.imagem, p.descricao, p.info_nutricional, c.descricao AS categoria, p.status, p.produto_especial, 
+          p.fator_multiplicador, p.preco_venda, p.data_cadastro, p.id_unidade_medida, p.id_categoria_produto, u.descricao AS unidade_medida, p.estoque_disponivel 
           FROM tb_produtos AS p
           INNER JOIN tb_categoria_produtos AS c ON c.id = p.id_categoria_produto 
           INNER JOIN  tb_und_medidas AS u ON u.id = p.id_unidade_medida
@@ -148,16 +149,16 @@ class ProdutoModel {
           INNER JOIN estoque_entrada entrada ON entrada.id_produto = p.id
           WHERE p.produto_excluido = ? AND p.status = ? AND p.produto_especial = ?
           HAVING estoque_disponivel > 0`, [
-          produto._produto_excluido, produto._status, produto._produto_especial], (err, result) => {
-            if (err) {
-              console.log(err.message);
-              reject(err.message);
-            } else {
-              resolve(result);
-            }
+            produto._produto_excluido, produto._status, produto._produto_especial], (err, result) => {
+              if (err) {
+                console.log(err.message);
+                reject(err.message);
+              } else {
+                resolve(result);
+              }
+            });
           });
-        });
-      }
+        }
         
         
         listarTodosProdutosParaAdmin(produto) {
@@ -190,7 +191,7 @@ class ProdutoModel {
           listarTodosProdutosEmEstoque(produto) {
             return new Promise((resolve, reject) => {
               conect.query(`
-              SELECT p.id, p.imagem, p.descricao, p.preco_venda, p.produto_especial, p.status, ctg.descricao AS categoria_descricao, COALESCE(saida.total, 0) AS total_saida, COALESCE(entrada.total, 0) AS total_entrada, (COALESCE(entrada.total, 0) - COALESCE(saida.total,0)) AS estoque_disponivel 
+              SELECT p.id, p.imagem, p.descricao, p.preco_venda, p.produto_especial, p.status, ctg.descricao AS categoria_descricao, p.estoque_disponivel 
               FROM tb_produtos AS p
               LEFT JOIN estoque_saida saida ON saida.id_produto = p.id
               LEFT JOIN estoque_entrada entrada ON entrada.id_produto = p.id
@@ -212,7 +213,9 @@ class ProdutoModel {
             listarProdutosEspeciaisAtivos(produto) {
               return new Promise((resolve, reject) => {
                 conect.query(`
-                SELECT p.id, p.imagem, p.descricao, p.info_nutricional, c.descricao AS categoria, p.status, p.produto_especial, p.fator_multiplicador, p.preco_venda, p.data_cadastro, p.id_unidade_medida, p.id_categoria_produto, u.descricao AS unidade_medida, (entrada.total - saida.total) AS estoque_disponivel 
+                SELECT p.id, p.imagem, p.descricao, p.info_nutricional, c.descricao AS categoria, p.status, p.produto_especial, 
+                p.fator_multiplicador, p.preco_venda, p.data_cadastro, p.id_unidade_medida, p.id_categoria_produto, u.descricao AS unidade_medida, 
+                p.estoque_disponivel 
                 FROM tb_produtos AS p
                 INNER JOIN tb_categoria_produtos AS c ON c.id = p.id_categoria_produto
                 INNER JOIN tb_und_medidas AS u ON u.id = p.id_unidade_medida
@@ -298,7 +301,9 @@ class ProdutoModel {
                     
                     abrirProdutosIndicados(produto) {
                       return new Promise((resolve, reject) => {
-                        conect.query(`SELECT p.id, p.descricao, p.imagem, p.info_nutricional, u.descricao AS und_descricao, p.preco_venda FROM tb_produtos AS p, tb_und_medidas AS u WHERE p.produto_excluido = ? AND p.status = ? AND u.id = p.id_unidade_medida AND p.produto_especial = 1 LIMIT 7`, [
+                        conect.query(`SELECT p.id, p.descricao, p.imagem, p.info_nutricional, u.descricao AS und_descricao, 
+                        p.preco_venda FROM tb_produtos AS p, tb_und_medidas AS u WHERE p.produto_excluido = ? AND p.status = ?
+                        AND u.id = p.id_unidade_medida AND p.produto_especial = 1 LIMIT 7`, [
                           produto._produto_excluido, produto._status], (err, result) => {
                             if (err) {
                               console.log(err.message);
@@ -338,16 +343,29 @@ class ProdutoModel {
                       
                       ajustarEstoque(produto) {
                         return new Promise((resolve, reject) => {
-                        conect.query(`UPDATE tb_produtos SET estoque_disponivel = ? WHERE id = ?`, [produto._estoque_disponivel, produto._id], (err, result) => {
-                          if (err) {
-                            console.log(err);
-                            reject(err);
-                          } else {
-                            resolve(result);
-                          }
+                          conect.query(`UPDATE tb_produtos SET estoque_disponivel = ? WHERE id = ?`, [produto._estoque_disponivel, produto._id], (err, result) => {
+                            if (err) {
+                              console.log(err);
+                              reject(err);
+                            } else {
+                              resolve(result);
+                            }
+                          });
                         });
-                      });
-                    }
+                      }
+                      
+                      zerarEstoque() {
+                        return new Promise((resolve, reject) => {
+                          conect.query(`UPDATE tb_produtos SET estoque_disponivel = 0 WHERE produto_excluido = 0`, (err, result) => {
+                            if (err) {
+                              console.log(err);
+                              reject(err);
+                            } else {
+                              resolve(result);
+                            }
+                          });
+                        });
+                      }
                       
                       
                     }
