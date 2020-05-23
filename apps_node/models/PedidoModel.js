@@ -439,8 +439,7 @@ class PedidoModel {
       INNER JOIN tb_tipos_pagamento pagamento ON pagamento.id = pedido.id_tipo_de_pagamento
       INNER JOIN tb_categoria_produtos categoria_p ON categoria_p.id = produto.id_categoria_produto
       WHERE pedido.id = ? AND cliente.id_usuario = ?
-      GROUP BY produto.id
-      ORDER BY pedido.id DESC LIMIT 7`, [pedido._id, cliente._id_usuario], (err, result) => {
+      GROUP BY estoque.id_produto`, [pedido._id, cliente._id_usuario], (err, result) => {
         if (err) {
           console.log(err);
           reject(err.message);
