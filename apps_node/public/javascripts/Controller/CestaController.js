@@ -42,10 +42,10 @@ export class CestaController {
               dangerMode: false
             }).then(() => {
               swal({
-                title: "Novidade",
-                text: "Gostaria de ver nossos produtos de mercearia?",
+                title: "Complemente sua cesta",
+                text: "Gostaria de visitar nossa mercearia?",
                 icon: "success",
-                buttons: true,
+                buttons: ["Não", "Sim"],
                 dangerMode: false,
               })
                 .then((irMercearia) => {

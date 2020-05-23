@@ -124,8 +124,10 @@ class ProdutoModel {
         INNER JOIN tb_und_medidas AS u ON u.id = p.id_unidade_medida
         LEFT JOIN estoque_saida saida ON saida.id_produto = p.id
         LEFT JOIN estoque_entrada entrada ON entrada.id_produto = p.id
-        WHERE p.produto_excluido = ? AND p.status = ?`, [
-          produto._produto_excluido, produto._status], (err, result) => {
+        WHERE p.produto_excluido = ? AND p.status = ? AND p.produto_especial = ?
+        ORDER BY p.descricao ASC
+        `, [
+            produto._produto_excluido, produto._status, produto._produto_especial], (err, result) => {
             if (err) {
               console.log(err.message);
               reject(err.message);
@@ -219,7 +221,7 @@ class ProdutoModel {
                 INNER JOIN estoque_saida saida ON saida.id_produto = p.id
                 INNER JOIN estoque_entrada entrada ON entrada.id_produto = p.id
                 WHERE p.produto_excluido = ? AND p.status = ? AND p.produto_especial = ?
-                HAVING estoque_disponivel > 0`, [
+                AND estoque_disponivel > 0`, [
                   produto._produto_excluido, produto._status, produto._produto_especial], (err, result) => {
                     if (err) {
                       console.log(err.message);

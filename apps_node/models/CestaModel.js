@@ -146,10 +146,15 @@ class CestaModel {
         
         listarCestasAtivas(cesta) {
           return new Promise((resolve, reject) => {
-            conect.query(`SELECT c.id, c.imagem, c.descricao, cc.descricao AS 'categoria', p.descricao AS 'produtos', p.status, p.fator_multiplicador, c.preco, 
+            conect.query(`
+            SELECT c.id, c.imagem, c.descricao, cc.descricao AS 'categoria', COALESCE(p.descricao,'Sem Produto') AS 'produtos', 
+            COALESCE(p.status,1), COALESCE(p.fator_multiplicador,1), c.preco, 
             c.alteracoes_permitidas, c.informacoes_nutricionais, COUNT(p.descricao ) AS quantidade_itens
-            FROM tb_cestas AS c, tb_produtos_para_cesta AS pc, tb_produtos AS p, tb_categoria_cestas AS cc 
-            WHERE c.cesta_excluida = ? AND c.id = pc.id_cesta AND p.id = pc.id_produto AND cc.id = c.id_categoria_cesta AND c.status = ? GROUP BY c.id`, [
+            FROM tb_cestas AS c
+            LEFT OUTER JOIN tb_produtos_para_cesta AS pc ON c.id = pc.id_cesta
+            LEFT OUTER JOIN tb_produtos AS p ON pc.id_produto = p.id
+            INNER JOIN tb_categoria_cestas AS cc ON cc.id = c.id_categoria_cesta
+            WHERE c.cesta_excluida = ? AND c.status = ? GROUP BY c.id`, [
               cesta._cesta_excluida, cesta._status], (err, results) => {
                 if (err) {
                   console.log(err.message);
@@ -184,46 +189,46 @@ class CestaModel {
               return new Promise((resolve, reject) => {
                 conect.query(`UPDATE tb_cestas SET imagem = ?, descricao = ?, id_categoria_cesta = ?, status = ?, preco = ?,
                 alteracoes_permitidas = ?, informacoes_nutricionais = ?, cesta_excluida = ? WHERE id = ?`,
-                  [cesta._imagem, cesta._descricao, cesta._id_categoria_cesta, cesta._status, cesta._preco, cesta._alteracoes_permitidas,
-                    cesta.__informacoes_nutricionais, cesta._cesta_excluida, cesta._id], (err, result) => {
-                  if (err) {
-                    console.log(err.message);
-                    reject(err.message);
-                  } else {
-                    resolve(result);
-                  }
+                [cesta._imagem, cesta._descricao, cesta._id_categoria_cesta, cesta._status, cesta._preco, cesta._alteracoes_permitidas,
+                  cesta.__informacoes_nutricionais, cesta._cesta_excluida, cesta._id], (err, result) => {
+                    if (err) {
+                      console.log(err.message);
+                      reject(err.message);
+                    } else {
+                      resolve(result);
+                    }
+                  });
                 });
-              });
+              }
+              
+              
+              desabilitarCesta(cesta) {
+                return new Promise((resolve, reject) => {
+                  conect.query(`UPDATE tb_cestas SET cesta_excluida = ? WHERE id = ?`, [cesta._cesta_excluida, cesta._id], (err, result) => {
+                    if (err) {
+                      console.log(err.message);
+                      reject(err.message);
+                    } else {
+                      resolve(result);
+                    }
+                  });
+                });
+              }
+              
+              
+              alterarStatus(qry) {
+                return new Promise((resolve, reject) => {
+                  conect.query(qry, (err, result) => {
+                    if (err) {
+                      console.log(err);
+                      reject(err.message);
+                    } else {
+                      resolve(result);
+                    }
+                  });
+                });
+              }
+              
             }
             
-            
-            desabilitarCesta(cesta) {
-              return new Promise((resolve, reject) => {
-                conect.query(`UPDATE tb_cestas SET cesta_excluida = ? WHERE id = ?`, [cesta._cesta_excluida, cesta._id], (err, result) => {
-                  if (err) {
-                    console.log(err.message);
-                    reject(err.message);
-                  } else {
-                    resolve(result);
-                  }
-                });
-              });
-            }
-            
-            
-            alterarStatus(qry) {
-              return new Promise((resolve, reject) => {
-                conect.query(qry, (err, result) => {
-                  if (err) {
-                    console.log(err);
-                    reject(err.message);
-                  } else {
-                    resolve(result);
-                  }
-                });
-              });
-            }
-            
-          }
-          
-          module.exports = CestaModel;
+            module.exports = CestaModel;

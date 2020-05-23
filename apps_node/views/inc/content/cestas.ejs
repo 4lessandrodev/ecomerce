@@ -24,7 +24,7 @@
                 <div class="fh5co-text">
                   <h2><%=cesta.descricao%></h2>
                   <p><i><%=cesta.categoria%> - <%=cesta.quantidade_itens%> Itens</i></p>
-                  <p><%=cesta.informacoes_nutricionais%></p>
+                  <p><%=cesta.informacoes_nutricionais.slice(0,70)%>...</p>
                   <p>
                     <span class="price cursive-font">R$ <%=cesta.preco%></span>
                   </p>
