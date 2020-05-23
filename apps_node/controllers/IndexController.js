@@ -224,12 +224,12 @@ const carregarPerfil = (req, res, next) => {
   regiao.listarRegioesAtivas(regiao).then(regioes => {
     cliente.selecionarClienteParaCarrinho(cliente).then(user => {
       
-      res.render('dados-usuario', { logado: true, user:user[0], regioes });
+      res.render('dados-usuario', { logado: true, user: user[0], regioes });
 
     }).catch(err => {
       console.log(err);
       res.send(err.message);
-    })
+    });
   }).catch(err => {
     console.log(err);
     res.send(err.message);
@@ -359,8 +359,6 @@ const verificarUsuarioLogado = (req, res, next) => {
 //CARREGAR CARRINHO 
 const carregarCarrinhoDeCompras = (req, res, next) => {
   let usuarioLogado = (req.session.user != undefined);
-  
-  console.log(usuarioLogado);
   
   if (usuarioLogado) {
     

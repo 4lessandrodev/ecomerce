@@ -583,7 +583,11 @@ class Utils {
       }
       return res;
     }).then(res => {
-      location.reload();
+      swal("Salvo!", {
+        buttons: false,
+        icon:"success",
+        timer: 800,
+      });
     });
 
    

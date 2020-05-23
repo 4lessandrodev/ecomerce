@@ -147,7 +147,9 @@ class ProdutoModel {
           FROM tb_produtos AS p
           INNER JOIN tb_categoria_produtos AS c ON c.id = p.id_categoria_produto 
           INNER JOIN  tb_und_medidas AS u ON u.id = p.id_unidade_medida
-          WHERE p.produto_excluido = ? AND p.status = ? AND p.produto_especial = ? AND p.estoque_disponivel > 0`, [
+          WHERE p.produto_excluido = ? AND p.status = ? AND p.produto_especial = ? AND p.estoque_disponivel > 0
+          ORDER BY p.descricao ASC
+          `, [
             produto._produto_excluido, produto._status, produto._produto_especial], (err, result) => {
               if (err) {
                 console.log(err.message);
@@ -172,7 +174,7 @@ class ProdutoModel {
             WHERE p.produto_excluido = ? AND p.descricao LIKE ${"'"+produto._descricao+"%'"} 
             AND p.status = ? AND p.produto_especial = ?
             GROUP BY p.id
-            ORDER BY p.descricao
+            ORDER BY p.descricao ASC
             `, [
               produto._produto_excluido, produto._status, produto._produto_especial], (err, result) => {
                 if (err) {
@@ -196,7 +198,9 @@ class ProdutoModel {
               LEFT JOIN estoque_entrada entrada ON entrada.id_produto = p.id
               INNER JOIN tb_categoria_produtos ctg ON ctg.id = p.id_categoria_produto
               WHERE p.produto_excluido = 0 AND p.descricao LIKE ${"'"+produto._descricao+"%'"} AND p.status LIKE ${"'"+produto._status+"%'"}
-              GROUP BY p.id`, [
+              GROUP BY p.id
+              ORDER BY p.descricao ASC
+              `, [
                 produto._produto_excluido], (err, result) => {
                   if (err) {
                     console.log(err.message);
@@ -221,7 +225,9 @@ class ProdutoModel {
                 INNER JOIN estoque_saida saida ON saida.id_produto = p.id
                 INNER JOIN estoque_entrada entrada ON entrada.id_produto = p.id
                 WHERE p.produto_excluido = ? AND p.status = ? AND p.produto_especial = ?
-                AND estoque_disponivel > 0`, [
+                AND p.estoque_disponivel > 0
+                ORDER BY p.descricao ASC
+                `, [
                   produto._produto_excluido, produto._status, produto._produto_especial], (err, result) => {
                     if (err) {
                       console.log(err.message);
@@ -302,7 +308,9 @@ class ProdutoModel {
                       return new Promise((resolve, reject) => {
                         conect.query(`SELECT p.id, p.descricao, p.imagem, p.info_nutricional, u.descricao AS und_descricao, 
                         p.preco_venda FROM tb_produtos AS p, tb_und_medidas AS u WHERE p.produto_excluido = ? AND p.status = ?
-                        AND u.id = p.id_unidade_medida AND p.produto_especial = 1 LIMIT 7`, [
+                        AND u.id = p.id_unidade_medida AND p.produto_especial = 1 LIMIT 7
+                        ORDER BY p.descricao ASC                        
+                        `, [
                           produto._produto_excluido, produto._status], (err, result) => {
                             if (err) {
                               console.log(err.message);
