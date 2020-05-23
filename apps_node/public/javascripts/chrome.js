@@ -123,15 +123,15 @@ TABELA_PRODUTOS_ADICIONAIS_PERSONALIZADO.addEventListener('click', function remo
 TABELA_PRODUTOS_ADICIONAIS_GERAL.addEventListener('click', function adicionar(e) {
   if (e.target.parentElement.parentNode.tagName == 'TR') {
     if (qtd_produtos_inseridos < QUANTIDADE_ALTERACOES_PERMITIDAS && CATEGORIA_DESCRICAO == 'PERSONALIZADA') {
-      if (qtd_produtos_retirados > qtd_produtos_inseridos) {
+     // if (qtd_produtos_retirados > qtd_produtos_inseridos) {
         adicionarItemAosProdutosDaCesta(e.target.parentElement.parentNode);
         //BTN_CLOSE_MODAL.click();
         itemAdicionado();
         qtd_produtos_inseridos++;
         fator_multiplicador_saldo = parseFloat(e.target.parentElement.parentNode.dataset.fator) - fator_multiplicador_saldo;
-      } else {
-        notificarLimiteDeAlt();
-      }
+     // } else {
+     //   notificarLimiteDeAlt();
+     // }
     } else {
       notificarLimiteDeAlt();
     }
@@ -202,10 +202,7 @@ const adicionarItemAosProdutosDaCesta = (item) => {
 };
 
 //-------------------------------------------------------------
-//DESABILITAR BOTAO ADD ITENS 
-desativarBotaoAdicionarItem();
-
-
+//Remover item da cesta
 const removerEventoAddDaTR = (e) => {
   let TR = document.querySelectorAll('#produtos-cesta tr');
   TR[TR.length - 1].cells[5].addEventListener('click', function(){
@@ -213,6 +210,12 @@ const removerEventoAddDaTR = (e) => {
   });
 };
 
+//DESABILITAR BOTAO ADD ITENS SE FOR DIFERENTE DE PERSONALIZADA
+if (CATEGORIA_DESCRICAO != 'PERSONALIZADA') {
+  desativarBotaoAdicionarItem();
+} else {
+  ativarBotaoAdicionarItem();
+}
 
 
 
