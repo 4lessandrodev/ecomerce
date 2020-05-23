@@ -318,22 +318,19 @@ const addProdutoNoCarrinho = (req, res, next) => {
   
 };
 //------------------------------------------------------------------------------------------------------
-const addCestaNoCarrinho = (req, res, next) => {
+const addCestaNoCarrinho = async (req, res, next) => {
   //id_cesta, id_compra, quantidade, preco_unitario, produtos
-  
   let cestaCompra = new CestaCompra(req.body._id_cesta, req.body._id_compra, req.body._quantidade, req.body._preco_unitario, req.body._produtos);
   req.session.id_compra = req.body._id_compra;
-  cestaCompra.salvarCestaCompra(cestaCompra).then(resposta => {
-    lancarSaidaDeEstoqueProdutosDeCesta(resposta, req, res, next).then(result => {
-      
-      //A função finaliza no lançamento de estoque
-      
-    }).catch(err => {
-      res.send(err.message);
-    });
-  }).catch(err => {
-    res.send(err.message);
-  });
+  try {
+   
+    let resposta = await cestaCompra.salvarCestaCompra(cestaCompra);
+    let result = await lancarSaidaDeEstoqueProdutosDeCesta(resposta, req, res, next);
+    
+    //A função finaliza no lançamento de estoque
+  } catch (error) {
+    
+  }
 };
 //------------------------------------------------------------------------------------------------------
 const sair = (req, res, next) => {
@@ -472,10 +469,10 @@ const salvarPedido = (req, res, next) => {
 
 //---------------------------------------------------------------------------------------------------------------------
 //Lançar saida de estoque 
-const lancarSaidaDeEstoqueProdutosDeCesta = (resposta, req, res, next) => {
+const lancarSaidaDeEstoqueProdutosDeCesta = async (resposta, req, res, next) => {
   
   
-  console.log('Entrou na função');
+  console.log('Entrou na função LANÇAR SAIDA DE ESTOQUE');
   
   let id_compra = req.session.id_compra;
   let produtos = req.body._produtos;
@@ -490,7 +487,9 @@ const lancarSaidaDeEstoqueProdutosDeCesta = (resposta, req, res, next) => {
   
   const estoque = new Estoque();
   
-  estoque.lancarSaidaDeEstoque(qry);
+  let result = await estoque.lancarSaidaDeEstoque(qry);
+
+  console.log(result);
   
   //Retornar com o número do pedido
   res.send(resposta);
