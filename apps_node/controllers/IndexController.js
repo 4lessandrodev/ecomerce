@@ -497,7 +497,7 @@ const lancarSaidaDeEstoqueProdutosDeCesta = async (resposta, req, res, next) => 
 };
 //---------------------------------------------------------------------------------------------------------------------
 //Lançar saida de produto
-const lancarSaidaDeEstoqueProduto = (resposta, req, res, next) => {
+const lancarSaidaDeEstoqueProduto = async (resposta, req, res, next) => {
   
   let id_compra = req.session.id_compra;
   let id_produto = req.body._id_produto;
@@ -509,7 +509,7 @@ const lancarSaidaDeEstoqueProduto = (resposta, req, res, next) => {
   
   const estoque = new Estoque();
   
-  estoque.lancarSaidaDeEstoque(qry);
+  await estoque.lancarSaidaDeEstoque(qry);
   
   //Retornar com o número do pedido
   res.send(resposta);

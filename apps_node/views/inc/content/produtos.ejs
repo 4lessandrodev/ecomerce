@@ -21,8 +21,8 @@
             <img src="<%=produto.imagem%>" alt="Image" class="img-responsive" style="margin: auto;">
           </figure>
           <div class="fh5co-text">
-            <h2><%=produto.descricao%></h2>
-            <p><%=produto.info_nutricional%></p>
+            <h2><%=produto.descricao.slice(0,22)%>...</h2>
+            <p><%=produto.info_nutricional.slice(0,40)%>...</p>
             <p>
               <span class="price cursive-font">R$ <%=produto.preco_venda%></span>
             </p>
