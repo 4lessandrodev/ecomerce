@@ -18,6 +18,50 @@ let TABELA_PRODUTOS_ADICIONAIS_PERSONALIZADO = document.querySelector('#produtos
 let qtd_produtos_inseridos = 0;
 let qtd_produtos_retirados = 0;
 
+//Capturar produtos da cesta
+const ESTOQUE = [];
+const ESTOQUE_DA_CESTA = [];
+//Verificar quantidade de cada um 
+const VERIFICAR_ESTOQUE = () => {
+  for (const produto of PRODUTOS_ADICIONAIS) {
+    ESTOQUE.push({
+      id: parseInt(produto.dataset.id),
+      estoque: parseInt(produto.dataset.estoque)
+    });
+  }
+  for (const item of PRODUTOS_DA_CESTA) {
+    ESTOQUE_DA_CESTA.push({
+      id: parseInt(item.dataset.id),
+      estoque: 1
+    });
+  }
+};
+
+const BAIXAR_ESTOQUE = () => {
+  for (const itemAdicional of ESTOQUE) {
+    for (const itemCesta of ESTOQUE_DA_CESTA) {
+      if (itemCesta.id === itemAdicional.id) {
+        itemAdicional.estoque = itemAdicional.estoque - 1;
+      }
+    }
+  }
+};
+
+const ATUALIZAR_ESTOQUE = (el) => {
+  let id = el.dataset.id;
+  for (const item of ESTOQUE) {
+    if (item.id == id) {
+      item.estoque = item.estoque - 1;
+      let estoqueDisponivel = (item.estoque >= 0);
+      return estoqueDisponivel;
+    }
+  }
+};
+//Criar um array de objeto com id e quantidade
+//Ao adicionar item verificar se ele esta na lista
+//Verificar se a soma é menor que o estoque
+//Se a quantidade é maior que o estoque avisar o cliente que o produto não está mais disponível
+//Atualizar array
 
 
 const retirarItem = (El) => {
@@ -25,7 +69,7 @@ const retirarItem = (El) => {
     swal('Oops!', 'Você precisa fazer login', 'info');
     return false;
   }
-
+  
   if (qtd_produtos_retirados < QUANTIDADE_ALTERACOES_PERMITIDAS && CATEGORIA_DESCRICAO == 'PERSONALIZADA') {
     ativarBotaoAdicionarItem();
     removerElemento(El);
@@ -123,15 +167,15 @@ TABELA_PRODUTOS_ADICIONAIS_PERSONALIZADO.addEventListener('click', function remo
 TABELA_PRODUTOS_ADICIONAIS_GERAL.addEventListener('click', function adicionar(e) {
   if (e.target.parentElement.parentNode.tagName == 'TR') {
     if (qtd_produtos_inseridos < QUANTIDADE_ALTERACOES_PERMITIDAS && CATEGORIA_DESCRICAO == 'PERSONALIZADA') {
-     // if (qtd_produtos_retirados > qtd_produtos_inseridos) {
-        adicionarItemAosProdutosDaCesta(e.target.parentElement.parentNode);
-        //BTN_CLOSE_MODAL.click();
-        itemAdicionado();
-        qtd_produtos_inseridos++;
-        fator_multiplicador_saldo = parseFloat(e.target.parentElement.parentNode.dataset.fator) - fator_multiplicador_saldo;
-     // } else {
-     //   notificarLimiteDeAlt();
-     // }
+      // if (qtd_produtos_retirados > qtd_produtos_inseridos) {
+      adicionarItemAosProdutosDaCesta(e.target.parentElement.parentNode);
+      //BTN_CLOSE_MODAL.click();
+      itemAdicionado();
+      qtd_produtos_inseridos++;
+      fator_multiplicador_saldo = parseFloat(e.target.parentElement.parentNode.dataset.fator) - fator_multiplicador_saldo;
+      // } else {
+      //   notificarLimiteDeAlt();
+      // }
     } else {
       notificarLimiteDeAlt();
     }
@@ -193,12 +237,18 @@ listarProdutosGeral = () => {
 
 //-------------------------------------------------------------
 
-const adicionarItemAosProdutosDaCesta = (item) => {
-  TBODY_PRODUTOS_DA_CESTA.innerHTML = TBODY_PRODUTOS_DA_CESTA.innerHTML + item.innerHTML;
-  TBODY_PRODUTOS_DA_CESTA = document.querySelector('#produtos-cesta');
-  removerEventoAddDaTR();
-  habilitarBtnsExcluir();
-  desativarBotaoAdicionarItem();
+const adicionarItemAosProdutosDaCesta = async (item) => {
+  let temEstoque = await ATUALIZAR_ESTOQUE(item);
+  if (temEstoque) {
+    TBODY_PRODUTOS_DA_CESTA.innerHTML = TBODY_PRODUTOS_DA_CESTA.innerHTML + item.innerHTML;
+    TBODY_PRODUTOS_DA_CESTA = document.querySelector('#produtos-cesta');
+    removerEventoAddDaTR();
+    habilitarBtnsExcluir();
+    desativarBotaoAdicionarItem();
+  } else {
+    swal("Oops...", "Produto acabou de ficar indisponível!", "info");
+    qtd_produtos_inseridos--;
+  }
 };
 
 //-------------------------------------------------------------
@@ -217,7 +267,8 @@ if (CATEGORIA_DESCRICAO != 'PERSONALIZADA') {
   ativarBotaoAdicionarItem();
 }
 
-
+VERIFICAR_ESTOQUE();
+BAIXAR_ESTOQUE();
 
 
 

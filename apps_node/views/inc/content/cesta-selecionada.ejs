@@ -27,7 +27,8 @@
           </thead>
           <tbody id="produtos-adicionais">
             <%produtos.forEach(function(produto){ %>
-              <tr class="itens-da-cesta" data-fator="<%=produto.fator_multiplicador%>" data-item-id="<%=produto.id%>">
+              <tr class="itens-da-cesta" data-fator="<%=produto.fator_multiplicador%>" data-item-id="<%=produto.id%>"
+                data-estoque="<%=produto.estoque_disponivel%>" data-id="<%=produto.id%>">
                 <td scope="row" class="tr-id"><%=produto.id%><input type="hidden" class="id_produto_cesta"
                   value="<%=produto.id%>"></th>
                   <td class="tr-imagem-produto"><img src="<%=produto.imagem%>" alt="imagem" class="imagem-produto"></td>
@@ -36,7 +37,8 @@
                   </td>
                   <td id="tr3"><%=produto.categoria%></td>
                   <td id="tr4"><%=produto.unidade_medida%></td>
-                  <td class="opcoes" data-item="<%=produto.id%>"><i class="fas fa-plus-circle"
+                  <td class="opcoes" data-item="<%=produto.id%>" data-estoque="<%=produto.estoque_disponivel%>"><i
+                      class="fas fa-plus-circle"
                     style="color: darkgreen;"></i></td>
                   </tr>
                   <% }); %>
@@ -117,7 +119,8 @@
             </thead>
             <tbody id="produtos-cesta">
               <%produtos_da_cesta.forEach(function(produto){ %>
-                <tr class="itens-da-cesta" data-fator="<%=produto.fator_multiplicador%>">
+                <tr class="itens-da-cesta" data-fator="<%=produto.fator_multiplicador%>"
+                  data-estoque="<%=produto.estoque_disponivel%>" data-id="<%=produto.id%>">
                   <td scope="row" class="tr-id"><%=produto.id%><input type="hidden" class="id_produto_cesta"
                     value="<%=produto.id%>"></th>
                     <td class="tr-imagem-produto"><img src="<%=produto.imagem%>" alt="imagem" class="imagem-produto"></td>
