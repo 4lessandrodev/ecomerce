@@ -472,8 +472,6 @@ const salvarPedido = (req, res, next) => {
 const lancarSaidaDeEstoqueProdutosDeCesta = async (resposta, req, res, next) => {
   
   
-  console.log('Entrou na função LANÇAR SAIDA DE ESTOQUE');
-  
   let id_compra = req.session.id_compra;
   let produtos = req.body._produtos;
   let quantidade = req.body._quantidade;
@@ -488,8 +486,6 @@ const lancarSaidaDeEstoqueProdutosDeCesta = async (resposta, req, res, next) => 
   const estoque = new Estoque();
   
   let result = await estoque.lancarSaidaDeEstoque(qry);
-
-  console.log(result);
   
   //Retornar com o número do pedido
   res.send(resposta);

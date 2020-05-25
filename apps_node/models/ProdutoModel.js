@@ -132,7 +132,6 @@ class ProdutoModel {
               console.log(err.message);
               reject(err.message);
             } else {
-              console.log(result);
               resolve(result);
             }
           });
@@ -306,8 +305,7 @@ class ProdutoModel {
                       return new Promise((resolve, reject) => {
                         conect.query(`SELECT p.id, p.descricao, p.imagem, p.info_nutricional, u.descricao AS und_descricao, 
                         p.preco_venda FROM tb_produtos AS p, tb_und_medidas AS u WHERE p.produto_excluido = ? AND p.status = ?
-                        AND u.id = p.id_unidade_medida AND p.produto_especial = 1 LIMIT 7
-                        ORDER BY p.descricao ASC                        
+                        AND u.id = p.id_unidade_medida AND p.produto_especial = 1 LIMIT 7                      
                         `, [
                           produto._produto_excluido, produto._status], (err, result) => {
                             if (err) {
