@@ -348,7 +348,7 @@ class PedidoModel {
       ORDER BY pedido.id ASC`, (err, result) => {
         if (err) {
           console.log(err);
-          resolve.send(err.message);
+          reject(err.message);
         } else {
           resolve(result);
         }

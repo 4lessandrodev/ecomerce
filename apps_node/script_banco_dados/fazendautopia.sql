@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `tb_categoria_cestas` (
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 5
-DEFAULT CHARACTER SET = utf8;
+ ;
 
 
 -- -----------------------------------------------------
@@ -39,9 +39,8 @@ CREATE TABLE IF NOT EXISTS `tb_categoria_produtos` (
   `data_cadastro` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `categoria_p_excluida` TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
+
 
 
 -- -----------------------------------------------------
@@ -67,9 +66,7 @@ CREATE TABLE IF NOT EXISTS `tb_cestas` (
     REFERENCES `tb_categoria_cestas` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -96,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `tb_pacotes_planos` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+ ;
 
 
 -- -----------------------------------------------------
@@ -113,9 +110,7 @@ CREATE TABLE IF NOT EXISTS `tb_usuarios` (
   `admin` TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC))
-ENGINE = InnoDB
-AUTO_INCREMENT
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -127,9 +122,7 @@ CREATE TABLE IF NOT EXISTS `tb_status_pedido` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `descricao` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -164,8 +157,7 @@ CREATE TABLE IF NOT EXISTS `tb_planos_compra` (
     REFERENCES `tb_status_pedido` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -200,9 +192,7 @@ CREATE TABLE IF NOT EXISTS `tb_regioes` (
   `status` TINYINT(1) NOT NULL DEFAULT '1',
   `regiao_excluida` TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -238,9 +228,7 @@ CREATE TABLE IF NOT EXISTS `tb_clientes` (
     REFERENCES `tb_regioes` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -260,9 +248,7 @@ CREATE TABLE IF NOT EXISTS `tb_compras` (
     REFERENCES `tb_clientes` (`id_usuario`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -290,9 +276,7 @@ CREATE TABLE IF NOT EXISTS `tb_cestas_compra` (
     REFERENCES `tb_compras` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -308,9 +292,7 @@ CREATE TABLE IF NOT EXISTS `tb_contatos` (
   `data_envio` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `mensagem_lida` TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -324,9 +306,7 @@ CREATE TABLE IF NOT EXISTS `tb_und_medidas` (
   `status` TINYINT(1) NOT NULL DEFAULT '1',
   `categoria_excluida` TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -360,9 +340,7 @@ CREATE TABLE IF NOT EXISTS `tb_produtos` (
     REFERENCES `tb_und_medidas` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -384,9 +362,7 @@ CREATE TABLE IF NOT EXISTS `tb_estoque` (
     REFERENCES `tb_produtos` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -409,8 +385,7 @@ CREATE TABLE IF NOT EXISTS `tb_fornecedores` (
   `bairro` VARCHAR(30) NULL DEFAULT NULL,
   `fornecedor_excluido` TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -435,8 +410,7 @@ CREATE TABLE IF NOT EXISTS `tb_fornecedor_produtos` (
     REFERENCES `tb_produtos` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -466,9 +440,7 @@ CREATE TABLE IF NOT EXISTS `tb_lojas` (
     REFERENCES `tb_regioes` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -496,9 +468,7 @@ CREATE TABLE IF NOT EXISTS `tb_fretes` (
     REFERENCES `tb_lojas` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -512,9 +482,7 @@ CREATE TABLE IF NOT EXISTS `tb_inscricoes` (
   `data_inscricao` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `emailNewsletter_UNIQUE` (`email` ASC))
-ENGINE = InnoDB
-AUTO_INCREMENT
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -559,9 +527,7 @@ CREATE TABLE IF NOT EXISTS `tb_tipos_pagamento` (
   `tipo_pagamento_excluido` TINYINT(1) NOT NULL DEFAULT '0',
   `descricao` VARCHAR(20) NOT NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -596,9 +562,7 @@ CREATE TABLE IF NOT EXISTS `tb_pedidos` (
     REFERENCES `tb_status_pedido` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -625,9 +589,7 @@ CREATE TABLE IF NOT EXISTS `tb_produtos_compra` (
     REFERENCES `tb_compras` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -652,10 +614,13 @@ CREATE TABLE IF NOT EXISTS `tb_produtos_para_cesta` (
     REFERENCES `tb_cestas` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
+ALTER TABLE `fazendautopia`.`tb_produtos` 
+ADD COLUMN `estoque_disponivel` INT NOT NULL DEFAULT 0 AFTER `data_cadastro`;
+
+ALTER TABLE `fazendautopia`.`tb_pedidos` 
+ADD COLUMN `total` FLOAT NULL DEFAULT 0 AFTER `id_compras`;
 
 -- -----------------------------------------------------
 -- Placeholder table for view `estoque_entrada`
@@ -672,14 +637,17 @@ CREATE TABLE IF NOT EXISTS `estoque_saida` (`id_produto` INT, `total` INT);
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `estoque_entrada`;
 DROP VIEW IF EXISTS `estoque_entrada` ;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`fazendautopia`@`localhost` SQL SECURITY DEFINER VIEW `estoque_entrada` AS select `tb_estoque`.`id_produto` AS `id_produto`,sum(`tb_estoque`.`quantidade`) AS `total` from `tb_estoque` where (`tb_estoque`.`entrada` = 1) group by `tb_estoque`.`entrada`,`tb_estoque`.`id_produto`;
+CREATE  VIEW `estoque_entrada` AS select `tb_estoque`.`id_produto` AS `id_produto`,sum(`tb_estoque`.`quantidade`) AS `total` from `tb_estoque` where (`tb_estoque`.`entrada` = 1) group by `tb_estoque`.`entrada`,`tb_estoque`.`id_produto`;
 
 -- -----------------------------------------------------
 -- View `estoque_saida`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `estoque_saida`;
 DROP VIEW IF EXISTS `estoque_saida` ;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`fazendautopia`@`localhost` SQL SECURITY DEFINER VIEW `estoque_saida` AS select `tb_estoque`.`id_produto` AS `id_produto`,sum(`tb_estoque`.`quantidade`) AS `total` from `tb_estoque` where (`tb_estoque`.`entrada` = 0) group by `tb_estoque`.`entrada`,`tb_estoque`.`id_produto`;
+CREATE VIEW `estoque_saida` AS select `tb_estoque`.`id_produto` AS `id_produto`,sum(`tb_estoque`.`quantidade`) AS `total` from `tb_estoque` where (`tb_estoque`.`entrada` = 0) group by `tb_estoque`.`entrada`,`tb_estoque`.`id_produto`;
+
+INSERT INTO `fazendautopia`.`tb_usuarios` (`email`, `senha`, `usuario_excluido`, `admin`) VALUES ('admin@admin.com', 'admin', '0', '1');
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

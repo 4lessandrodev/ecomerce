@@ -183,7 +183,7 @@ const carregarIndex = (req, res, next) => {
       let produtos = await produto.listarProdutosEspeciaisAtivos(produto);
       let planos = await plano.listarPacotesPlanosAtivos(plano);
       renderizar(req, res, next, produtos, cestas, planos);
-    } catch (error) {
+    } catch (err) {
       console.log(err);
       res.send(err.message);
     }
