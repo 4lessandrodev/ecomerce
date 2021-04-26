@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "env-cmd node ./bin/www"
   },
   "dependencies": {
     "body-parse": "^0.1.0",
@@ -11,6 +11,7 @@
     "cookie-session": "^1.4.0",
     "debug": "^2.6.9",
     "ejs": "^2.6.1",
+    "env-cmd": "^10.1.0",
     "express": "^4.16.1",
     "http-errors": "^1.6.3",
     "moment": "^2.24.0",
@@ -18,7 +19,7 @@
     "mysql2": "^2.1.0",
     "nodemailer": "^6.4.6",
     "sweetalert": "^2.1.2",
-    "update": "^0.7.4",
+    "update": "^0.4.2",
     "upgrade": "^1.1.0"
   }
 }

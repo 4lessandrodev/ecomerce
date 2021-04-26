@@ -325,6 +325,7 @@ CREATE TABLE IF NOT EXISTS `tb_produtos` (
   `fator_multiplicador` INT(2) NOT NULL,
   `preco_venda` DECIMAL(10,2) NOT NULL,
   `produto_excluido` TINYINT(1) NOT NULL DEFAULT '0',
+  `estoque_disponivel` TINYINT(1) NOT NULL DEFAULT '0',
   `id_unidade_medida` INT(11) NOT NULL,
   `data_cadastro` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -646,7 +647,7 @@ DROP TABLE IF EXISTS `estoque_saida`;
 DROP VIEW IF EXISTS `estoque_saida` ;
 CREATE VIEW `estoque_saida` AS select `tb_estoque`.`id_produto` AS `id_produto`,sum(`tb_estoque`.`quantidade`) AS `total` from `tb_estoque` where (`tb_estoque`.`entrada` = 0) group by `tb_estoque`.`entrada`,`tb_estoque`.`id_produto`;
 
-INSERT INTO `fazendautopia`.`tb_usuarios` (`email`, `senha`, `usuario_excluido`, `admin`) VALUES ('admin@admin.com', 'admin', '0', '1');
+INSERT INTO `fazenda`.`tb_usuarios` (`email`, `senha`, `usuario_excluido`, `admin`) VALUES ('admin@admin.com', 'admin', '0', '1');
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

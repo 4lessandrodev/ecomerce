@@ -1,0 +1,20 @@
+version: '3'
+services:
+     fazenda_db:
+          container_name: fazenda_db_mysql
+          image: mysql:5.7
+          environment:
+               DB_PORT: 3306
+               MYSQL_DATABASE: fazenda
+               MYSQL_ROOT_PASSWORD: root
+               MYSQL_USER: root
+               MYSQL_SECRET: root
+               MYSQL_HOST: localhost
+          volumes:
+               - ./data:/var/lib/mysql
+               # - ./mysql.conf:/etc/mysql/conf.d
+          ports:
+               - 3306:3306
+
+volumes:
+     db:
