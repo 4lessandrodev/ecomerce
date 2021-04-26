@@ -2,6 +2,9 @@
   "name": "fazendautopia",
   "version": "0.0.1",
   "private": true,
+  "engines": {
+    "node": ">=14"
+  },
   "scripts": {
     "start": "env-cmd node ./bin/www"
   },
