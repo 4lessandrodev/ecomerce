@@ -1,9 +1,9 @@
-const Inscricao = require('../models/InscricaoModel');
-const Mensagens = require('../models/ContatoModel');
-const DashBoard = require('../models/DashboardModel');
-const Assinaturas = require('../models/PlanoCompraModel');
-const Status = require('../models/StatusPedidoModel');
-const Pedido = require('../models/PedidoModel');
+const Inscricao = require('./../models/InscricaoModel');
+const Mensagens = require('./../models/ContatoModel');
+const DashBoard = require('./../models/DashboardModel');
+const Assinaturas = require('./../models/PlanoCompraModel');
+const Status = require('./../models/StatusPedidoModel');
+const Pedido = require('./../models/PedidoModel');
 const Observacao = require('./../models/ObservacaoModel');
 
 //AUTENTICAÇÃO DO USUÁRIO COMO ADMINISTRADOR

@@ -1,4 +1,4 @@
-var Inscricao = require('../models/InscricaoModel');
+var Inscricao = require('./../models/InscricaoModel');
 const Produto = require('./../models/ProdutoModel');
 const Cesta = require('./../models/CestaModel');
 const Regioes = require('./../models/RegiaoModel');
