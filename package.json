@@ -6,7 +6,8 @@
     "node": ">=14"
   },
   "scripts": {
-    "start": "env-cmd node ./bin/www"
+    "start": "node ./bin/www",
+    "dev": "env-cmd node ./bin/www"
   },
   "dependencies": {
     "body-parse": "^0.1.0",
