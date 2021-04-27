@@ -9,8 +9,7 @@ npm-debug.log*
 # Optional npm cache directory
 .npm
 
-#Arquivo com a senha de conexão do banco de dados
-/config/CONECT_BD.js
+
 CONECT_BD.js
 
 #Anotações 
